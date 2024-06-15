@@ -1,10 +1,12 @@
+'use client';
+
 import { Footer, NavbarUser } from "@/components"
 
 const page = () => {
   return (
     <div>
-        <NavbarUser />
-        <Footer />
+      <NavbarUser />
+      <Footer />
     </div>
   )
 }
