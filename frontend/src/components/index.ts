@@ -3,3 +3,7 @@ export * from './NavbarUser';
 export * from './Carousel';
 export * from './ManageMent';
 export * from './Footer';
+export * from './Sign';
+export * from './LogIn';
+export * from './MenuBar';
+export * from './GoogleMaps';

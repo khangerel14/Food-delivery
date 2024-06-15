@@ -1,11 +1,12 @@
 'use client';
 
-import { Footer, Navbar } from "@/components"
+import { Footer, LogIn, Navbar } from "@/components"
 
 const page = () => {
   return (
     <div>
       <Navbar />
+      <LogIn />
       <Footer />
     </div>
   )
