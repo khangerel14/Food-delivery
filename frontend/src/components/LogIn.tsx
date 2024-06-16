@@ -1,4 +1,10 @@
+import { useRouter } from "next/navigation"
+
 export const LogIn = () => {
+    const router = useRouter()
+    const moveSign = () => {
+        router.push('/signUp')
+    }
   return (
     <div className="flex flex-col w-full items-center my-24 gap-10">
         <div className="font-bold text-2xl">
@@ -20,7 +26,7 @@ export const LogIn = () => {
         <div className="flex flex-col gap-6 w-96 items-center">
             <button className="border w-full bg-gray-100 p-3 text-gray-400 rounded-sm">Нэвтрэх</button>
             <p>Эсвэл</p>
-            <button className="border w-full border-green-400 p-3 rounded-sm">Бүртгүүлэх</button>
+            <button className="border w-full border-green-400 p-3 rounded-sm" onClick={moveSign}>Бүртгүүлэх</button>
         </div>
     </div>
   )

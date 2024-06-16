@@ -4,7 +4,7 @@ export const Sign = () => {
         <div className="font-bold text-2xl">
             <h1>Бүртгүүлэх</h1>
         </div>
-        <div className="flex flex-col gap-5 w-80">
+        <div className="flex flex-col gap-5 w-96">
             <div className="flex flex-col gap-1">
                 <h1>Нэр</h1>
                 <input className='border rounded-sm h-8 p-5' placeholder='Нэрээ оруулна уу' type="text" name="" id="" />
@@ -26,7 +26,7 @@ export const Sign = () => {
                 <input className='border rounded-sm h-8 p-5' placeholder='Нууц үгээ давтан оруулна уу' type="password" name="" id="" />
             </div>
         </div>
-        <div className="flex flex-col gap-10 w-80">
+        <div className="flex flex-col gap-10 w-96">
             <div className="flex gap-3">
                 <input className='border rounded-sm h-8' type="checkbox" />
                 <p>Үйлчилгээний нөхцөо зөвшөөрөх</p>

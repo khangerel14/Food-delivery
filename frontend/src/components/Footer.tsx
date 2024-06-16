@@ -3,7 +3,7 @@ import { Facebook, Instagram, Twitter } from "@mui/icons-material"
 
 export const Footer = () => {
   return (
-    <div className="flex relative items-center justify-center w-full h-[650px] bg-[#18BA51] text-white bg-cover"> 
+    <div className="flex relative items-center justify-center w-full max-h-[500px] bg-[#18BA51] text-white bg-cover"> 
         <White />
         <div className="flex flex-col items-center justify-center gap-9 absolute">
             <div>
