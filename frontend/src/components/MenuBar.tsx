@@ -19,6 +19,7 @@ export const MenuBar = () => {
             <button className="border p-3 w-80 rounded-lg text-center" onClick={() => setIsActive('Main Course')} style={{ background: isActive === 'Main Course' ? '#18BA51' : '#fff' }}>Main Course</button>
             <button className="border p-3 w-80 rounded-lg text-center" onClick={() => setIsActive('Dessert')} style={{ background: isActive === 'Dessert' ? '#18BA51' : '#fff' }}>Dessert</button> */}
         </div>
+        <div>irhvaeiuvnha</div>
     </div>
   )
 }
