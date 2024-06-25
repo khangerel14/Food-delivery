@@ -4,7 +4,7 @@ import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import AddIcon from '@mui/icons-material/Add';
 import { green } from '@mui/material/colors';
 
-export const GoogleMaps = ({ isLoaded }: any) => {
+export const GoogleMaps = ({ isLoaded }: any ) => {
   const containerStyle = {
     width: '1440px',
     height: '500px'
@@ -26,7 +26,7 @@ export const GoogleMaps = ({ isLoaded }: any) => {
       <div className='flex flex-col gap-10 items-start my-14 w-[1440px]'>
         <h1 className='flex gap-1 items-center font-semibold text-xl'><AddIcon sx={{ color: green[400]}}/>Хүргэлтийн бүс дэх хаягууд</h1>
         <div className='flex justify-between items-center w-full'>
-          <div className='flex flex-col w-[300px] p-4'>
+          <div className='flex flex-col w-[350px] p-4'>
             <h1 className='border-2 border-solid border-b-green-500 pb-2 font-semibold'>А бүс</h1>
             <div className='flex justify-between items-center pt-2'>
               <div className='flex flex-col'>
@@ -45,7 +45,7 @@ export const GoogleMaps = ({ isLoaded }: any) => {
               </div>
             </div>
           </div>
-          <div className='flex flex-col w-[300px] p-4'>
+          <div className='flex flex-col w-[350px] p-4'>
             <h1 className='border-2 border-solid border-b-green-500 pb-2 font-semibold'>Б бүс</h1>
             <div className='flex justify-between items-center pt-2'>
               <div className='flex flex-col'>
@@ -64,7 +64,7 @@ export const GoogleMaps = ({ isLoaded }: any) => {
               </div>
             </div>
           </div>
-          <div className='flex flex-col w-[300px] p-4'>
+          <div className='flex flex-col w-[350px] p-4'>
             <h1 className='border-2 border-solid border-b-green-500 pb-2 font-semibold'>С бүс</h1>
             <div className='flex justify-between items-center pt-2'>
               <div className='flex flex-col'>
@@ -83,7 +83,7 @@ export const GoogleMaps = ({ isLoaded }: any) => {
               </div>
             </div>
           </div>
-          <div className='flex flex-col w-[300px] p-4'>
+          <div className='flex flex-col w-[350px] p-4'>
             <h1 className='border-2 border-solid border-b-green-500 pb-2 font-semibold'>Д бүс</h1>
             <div className='flex justify-between items-center pt-2'>
               <div className='flex flex-col'>

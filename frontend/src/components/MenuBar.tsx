@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 export const MenuBar = () => {
-    const [ isActive, setIsActive ] = useState('Breakfast')
+    const [ isActive, setIsActive ] = useState('Dessert')
 
     const menuData = [ 'Breakfast', 'Soup', 'Main Course', 'Dessert' ]
   return (
