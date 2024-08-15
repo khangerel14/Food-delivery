@@ -8,3 +8,4 @@ export * from './LogIn';
 export * from './MenuBar';
 export * from './GoogleMaps';
 export * from './MapConfiguration';
+export * from './Bask';

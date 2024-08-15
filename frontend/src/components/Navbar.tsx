@@ -19,6 +19,9 @@ export const Navbar = () => {
   const homePage = () => {
     router.push('dashboard')
   }
+  const basket = () => {
+    router.push('/basket')
+  }
   return (
     <div>
       <div className="flex items-center justify-between w-[1440px] mx-auto font-semibold h-20">
@@ -30,7 +33,7 @@ export const Navbar = () => {
         </div>
         <div className="flex items-center gap-10">
           <input className="border rounded-lg h-10 font-normal px-4" type="search" placeholder="Хайх" />
-          <button className="flex items-center gap-4 hover:text-green-600"><Basket />Сагс</button>
+          <button className="flex items-center gap-4 hover:text-green-600" onClick={basket}><Basket />Сагс</button>
           <button className="flex items-center gap-4 hover:text-green-600" onClick={logIn}><User />Нэвтрэх</button>
         </div>
       </div>
