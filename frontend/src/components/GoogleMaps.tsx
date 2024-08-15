@@ -1,6 +1,6 @@
 'use client';
 
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
+import { GoogleMap } from '@react-google-maps/api';
 import AddIcon from '@mui/icons-material/Add';
 import { green } from '@mui/material/colors';
 
