@@ -5,7 +5,7 @@ import { useJsApiLoader } from '@react-google-maps/api';
 
 
 
-const page = () => {
+const Page = () => {
   const { isLoaded } = useJsApiLoader({
     id: mapOptions.googleMapApiKey,
     googleMapsApiKey: mapOptions.googleMapApiKey
@@ -19,4 +19,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
