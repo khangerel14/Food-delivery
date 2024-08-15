@@ -3,23 +3,24 @@
 import { useState } from "react";
 
 export const MenuBar = () => {
-    const [ isActive, setIsActive ] = useState('Dessert')
-
-    const menuData = [ 'Breakfast', 'Soup', 'Main Course', 'Dessert' ]
+    const [ isActive, setIsActive ] = useState(null)
+    
+    // const data = [ 'Breakfast', 'Soup', 'Main Course', 'Dessert' ];
+    const handleClick = (index: any) => {
+        setIsActive(index)
+    }
   return (
     <div className="flex flex-col w-[1440px] mx-auto">
-        <div className="flex justify-between items-center my-5">
-            { menuData.map((item, index) => {
-                return (
-                    <div className="border p-3 w-80 rounded-lg text-center" onClick={() => setIsActive(item)} style={{ background: isActive === item ? '#18BA51' : '#fff' }} key={index}>{item}</div>
-                )
-            })}
-            {/* <button className="border p-3 w-80 rounded-lg text-center" onClick={() => setIsActive('Breakfast')} style={{ background: isActive === 'Breakfast' ? '#18BA51' : '#fff' }}>Breakfast</button>
-            <button className="border p-3 w-80 rounded-lg text-center" onClick={() => setIsActive('Soup')} style={{ background: isActive === 'Soup' ? '#18BA51' : '#fff' }}>Soup</button>
-            <button className="border p-3 w-80 rounded-lg text-center" onClick={() => setIsActive('Main Course')} style={{ background: isActive === 'Main Course' ? '#18BA51' : '#fff' }}>Main Course</button>
-            <button className="border p-3 w-80 rounded-lg text-center" onClick={() => setIsActive('Dessert')} style={{ background: isActive === 'Dessert' ? '#18BA51' : '#fff' }}>Dessert</button> */}
+        <div className="flex justify-between my-8">
+            <button className={isActive === 0 ? 'active' : ''} onClick={() => handleClick(0)} style={{background: isActive === 'Breakfast' ? '#3dbf0c' : ''}}>Breakfast</button>
+            <button className={isActive === 1 ? 'active' : ''} onClick={() => handleClick(1)} style={{background: isActive === 'Soup' ? '#3dbf0c' : ''}}>Soup</button>
+            <button className={isActive === 2 ? 'active' : ''} onClick={() => handleClick(2)} style={{background: isActive === 'Main Course' ? '#3dbf0c' : ''}}>Main Course</button>
+            <button className={isActive === 3 ? 'active' : ''} onClick={() => handleClick(3)} style={{background: isActive === 'Dessert' ? '#3dbf0c' : ''}}>Dessert</button>
+            {/* <button className="w-80 border h-10 rounded-md" onClick={() => handleClick(0)} style={{background: isActive === 'Breakfast' ? '#3dbf0c' : ''}}>Breakfast</button>
+            <button className="w-80 border h-10 rounded-md" onClick={() => handleClick(1)} style={{background: isActive === 'Soup' ? '#3dbf0c' : ''}}>Soup</button>
+            <button className="w-80 border h-10 rounded-md" onClick={() => handleClick(2)} style={{background: isActive === 'Main Course' ? '#3dbf0c' : ''}}>Main Course</button>
+            <button className="w-80 border h-10 rounded-md" onClick={() => handleClick(3)} style={{background: isActive === 'Dessert' ? '#3dbf0c' : ''}}>Dessert</button> */}
         </div>
-        <div>irhvaeiuvnha</div>
     </div>
   )
 }
