@@ -2,16 +2,20 @@
 
 import { Carousel, Footer, ManageMent, NavbarUser } from "@/components"
 import Foods from "@/utils/Foods";
+import { createContext, useRef } from "react"
+
+export const inputContext = createContext<React.MutableRefObject<string> | null>({ current: ''})
 
 const page = () => {
+  const inputRef = useRef('')
   return (
-    <div>
+    <inputContext.Provider value={inputRef}>
       <NavbarUser />
       <Carousel />
       <ManageMent />
       <Foods />
       <Footer />
-    </div>
+    </inputContext.Provider>
   )
 }
 

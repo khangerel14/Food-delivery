@@ -1,4 +1,5 @@
-import React from 'react'
+import { useContext } from "react";
+import { inputContext } from '@/app/dashboard/page'
 
 const data = [
     {
@@ -54,8 +55,10 @@ const data = [
 ]
 
 const Foods = () => {
+    const inputRef = useContext(inputContext)
   return (
-    <div className='flex w-[1440px] mx-auto gap-20 h-96'>
+    <div className='flex w-[1440px] mx-auto gap-20 h-96 my-24'>
+        { inputRef && inputRef.current }
         {
             data && data.map((el, index) => {
                 return (
