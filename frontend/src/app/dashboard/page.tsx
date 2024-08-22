@@ -6,7 +6,7 @@ import { createContext, useRef } from "react"
 
 export const inputContext = createContext<React.MutableRefObject<string> | null>({ current: ''})
 
-const page = () => {
+const Page = () => {
   const inputRef = useRef('')
   return (
     <inputContext.Provider value={inputRef}>
@@ -19,4 +19,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
