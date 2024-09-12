@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { Footer, Navbar, Sign } from "@/components"
+import { Footer, Navbar, SignUp } from "@/components";
 
 const page = () => {
   return (
     <div>
       <Navbar />
-      <Sign />
+      <SignUp />
       <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

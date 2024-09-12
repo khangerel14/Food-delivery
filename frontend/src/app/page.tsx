@@ -1,4 +1,4 @@
-import { Carousel, Footer, ManageMent, Navbar } from "@/components";
+import { Carousel, Foods, Footer, ManageMent, Navbar } from "@/components";
 
 export default function Home() {
   return (
@@ -6,6 +6,7 @@ export default function Home() {
       <Navbar />
       <Carousel />
       <ManageMent />
+      <Foods />
       <Footer />
     </div>
   );

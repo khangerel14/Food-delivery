@@ -1,9 +1,8 @@
-'use client';
+"use client";
 
-import { Footer, MenuBar, NavbarUser } from "@/components"
-import Foods from "@/utils/Foods";
+import { Foods, Footer, MenuBar, NavbarUser } from "@/components";
 
-const page = () => {
+const Page = () => {
   return (
     <div>
       <NavbarUser />
@@ -11,7 +10,7 @@ const page = () => {
       <Foods />
       <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default Page;

@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { Carousel, Footer, ManageMent, NavbarUser } from "@/components"
-import Foods from "@/utils/Foods";
-import { createContext, useRef } from "react"
+import { Carousel, Foods, Footer, ManageMent, NavbarUser } from "@/components";
+import { createContext, useRef } from "react";
 
-export const inputContext = createContext<React.MutableRefObject<string> | null>({ current: ''})
+export const inputContext =
+  createContext<React.MutableRefObject<string> | null>({ current: "" });
 
 const Page = () => {
-  const inputRef = useRef('')
+  const inputRef = useRef("");
   return (
     <inputContext.Provider value={inputRef}>
       <NavbarUser />
@@ -16,7 +16,7 @@ const Page = () => {
       <Foods />
       <Footer />
     </inputContext.Provider>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;
