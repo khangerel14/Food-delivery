@@ -11,7 +11,7 @@ export const MenuBar = () => {
     <div className="flex flex-col max-w-screen-xl mx-auto">
       <div className="flex justify-between my-8">
         <button
-          className="w-[280px] border h-10 rounded-md"
+          className="w-[280px] border border-gray-400 h-10 rounded-md"
           style={{
             background: isActive === "Breakfast" ? "#3dbf0c" : "",
             color: isActive === "Breakfast" ? "white" : "",
@@ -21,7 +21,7 @@ export const MenuBar = () => {
           Breakfast
         </button>
         <button
-          className="w-[280px] border h-10 rounded-md"
+          className="w-[280px] border border-gray-400 h-10 rounded-md"
           style={{
             background: isActive === "Soup" ? "#3dbf0c" : "",
             color: isActive === "Soup" ? "white" : "",
@@ -31,7 +31,7 @@ export const MenuBar = () => {
           Soup
         </button>
         <button
-          className="w-[280px] border h-10 rounded-md"
+          className="w-[280px] border border-gray-400 h-10 rounded-md"
           style={{
             background: isActive === "Main Course" ? "#3dbf0c" : "",
             color: isActive === "Main Course" ? "white" : "",
@@ -41,7 +41,7 @@ export const MenuBar = () => {
           Main Course
         </button>
         <button
-          className="w-[280px] border h-10 rounded-md"
+          className="w-[280px] border border-gray-400 h-10 rounded-md"
           style={{
             background: isActive === "Dessert" ? "#3dbf0c" : "",
             color: isActive === "Dessert" ? "white" : "",

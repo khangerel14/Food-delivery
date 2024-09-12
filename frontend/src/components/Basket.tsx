@@ -64,7 +64,10 @@ export const Basket = () => {
           );
         })}
       </div>
-      <div></div>
+      <div>
+        <h1>Төлбөр төлөх</h1>
+        <p></p>
+      </div>
     </div>
   );
 };

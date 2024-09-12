@@ -7,7 +7,7 @@ export const Card = ({ mock }: any) => {
         mock.map((elem: any, index: number) => {
           return (
             <div
-              className="flex flex-col border mb-10 w-[280px] rounded-xl"
+              className="flex flex-col border border-gray-400 mb-10 w-[280px] rounded-xl"
               key={index}
             >
               <div className="relative">
