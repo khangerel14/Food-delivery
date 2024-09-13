@@ -1,9 +1,5 @@
-import icon from './../../public/icon.svg'
+import icon from "./../../public/icon.svg";
 
-const Icon = () => {
-  return (
-    <img src={icon.src} alt="" />
-  )
-}
-
-export default Icon
+export const Icon = () => {
+  return <img src={icon.src} alt="" />;
+};

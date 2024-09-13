@@ -1,8 +1,6 @@
 "use client";
 
-import Basket from "@/images/Basket";
-import Icon from "@/images/Icon";
-import User from "@/images/User";
+import { Basket, Icon, User } from "@/images";
 import { useRouter } from "next/navigation";
 
 export const Navbar = () => {

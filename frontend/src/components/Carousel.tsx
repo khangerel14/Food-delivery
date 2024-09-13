@@ -1,5 +1,4 @@
-import Food from "@/images/Food";
-import White from "@/images/White";
+import { Food, White } from "@/images";
 
 export const Carousel = () => {
   return (

@@ -27,46 +27,60 @@ const mockData = [
 
 export const Basket = () => {
   return (
-    <div className="flex flex-col justify-center items-center h-[500px] gap-6 max-w-screen-xl">
+    <div className="flex flex-col justify-center items-start gap-20 max-w-screen-xl mx-auto w-full py-20">
       <div className="flex items-center flex-col max-w-screen-xl mx-auto">
-        {mockData.map((elem: any, index: number) => {
-          return (
-            <Table className="mx-auto" key={index}>
-              <TableHeader>
-                <TableRow className="w-full">
-                  <TableHead className="w-[200px] text-center">
-                    Бүтээгдэхүүн
-                  </TableHead>
-                  <TableHead className="w-[200px]">Нэр</TableHead>
-                  <TableHead className="w-[200px]">Үнэ</TableHead>
-                  <TableHead className="w-[200px]">Тоо ширхэг</TableHead>
-                  <TableHead className="w-[200px]">Тоо Нийт</TableHead>
-                  <TableHead className="w-[200px] text-center">
-                    Устгах
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
+        <Table>
+          <TableHeader>
+            <TableRow className="w-full">
+              <TableHead className="w-[260px] text-center">
+                Бүтээгдэхүүн
+              </TableHead>
+              <TableHead className="w-[260px]">Нэр</TableHead>
+              <TableHead className="w-[260px]">Үнэ</TableHead>
+              <TableHead className="w-[230px]">Тоо ширхэг</TableHead>
+              <TableHead className="w-[230px]">Тоо Нийт</TableHead>
+              <TableHead className="w-[180px] text-center">Устгах</TableHead>
+            </TableRow>
+          </TableHeader>
+          {mockData.map((elem: any, index: number) => {
+            return (
+              <TableBody key={index} className="border-b">
                 <TableRow>
                   <TableCell className="flex justify-center rounded-md">
-                    <img src={elem.img} height={80} width={100} />
+                    <img src={elem.img} height={100} width={120} />
                   </TableCell>
                   <TableCell className="text-start">{elem.name}</TableCell>
                   <TableCell className="text-start">{elem.price}</TableCell>
                   <TableCell className="text-start">{elem.qty}</TableCell>
-                  <TableCell className="text-start">{elem.qty}</TableCell>
+                  <TableCell className="text-start">{elem.price}</TableCell>
                   <TableCell className="text-center">
                     <DeleteIcon />
                   </TableCell>
                 </TableRow>
               </TableBody>
-            </Table>
-          );
-        })}
+            );
+          })}
+        </Table>
       </div>
-      <div>
-        <h1>Төлбөр төлөх</h1>
-        <p></p>
+      <div className="flex flex-col gap-6 w-[480px] h-fit">
+        <h1 className="text-2xl font-semibold">Төлбөрийн мэдээлэл</h1>
+        <div className="flex flex-col gap-6">
+          <div className="flex justify-between items-center h-8 border-b">
+            <p>Мөнгөн дүн:</p>
+            <p>30000₮</p>
+          </div>
+          <div className="flex justify-between items-center h-8 border-b">
+            <p>Хүргэлтийн үнэ:</p>
+            <p>2500₮</p>
+          </div>
+          <div className="flex justify-between items-center h-8 border-b font-semibold">
+            <p>Нийт:</p>
+            <p>32500₮</p>
+          </div>
+        </div>
+        <button className="w-64 p-3 text-center bg-[#48A860] rounded-xl text-white">
+          Төлбөр төлөх
+        </button>
       </div>
     </div>
   );

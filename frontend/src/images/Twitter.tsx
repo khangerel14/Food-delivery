@@ -1,9 +1,5 @@
-import icon from './../../public/twitter.svg'
+import icon from "./../../public/twitter.svg";
 
-const Twitter = () => {
-  return (
-    <img src={icon.src} alt="" />
-  )
-}
-
-export default Twitter
+export const Twitter = () => {
+  return <img src={icon.src} alt="" />;
+};

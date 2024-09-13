@@ -1,11 +1,9 @@
 "use client";
 
-import Basket from "@/images/Basket";
-import Icon from "@/images/Icon";
-import User from "@/images/User";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { inputContext } from "@/app/dashboard/page";
+import { Basket, Icon, User } from "@/images";
 
 export const NavbarUser = () => {
   const router = useRouter();

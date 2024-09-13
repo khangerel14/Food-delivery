@@ -1,4 +1,3 @@
-import White from "@/images/White";
 import { Facebook, Instagram, Twitter } from "@mui/icons-material";
 
 export const Footer = () => {
