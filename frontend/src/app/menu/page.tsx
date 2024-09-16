@@ -1,11 +1,11 @@
 "use client";
 
-import { Foods, Footer, MenuBar, NavbarUser } from "@/components";
+import { Foods, Footer, MenuBar, Navbar } from "@/components";
 
 const Page = () => {
   return (
     <div>
-      <NavbarUser />
+      <Navbar />
       <MenuBar />
       <Foods />
       <Footer />

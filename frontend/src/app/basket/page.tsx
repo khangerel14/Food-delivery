@@ -1,10 +1,10 @@
-import { Basket, Footer, NavbarUser } from "@/components";
+import { Basket, Footer, Navbar } from "@/components";
 import React from "react";
 
 const Page = () => {
   return (
     <div>
-      <NavbarUser />
+      <Navbar />
       <Basket />
       <Footer />
     </div>

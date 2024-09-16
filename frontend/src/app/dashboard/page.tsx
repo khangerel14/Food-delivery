@@ -1,6 +1,6 @@
 "use client";
 
-import { Carousel, Foods, Footer, ManageMent, NavbarUser } from "@/components";
+import { Carousel, Foods, Footer, ManageMent, Navbar } from "@/components";
 import { createContext, useRef } from "react";
 
 export const inputContext =
@@ -10,7 +10,7 @@ const Page = () => {
   const inputRef = useRef("");
   return (
     <inputContext.Provider value={inputRef}>
-      <NavbarUser />
+      <Navbar />
       <Carousel />
       <ManageMent />
       <Foods />

@@ -2,9 +2,15 @@
 
 import { Basket, Icon, User } from "@/images";
 import { useRouter } from "next/navigation";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 export const Navbar = () => {
+  const { user, error, isLoading } = useUser();
   const router = useRouter();
+
+  if (error) return <p>{error.message}</p>;
+  if (isLoading) return <p>Loading...</p>;
+
   const logIn = () => {
     router.push("/logIn");
   };
@@ -55,7 +61,7 @@ export const Navbar = () => {
             onClick={logIn}
           >
             <User />
-            Нэвтрэх
+            {user ? user.name : "Нэвтрэх"}
           </button>
         </div>
       </div>
