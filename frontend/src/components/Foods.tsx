@@ -1,68 +1,27 @@
-import { Card } from "./Card";
+"use client";
 
-export const mock = [
-  {
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdp20o9NY1dVAsKfKqNUZs9XAIk5A0_ndo0A&s",
-    name: "Cheese Burger",
-    qty: "2",
-    desc: "best cheeseburger, including homemade burger sauces. Quick and easy.",
-    price: "15000₮",
-  },
-  {
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdp20o9NY1dVAsKfKqNUZs9XAIk5A0_ndo0A&s",
-    name: "Cheese Burger",
-    qty: "2",
-    desc: "best cheeseburger, including homemade burger sauces. Quick and easy.",
-    price: "15000₮",
-  },
-  {
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdp20o9NY1dVAsKfKqNUZs9XAIk5A0_ndo0A&s",
-    name: "Cheese Burger",
-    qty: "2",
-    desc: "best cheeseburger, including homemade burger sauces. Quick and easy.",
-    price: "15000₮",
-  },
-  {
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdp20o9NY1dVAsKfKqNUZs9XAIk5A0_ndo0A&s",
-    name: "Cheese Burger",
-    qty: "2",
-    desc: "best cheeseburger, including homemade burger sauces. Quick and easy.",
-    price: "15000₮",
-  },
-  {
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdp20o9NY1dVAsKfKqNUZs9XAIk5A0_ndo0A&s",
-    name: "Cheese Burger",
-    qty: "2",
-    desc: "best cheeseburger, including homemade burger sauces. Quick and easy.",
-    price: "15000₮",
-  },
-  {
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdp20o9NY1dVAsKfKqNUZs9XAIk5A0_ndo0A&s",
-    name: "Cheese Burger",
-    qty: "2",
-    desc: "best cheeseburger, including homemade burger sauces. Quick and easy.",
-    price: "15000₮",
-  },
-  {
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdp20o9NY1dVAsKfKqNUZs9XAIk5A0_ndo0A&s",
-    name: "Cheese Burger",
-    qty: "2",
-    desc: "best cheeseburger, including homemade burger sauces. Quick and easy.",
-    price: "15000₮",
-  },
-  {
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdp20o9NY1dVAsKfKqNUZs9XAIk5A0_ndo0A&s",
-    name: "Cheese Burger",
-    qty: "2",
-    desc: "best cheeseburger, including homemade burger sauces. Quick and easy.",
-    price: "15000₮",
-  },
-];
+import axios from "axios";
+import { Card } from "./Card";
+import { useEffect, useState } from "react";
 
 export const Foods = () => {
+  const [foodData, setFoodData] = useState([]);
+  const fetchFoods = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/api/foods");
+      setFoodData(response.data);
+    } catch (error) {
+      console.error("Error fetching foods:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFoods();
+  }, []);
+
   return (
     <div className="max-w-screen-xl mx-auto">
-      <Card mock={mock} />
+      <Card foodData={foodData} />
     </div>
   );
 };

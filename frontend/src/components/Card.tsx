@@ -1,44 +1,55 @@
-import StarIcon from "@mui/icons-material/Star";
+"use client";
 
-export const Card = ({ mock }: any) => {
+import StarIcon from "@mui/icons-material/Star";
+import { useContext } from "react";
+import { FoodProvider } from "../app/menu/page";
+
+export const Card = ({ foodData }: any) => {
+  const isActive = useContext(FoodProvider);
+  console.log(isActive);
+
   return (
     <div className="flex flex-wrap justify-between rounded-xl py-10">
-      {mock &&
-        mock.map((elem: any, index: number) => {
-          return (
-            <div
-              className="flex flex-col border border-gray-400 mb-10 w-[280px] rounded-xl shadow-inner"
-              key={index}
-            >
-              <div className="relative">
-                <img
-                  src={elem.img}
-                  alt="picture"
-                  className="rounded-t-xl"
-                  height={180}
-                  width={280}
-                />
-                <div className="absolute flex top-2 right-2 bg-white rounded-full text-center px-2 z-20">
-                  <StarIcon sx={{ color: "#ffff00" }} />
-                  <p>4.5</p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2 p-3">
-                <h1 className="font-semibold">{elem.name}</h1>
-                <p>{elem.desc}</p>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h1 className="text-gray-600">Үнэ:</h1>
-                    <p className="font-semibold">{elem.price}</p>
+      {foodData &&
+        foodData
+          .filter((item: any) =>
+            item.menu === isActive ? { ...item, menu: isActive } : item
+          )
+          .map((elem: any, index: number) => {
+            return (
+              <div
+                className="flex flex-col border border-gray-400 mb-10 w-[280px] rounded-xl shadow-inner"
+                key={index}
+              >
+                <div className="relative">
+                  <img
+                    src={elem.imgUrl}
+                    alt="picture"
+                    className="rounded-t-xl bg-cover h-[180px]"
+                    height={180}
+                    width={280}
+                  />
+                  <div className="absolute flex top-2 right-2 bg-white rounded-full text-center px-2 z-20">
+                    <StarIcon sx={{ color: "#ffff00" }} />
+                    <p>{elem.assessment}</p>
                   </div>
-                  <button className="p-2 px-3 rounded-full flex items-center justify-center bg-[#85BB65]">
-                    Сагслах
-                  </button>
+                </div>
+                <div className="flex flex-col p-3 justify-between gap-3">
+                  <h1 className="font-semibold">{elem.name}</h1>
+                  <p>{elem.description}</p>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h1 className="text-gray-600">Үнэ:</h1>
+                      <p className="font-semibold">{elem.price}</p>
+                    </div>
+                    <button className="p-2 px-3 rounded-full flex items-center justify-center bg-[#85BB65]">
+                      Сагслах
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
     </div>
   );
 };

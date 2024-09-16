@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 
-export const MenuBar = () => {
-  const [isActive, setIsActive] = useState("Breakfast");
+export const MenuBar = ({ setIsActive, isActive }: any) => {
   const handleClick = (e: any) => {
     setIsActive(e);
   };
