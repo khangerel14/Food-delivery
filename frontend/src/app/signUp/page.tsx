@@ -1,11 +1,14 @@
 "use client";
 
 import { Footer, Navbar, SignUp } from "@/components";
+import StoreContextProvider from "@/context/StoreContext";
 
 const page = () => {
   return (
     <div>
-      <Navbar />
+      <StoreContextProvider>
+        <Navbar />
+      </StoreContextProvider>
       <SignUp />
       <Footer />
     </div>

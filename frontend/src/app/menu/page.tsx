@@ -1,6 +1,7 @@
 "use client";
 
 import { Foods, Footer, MenuBar, Navbar } from "@/components";
+import StoreContextProvider from "@/context/StoreContext";
 import { useState, createContext } from "react";
 
 export const FoodProvider = createContext("");
@@ -11,7 +12,9 @@ const Page = () => {
   return (
     <div>
       <FoodProvider.Provider value={isActive}>
-        <Navbar />
+        <StoreContextProvider>
+          <Navbar />
+        </StoreContextProvider>
         <MenuBar setIsActive={setIsActive} isActive={isActive} />
         <Foods />
         <Footer />

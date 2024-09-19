@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 export const MenuBar = ({ setIsActive, isActive }: any) => {
   const handleClick = (e: any) => {
     setIsActive(e);

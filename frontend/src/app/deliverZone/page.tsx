@@ -2,6 +2,7 @@
 
 import { Footer, GoogleMaps, Navbar, mapOptions } from "@/components";
 import { useJsApiLoader } from "@react-google-maps/api";
+import StoreContextProvider from "@/context/StoreContext";
 
 const Page = () => {
   const { isLoaded } = useJsApiLoader({
@@ -10,7 +11,9 @@ const Page = () => {
   });
   return (
     <div>
-      <Navbar />
+      <StoreContextProvider>
+        <Navbar />
+      </StoreContextProvider>
       <GoogleMaps isLoaded={isLoaded} />
       <Footer />
     </div>

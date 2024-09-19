@@ -3,13 +3,15 @@
 import { Basket, Icon, User } from "@/images";
 import { useRouter } from "next/navigation";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { useContext, useState } from "react";
+import { StoreContext } from "@/context/StoreContext";
 
 export const Navbar = () => {
-  const { user, error, isLoading } = useUser();
+  const { user, error } = useUser();
   const router = useRouter();
+  const { inputValue, setInputValue }: any = useContext(StoreContext);
 
   if (error) return <p>{error.message}</p>;
-  if (isLoading) return <p>Loading...</p>;
 
   const logIn = () => {
     router.push("/logIn");
@@ -48,6 +50,8 @@ export const Navbar = () => {
             className="border rounded-lg h-10 font-normal px-4 outline-none"
             type="search"
             placeholder="Хайх"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
           />
           <button
             className="flex items-center gap-4 hover:text-green-600"

@@ -1,11 +1,15 @@
+"use client";
+
 import { Basket, Footer, Navbar } from "@/components";
-import React from "react";
+import StoreContextProvider from "@/context/StoreContext";
 
 const Page = () => {
   return (
     <div>
-      <Navbar />
-      <Basket />
+      <StoreContextProvider>
+        <Navbar />
+        <Basket />
+      </StoreContextProvider>
       <Footer />
     </div>
   );

@@ -1,23 +1,85 @@
 import { Op } from "sequelize";
 import db from "../models/index.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 const { User } = db;
 
 export const create = async (req, res) => {
   try {
-    const { email, name } = req.body;
+    const { email, name, password } = req.body;
 
-    if (!email) {
-      return res.status(400).send({ message: "Email is required." });
+    if (!email || !name || !password) {
+      return res
+        .status(400)
+        .send({ message: "All fields are required: email, name, password." });
     }
 
-    const user = { email, name };
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res
+        .status(400)
+        .send({ message: "User already exists with this email." });
+    }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = { email, name, password: hashedPassword };
     const data = await User.create(user);
-    res.status(201).send(data);
+
+    const { password: _, ...userData } = data.get({ plain: true });
+
+    res.status(201).send({
+      message: "User created successfully",
+      user: userData,
+    });
   } catch (err) {
     res.status(500).send({
       message: err.message || "Some error occurred while creating the user.",
+    });
+  }
+};
+
+export const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res
+        .status(400)
+        .send({ message: "Email and password are required." });
+    }
+
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(404).send({ message: "User not found." });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).send({ message: "Invalid email or password." });
+    }
+
+    const userData = user.get({ plain: true });
+    delete userData.password;
+
+    const createToken = (id) => {
+      return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
+    };
+
+    const token = createToken(user.id);
+
+    res.status(200).send({
+      message: "Login successful",
+      user: userData,
+      token,
+    });
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || "Some error occurred while logging in.",
     });
   }
 };

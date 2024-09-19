@@ -1,27 +1,17 @@
 "use client";
 
-import axios from "axios";
 import { Card } from "./Card";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
+import { StoreContext } from "@/context/StoreContext";
+import StoreContextProvider from "@/context/StoreContext";
 
 export const Foods = () => {
-  const [foodData, setFoodData] = useState([]);
-  const fetchFoods = async () => {
-    try {
-      const response = await axios.get("http://localhost:8000/api/foods");
-      setFoodData(response.data);
-    } catch (error) {
-      console.error("Error fetching foods:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchFoods();
-  }, []);
-
+  const response = useContext(StoreContext);
   return (
     <div className="max-w-screen-xl mx-auto">
-      <Card foodData={foodData} />
+      <StoreContextProvider>
+        <Card />
+      </StoreContextProvider>
     </div>
   );
 };

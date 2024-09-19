@@ -1,20 +1,21 @@
 "use client";
 
 import StarIcon from "@mui/icons-material/Star";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FoodProvider } from "../app/menu/page";
+import { StoreContext } from "@/context/StoreContext";
 
-export const Card = ({ foodData }: any) => {
+import axios from "axios";
+
+export const Card = () => {
   const isActive = useContext(FoodProvider);
-  console.log(isActive);
+  const { addToCart, inputValue, foodData }: any = useContext(StoreContext);
 
   return (
     <div className="flex flex-wrap justify-between rounded-xl py-10">
       {foodData &&
         foodData
-          .filter((item: any) =>
-            item.menu === isActive ? { ...item, menu: isActive } : item
-          )
+          .filter((item: any) => item?.menu === isActive)
           .map((elem: any, index: number) => {
             return (
               <div
@@ -42,7 +43,10 @@ export const Card = ({ foodData }: any) => {
                       <h1 className="text-gray-600">Үнэ:</h1>
                       <p className="font-semibold">{elem.price}</p>
                     </div>
-                    <button className="p-2 px-3 rounded-full flex items-center justify-center bg-[#85BB65]">
+                    <button
+                      className="p-2 px-3 rounded-full flex items-center justify-center bg-[#85BB65]"
+                      onClick={() => addToCart(elem.id)}
+                    >
                       Сагслах
                     </button>
                   </div>
