@@ -3,13 +3,16 @@
 import { Basket, Icon, User } from "@/images";
 import { useRouter } from "next/navigation";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { StoreContext } from "@/context/StoreContext";
 
 export const Navbar = () => {
   const { user, error } = useUser();
   const router = useRouter();
-  const { inputValue, setInputValue }: any = useContext(StoreContext);
+  const { inputValue, setInputValue, cartItems }: any =
+    useContext(StoreContext);
+
+  const foodLength = cartItems ? Object.keys(cartItems).length : 0;
 
   if (error) return <p>{error.message}</p>;
 
@@ -57,7 +60,10 @@ export const Navbar = () => {
             className="flex items-center gap-4 hover:text-green-600"
             onClick={basket}
           >
-            <Basket />
+            <div className="relative">
+              <Basket />
+              <p className="absolute inset-0 -top-2 pl-4">{foodLength}</p>
+            </div>
             Сагс
           </button>
           <button

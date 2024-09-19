@@ -9,5 +9,4 @@ export * from "./GoogleMaps";
 export * from "./MapConfiguration";
 export * from "./Basket";
 export * from "./GetSession";
-export * from "./Foods";
 export * from "./Card";

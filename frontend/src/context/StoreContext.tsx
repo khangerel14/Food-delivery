@@ -1,15 +1,25 @@
 "use client";
 
 import axios from "axios";
-import { createContext, useEffect, useState, ReactNode } from "react";
+import {
+  createContext,
+  useEffect,
+  useState,
+  ReactNode,
+  Dispatch,
+  SetStateAction,
+} from "react";
 
 interface StoreContextProps {
   foodData: any[];
   cartItems: { [key: string]: number };
   addToCart: (id: any) => void;
   removeFromCart: (id: any) => void;
-  setInputValue: React.Dispatch<React.SetStateAction<string>>;
+  deleteFromCart: (id: any) => void;
+  setInputValue: Dispatch<SetStateAction<string>>;
+  setIsActive: Dispatch<SetStateAction<string>>;
   inputValue: string;
+  isActive: string;
 }
 
 export const StoreContext = createContext<StoreContextProps | undefined>(
@@ -23,7 +33,9 @@ interface StoreProviderProps {
 const StoreContextProvider = ({ children }: StoreProviderProps) => {
   const [cartItems, setCartItems] = useState<{ [key: string]: number }>({});
   const [foodData, setFoodData] = useState<any[]>([]);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState<string>("");
+  const [isActive, setIsActive] = useState<string>("");
+  console.log(inputValue);
 
   const fetchFoods = async () => {
     try {
@@ -34,8 +46,10 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
     }
   };
 
-  const storedCartItems = localStorage.getItem("cartItems");
   useEffect(() => {
+    console.log("Fetching cart items and food data");
+
+    const storedCartItems = localStorage.getItem("cartItems");
     if (storedCartItems) {
       try {
         setCartItems(JSON.parse(storedCartItems) || {});
@@ -48,22 +62,21 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    if (cartItems) {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    }
   }, [cartItems]);
 
   const addToCart = (id: any) => {
-    try {
-      setCartItems((prev) => ({
-        ...prev,
-        [id]: (prev[id] || 0) + 1,
-      }));
-    } catch (error) {
-      console.log("Couldn't add to cart");
-    }
+    setCartItems((prev) => ({
+      ...prev,
+      [id]: prev ? (prev[id] || 0) + 1 : 1,
+    }));
   };
 
   const removeFromCart = (id: any) => {
     setCartItems((prev) => {
+      if (!prev || !prev[id]) return prev;
       if (prev[id] > 1) {
         return { ...prev, [id]: prev[id] - 1 };
       } else {
@@ -73,13 +86,25 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
     });
   };
 
+  const deleteFromCart = (id: string) => {
+    setCartItems((prev) => {
+      if (!prev || !prev[id]) return prev;
+
+      const { [id]: _, ...rest } = prev;
+      return rest;
+    });
+  };
+
   const contextValue: StoreContextProps = {
     foodData,
     cartItems,
     addToCart,
     removeFromCart,
+    deleteFromCart,
     setInputValue,
+    setIsActive,
     inputValue,
+    isActive,
   };
 
   return (

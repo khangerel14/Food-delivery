@@ -1,21 +1,19 @@
 "use client";
 
 import StarIcon from "@mui/icons-material/Star";
-import { useContext, useEffect, useState } from "react";
-import { FoodProvider } from "../app/menu/page";
+import { useContext } from "react";
 import { StoreContext } from "@/context/StoreContext";
 
-import axios from "axios";
-
 export const Card = () => {
-  const isActive = useContext(FoodProvider);
-  const { addToCart, inputValue, foodData }: any = useContext(StoreContext);
-
+  const { addToCart, foodData, isActive }: any = useContext(StoreContext);
   return (
-    <div className="flex flex-wrap justify-between rounded-xl py-10">
+    <div className="flex flex-wrap justify-between rounded-xl py-10 max-w-screen-xl mx-auto">
       {foodData &&
         foodData
-          .filter((item: any) => item?.menu === isActive)
+          .filter((item: any) => {
+            if (isActive === "" || !isActive) return true;
+            return item?.menu === isActive;
+          })
           .map((elem: any, index: number) => {
             return (
               <div

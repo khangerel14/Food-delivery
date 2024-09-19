@@ -1,24 +1,17 @@
 "use client";
 
-import { Carousel, Foods, Footer, ManageMent, Navbar } from "@/components";
-import { createContext, useRef } from "react";
+import { Carousel, Card, Footer, ManageMent, Navbar } from "@/components";
 import StoreContextProvider from "@/context/StoreContext";
 
-export const inputContext =
-  createContext<React.MutableRefObject<string> | null>({ current: "" });
-
 const Page = () => {
-  const inputRef = useRef("");
   return (
-    <inputContext.Provider value={inputRef}>
-      <StoreContextProvider>
-        <Navbar />
-      </StoreContextProvider>
+    <StoreContextProvider>
+      <Navbar />
       <Carousel />
       <ManageMent />
-      <Foods />
+      <Card />
       <Footer />
-    </inputContext.Provider>
+    </StoreContextProvider>
   );
 };
 

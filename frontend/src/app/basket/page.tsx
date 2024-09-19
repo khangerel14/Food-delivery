@@ -5,13 +5,11 @@ import StoreContextProvider from "@/context/StoreContext";
 
 const Page = () => {
   return (
-    <div>
-      <StoreContextProvider>
-        <Navbar />
-        <Basket />
-      </StoreContextProvider>
+    <StoreContextProvider>
+      <Navbar />
+      <Basket />
       <Footer />
-    </div>
+    </StoreContextProvider>
   );
 };
 

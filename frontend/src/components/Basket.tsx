@@ -1,6 +1,10 @@
 "use client";
 
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { useState, useEffect, useContext } from "react";
+import { StoreContext } from "@/context/StoreContext";
 import {
   Table,
   TableBody,
@@ -9,20 +13,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState, useEffect, useContext } from "react";
-import { StoreContext } from "@/context/StoreContext";
 
 export const Basket = () => {
   const [cartItemsArray, setCartItemsArray] = useState<any[]>([]);
-  const { foodData, cartItems, removeFromCart }: any = useContext(StoreContext);
+  const {
+    foodData,
+    cartItems,
+    removeFromCart,
+    addToCart,
+    deleteFromCart,
+  }: any = useContext(StoreContext);
+  console.log("cart", cartItems);
 
   useEffect(() => {
     if (cartItems && foodData.length > 0) {
       try {
         const parsedItems =
           typeof cartItems === "string" ? JSON.parse(cartItems) : cartItems;
-
-        console.log("Parsed Cart Items:", parsedItems);
 
         const itemsArray = Object.entries(parsedItems)
           .map(([id, qty]) => {
@@ -33,8 +40,6 @@ export const Basket = () => {
             return foodItem ? { ...foodItem, qty } : null;
           })
           .filter(Boolean);
-
-        console.log("Items Array:", itemsArray);
 
         setCartItemsArray(itemsArray);
       } catch (error) {
@@ -81,13 +86,24 @@ export const Basket = () => {
                   </TableCell>
                   <TableCell className="text-start">{item.name}</TableCell>
                   <TableCell className="text-start">{item.price}₮</TableCell>
-                  <TableCell className="text-start">{item.qty}</TableCell>
+                  <TableCell className="text-start">
+                    <button
+                      className="mr-5"
+                      onClick={() => removeFromCart(item.id)}
+                    >
+                      <RemoveIcon />
+                    </button>
+                    {item.qty}
+                    <button className="ml-5" onClick={() => addToCart(item.id)}>
+                      <AddIcon />
+                    </button>
+                  </TableCell>
                   <TableCell className="text-start">
                     {item.qty * item.price}₮
                   </TableCell>
                   <TableCell
                     className="text-center"
-                    onClick={() => removeFromCart(item.id)}
+                    onClick={() => deleteFromCart(item.id)}
                   >
                     <DeleteIcon />
                   </TableCell>

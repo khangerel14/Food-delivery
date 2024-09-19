@@ -10,13 +10,11 @@ const Page = () => {
     googleMapsApiKey: mapOptions.googleMapApiKey,
   });
   return (
-    <div>
-      <StoreContextProvider>
-        <Navbar />
-      </StoreContextProvider>
+    <StoreContextProvider>
+      <Navbar />
       <GoogleMaps isLoaded={isLoaded} />
       <Footer />
-    </div>
+    </StoreContextProvider>
   );
 };
 

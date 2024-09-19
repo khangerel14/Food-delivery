@@ -1,6 +1,11 @@
 "use client";
 
-export const MenuBar = ({ setIsActive, isActive }: any) => {
+import { useContext } from "react";
+import { StoreContext } from "@/context/StoreContext";
+
+export const MenuBar = () => {
+  const { isActive, setIsActive }: any = useContext(StoreContext);
+
   const handleClick = (e: any) => {
     setIsActive(e);
   };

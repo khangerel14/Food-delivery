@@ -3,14 +3,14 @@ import StoreContextProvider from "@/context/StoreContext";
 
 export default function Home() {
   return (
-    <div>
-      <StoreContextProvider>
+    <StoreContextProvider>
+      <div>
         <Navbar />
-      </StoreContextProvider>
-      <Carousel />
-      <ManageMent />
-      <Foods />
-      <Footer />
-    </div>
+        <Carousel />
+        <ManageMent />
+        <Foods />
+        <Footer />
+      </div>
+    </StoreContextProvider>
   );
 }
