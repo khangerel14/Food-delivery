@@ -2,7 +2,7 @@ import { Facebook, Instagram, Twitter } from "@mui/icons-material";
 
 export const Footer = () => {
   return (
-    <div className="flex relative items-center justify-center w-full h-[400px] bg-[#18BA51] text-white bg-cover">
+    <div className="flex relative items-center justify-center w-full h-[400px] bg-[#2c2c2c] text-white bg-cover">
       <div className="flex flex-col items-center justify-center gap-9 absolute">
         <div>
           <h1 className="font-bold text-2xl">Food Delivery</h1>

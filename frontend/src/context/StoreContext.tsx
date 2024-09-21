@@ -10,12 +10,20 @@ import {
   SetStateAction,
 } from "react";
 
+// Define specific types for foodData and cartItems
+interface FoodItem {
+  id: string;
+  name: string;
+  price: number;
+  // other properties of your food item
+}
+
 interface StoreContextProps {
-  foodData: any[];
+  foodData: FoodItem[];
   cartItems: { [key: string]: number };
-  addToCart: (id: any) => void;
-  removeFromCart: (id: any) => void;
-  deleteFromCart: (id: any) => void;
+  addToCart: (id: string) => void;
+  removeFromCart: (id: string) => void;
+  deleteFromCart: (id: string) => void;
   setInputValue: Dispatch<SetStateAction<string>>;
   setIsActive: Dispatch<SetStateAction<string>>;
   inputValue: string;
@@ -32,10 +40,9 @@ interface StoreProviderProps {
 
 const StoreContextProvider = ({ children }: StoreProviderProps) => {
   const [cartItems, setCartItems] = useState<{ [key: string]: number }>({});
-  const [foodData, setFoodData] = useState<any[]>([]);
+  const [foodData, setFoodData] = useState<FoodItem[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const [isActive, setIsActive] = useState<string>("");
-  console.log(inputValue);
 
   const fetchFoods = async () => {
     try {
@@ -47,36 +54,46 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
   };
 
   useEffect(() => {
-    console.log("Fetching cart items and food data");
+    let isMounted = true;
 
     const storedCartItems = localStorage.getItem("cartItems");
     if (storedCartItems) {
       try {
-        setCartItems(JSON.parse(storedCartItems) || {});
+        const parsedCartItems = JSON.parse(storedCartItems);
+        setCartItems(parsedCartItems || {});
+        console.log("Loaded cart items from localStorage:", parsedCartItems);
       } catch (error) {
         console.error("Error parsing cartItems from localStorage", error);
         setCartItems({});
       }
+    } else {
+      console.log("No cart items found in localStorage");
     }
-    fetchFoods();
+
+    if (isMounted) {
+      fetchFoods();
+    }
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   useEffect(() => {
-    if (cartItems) {
+    if (Object.keys(cartItems).length > 0) {
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
     }
   }, [cartItems]);
 
-  const addToCart = (id: any) => {
+  const addToCart = (id: string) => {
     setCartItems((prev) => ({
       ...prev,
-      [id]: prev ? (prev[id] || 0) + 1 : 1,
+      [id]: prev[id] ? prev[id] + 1 : 1,
     }));
   };
 
-  const removeFromCart = (id: any) => {
+  const removeFromCart = (id: string) => {
     setCartItems((prev) => {
-      if (!prev || !prev[id]) return prev;
       if (prev[id] > 1) {
         return { ...prev, [id]: prev[id] - 1 };
       } else {
@@ -88,8 +105,6 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
 
   const deleteFromCart = (id: string) => {
     setCartItems((prev) => {
-      if (!prev || !prev[id]) return prev;
-
       const { [id]: _, ...rest } = prev;
       return rest;
     });

@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import userRoutes from "./routers/user.route.js";
 import foodRoutes from "./routers/food.route.js";
-import cartRoutes from "./routers/cart.route.js";
+import orderRoutes from "./routers/order.route.js";
 
 const app = express();
 
@@ -19,7 +19,7 @@ connection();
 
 userRoutes(app);
 foodRoutes(app);
-cartRoutes(app);
+orderRoutes(app);
 
 app.get("/", (_, res) => {
   res.json({ message: "Welcome to my app" });

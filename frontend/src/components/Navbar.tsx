@@ -71,7 +71,7 @@ export const Navbar = () => {
             onClick={logIn}
           >
             <User />
-            {user ? user.name : "Нэвтрэх"}
+            {user ? user.nickname : "Нэвтрэх"}
           </button>
         </div>
       </div>

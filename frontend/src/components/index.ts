@@ -8,5 +8,5 @@ export * from "./MenuBar";
 export * from "./GoogleMaps";
 export * from "./MapConfiguration";
 export * from "./Basket";
-export * from "./GetSession";
 export * from "./Card";
+export * from "./Order";

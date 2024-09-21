@@ -1,14 +1,16 @@
-import { Carousel, Card, Footer, ManageMent, Navbar } from "@/components";
+"use client";
+
+import { Footer, Navbar, Order } from "@/components";
 import StoreContextProvider from "@/context/StoreContext";
 
-export default function Home() {
+const Page = () => {
   return (
     <StoreContextProvider>
       <Navbar />
-      <Carousel />
-      <ManageMent />
-      <Card />
+      <Order />
       <Footer />
     </StoreContextProvider>
   );
-}
+};
+
+export default Page;

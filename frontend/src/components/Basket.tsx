@@ -4,6 +4,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useState, useEffect, useContext } from "react";
+import { useRouter } from "next/navigation";
 import { StoreContext } from "@/context/StoreContext";
 import {
   Table,
@@ -16,6 +17,7 @@ import {
 
 export const Basket = () => {
   const [cartItemsArray, setCartItemsArray] = useState<any[]>([]);
+  const router = useRouter();
   const {
     foodData,
     cartItems,
@@ -23,7 +25,10 @@ export const Basket = () => {
     addToCart,
     deleteFromCart,
   }: any = useContext(StoreContext);
-  console.log("cart", cartItems);
+
+  const orderPage = () => {
+    router.push("/order");
+  };
 
   useEffect(() => {
     if (cartItems && foodData.length > 0) {
@@ -137,8 +142,11 @@ export const Basket = () => {
             <p>{grandTotal}₮</p>
           </div>
         </div>
-        <button className="w-64 p-3 text-center bg-[#48A860] rounded-xl text-white">
-          Төлбөр төлөх
+        <button
+          className="w-64 p-3 text-center bg-[#48A860] rounded-xl text-white"
+          onClick={orderPage}
+        >
+          Захиалга баталгаажуулах
         </button>
       </div>
     </div>

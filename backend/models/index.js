@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import { userModel } from "./user.js";
 import { foodModel } from "./food.js";
+import { orderModel } from "./order.js";
 
 const sequelize = new Sequelize("sql", "postgres", "1234", {
   host: "localhost",
@@ -12,6 +13,7 @@ const db = {
   sequelize,
   User: userModel(sequelize),
   Food: foodModel(sequelize),
+  Order: orderModel(sequelize),
 };
 
 const syncModels = async () => {
