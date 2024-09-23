@@ -5,7 +5,9 @@ import { useContext } from "react";
 import { StoreContext } from "@/context/StoreContext";
 
 export const Card = () => {
-  const { addToCart, foodData, isActive }: any = useContext(StoreContext);
+  const { addToCart, foodData, isActive, inputValue }: any =
+    useContext(StoreContext);
+
   return (
     <div className="flex flex-wrap justify-between rounded-xl py-10 max-w-screen-xl mx-auto">
       {foodData &&
@@ -13,6 +15,13 @@ export const Card = () => {
           .filter((item: any) => {
             if (isActive === "" || !isActive) return true;
             return item?.menu === isActive;
+          })
+          .filter((item: any) => {
+            if (!inputValue) {
+              return true;
+            } else if (inputValue) {
+              return item.name.toLowerCase().includes(inputValue.toLowerCase());
+            }
           })
           .map((elem: any, index: number) => {
             return (

@@ -10,12 +10,10 @@ import {
   SetStateAction,
 } from "react";
 
-// Define specific types for foodData and cartItems
 interface FoodItem {
   id: string;
   name: string;
   price: number;
-  // other properties of your food item
 }
 
 interface StoreContextProps {
@@ -43,45 +41,45 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
   const [foodData, setFoodData] = useState<FoodItem[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const [isActive, setIsActive] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
   const fetchFoods = async () => {
+    setLoading(true);
     try {
       const response = await axios.get("http://localhost:8000/api/foods");
       setFoodData(response.data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching foods:", error);
+      setLoading(false);
+    }
+    if (loading) {
+      <div>loading...</div>;
     }
   };
 
   useEffect(() => {
-    let isMounted = true;
-
-    const storedCartItems = localStorage.getItem("cartItems");
-    if (storedCartItems) {
+    const loadCartItems = () => {
       try {
-        const parsedCartItems = JSON.parse(storedCartItems);
-        setCartItems(parsedCartItems || {});
-        console.log("Loaded cart items from localStorage:", parsedCartItems);
+        const storedCartItems = localStorage.getItem("cartItems");
+        if (storedCartItems) {
+          setCartItems(JSON.parse(storedCartItems));
+        }
       } catch (error) {
-        console.error("Error parsing cartItems from localStorage", error);
         setCartItems({});
       }
-    } else {
-      console.log("No cart items found in localStorage");
-    }
-
-    if (isMounted) {
-      fetchFoods();
-    }
-
-    return () => {
-      isMounted = false;
     };
+    loadCartItems();
+    fetchFoods();
   }, []);
 
   useEffect(() => {
-    if (Object.keys(cartItems).length > 0) {
+    const cartIsNotEmpty = Object.keys(cartItems).length > 0;
+
+    if (cartIsNotEmpty) {
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    } else {
+      localStorage.removeItem("cartItems");
     }
   }, [cartItems]);
 

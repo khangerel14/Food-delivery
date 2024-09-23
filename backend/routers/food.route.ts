@@ -1,3 +1,4 @@
+import { Router, Express } from "express";
 import {
   create,
   findAll,
@@ -6,11 +7,10 @@ import {
   deleteAll,
   deleteFood,
 } from "../controllers/food.controller.js";
-import { Router } from "express";
 
 const router = Router();
 
-export default (app) => {
+export default (app: Express): void => {
   router.post("/", create);
   router.get("/", findAll);
   router.get("/:id", findOne);

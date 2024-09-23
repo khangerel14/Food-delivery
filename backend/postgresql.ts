@@ -1,19 +1,26 @@
 import { Sequelize } from "sequelize";
 import { userModel } from "./models/user.js";
 import { foodModel } from "./models/food.js";
+import { orderModel } from "./models/order.js";
 
-export const connection = async () => {
+export const connection = async (): Promise<void> => {
   const sequelize = new Sequelize("sql", "postgres", "1234", {
     host: "localhost",
     dialect: "postgres",
   });
-  let User = null;
-  let Food = null;
+
+  let User: ReturnType<typeof userModel> | null = null;
+  let Food: ReturnType<typeof foodModel> | null = null;
+  let Order: ReturnType<typeof orderModel> | null = null;
+
   try {
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
+
     User = userModel(sequelize);
     Food = foodModel(sequelize);
+    Order = orderModel(sequelize);
+
     await sequelize.sync();
     console.log("Data table created successfully.");
   } catch (error) {

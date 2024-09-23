@@ -1,9 +1,9 @@
 import { create, deleteOrder } from "../controllers/order.controller.js";
-import { Router } from "express";
+import { Router, Express } from "express";
 
 const router = Router();
 
-export default (app) => {
+export default (app: Express): void => {
   router.post("/", create);
   router.delete("/:id", deleteOrder);
 

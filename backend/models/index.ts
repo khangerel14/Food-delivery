@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
-import { userModel } from "./user.js";
-import { foodModel } from "./food.js";
-import { orderModel } from "./order.js";
+import { userModel, User } from "./user.js";
+import { foodModel, Food } from "./food.js";
+import { orderModel, Order } from "./order.js";
 
 const sequelize = new Sequelize("sql", "postgres", "1234", {
   host: "localhost",
@@ -16,11 +16,11 @@ const db = {
   Order: orderModel(sequelize),
 };
 
-const syncModels = async () => {
+const syncModels = async (): Promise<void> => {
   try {
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
-    await sequelize.sync(); // Sync all models
+    await sequelize.sync();
     console.log("Data tables created successfully.");
   } catch (error) {
     console.error("Unable to connect to the database:", error);

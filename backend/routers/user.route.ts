@@ -7,11 +7,11 @@ import {
   deleteAll,
   loginUser,
 } from "../controllers/user.controller.js";
-import { Router } from "express";
+import { Router, Express } from "express";
 
 const router = Router();
 
-export default (app) => {
+export default (app: Express): void => {
   router.post("/", create);
   router.post("/logIn", loginUser);
   router.get("/", findAll);

@@ -2,7 +2,7 @@ import { Food, White } from "@/images";
 
 export const Carousel = () => {
   return (
-    <div className="bg-[#18BA51] w-full h-[650px]">
+    <div className="bg-[#767776] w-full h-[650px]">
       <div className="flex bg-cover relative justify-center items-center">
         <White />
         <div className="flex justify-between w-[1280px] absolute mx-auto">
