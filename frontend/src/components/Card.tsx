@@ -7,14 +7,16 @@ import { StoreContext } from "@/context/StoreContext";
 export const Card = () => {
   const { addToCart, foodData, isActive, inputValue }: any =
     useContext(StoreContext);
-
   return (
     <div className="flex flex-wrap justify-between rounded-xl py-10 max-w-screen-xl mx-auto">
       {foodData &&
         foodData
           .filter((item: any) => {
-            if (isActive === "" || !isActive) return true;
-            return item?.menu === isActive;
+            if (isActive === "" || !isActive) {
+              return true;
+            } else {
+              return item?.menu === isActive;
+            }
           })
           .filter((item: any) => {
             if (!inputValue) {
@@ -42,7 +44,7 @@ export const Card = () => {
                     <p>{elem.assessment}</p>
                   </div>
                 </div>
-                <div className="flex flex-col p-3 justify-between gap-3">
+                <div className="flex flex-col p-3 justify-between gap-3 h-full">
                   <h1 className="font-semibold">{elem.name}</h1>
                   <p>{elem.description}</p>
                   <div className="flex justify-between items-center">

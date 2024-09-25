@@ -6,6 +6,7 @@ import { StoreContext } from "@/context/StoreContext";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import { SendBtn } from "./SendBtn";
 
 export const Order = () => {
   const { user }: any = useUser();
@@ -98,6 +99,9 @@ export const Order = () => {
             className="p-3 border border-gray-500 rounded-sm outline-none"
             onChange={(e) => handleRef("phoneNumber", e.target.value)}
           />
+          <button onClick={orderPost}>
+            <SendBtn />
+          </button>
         </div>
       </div>
       <div className="flex flex-col gap-10 w-[450px]">
@@ -116,11 +120,8 @@ export const Order = () => {
             <p>{grandTotal}₮</p>
           </div>
         </div>
-        <button
-          className="flex gap-5 items-center justify-center w-64 p-3 text-center bg-[#48A860] rounded-xl text-white"
-          onClick={orderPost}
-        >
-          Төлбөр төлөх
+        <button className="flex gap-5 items-center justify-center w-64 p-3 text-center bg-[#48A860] rounded-xl text-white">
+          <a href="/api/create-invoice">Төлбөр төлөх</a>
           <QrCodeScannerIcon />
         </button>
       </div>

@@ -10,7 +10,7 @@ import {
 
 const router = Router();
 
-export default (app: Express): void => {
+export default (app: Express) => {
   router.post("/", create);
   router.get("/", findAll);
   router.get("/:id", findOne);

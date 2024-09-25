@@ -42,6 +42,18 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
   const [inputValue, setInputValue] = useState<string>("");
   const [isActive, setIsActive] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [canOrder, setCanOrder] = useState(false);
+
+  const checkTime = () => {
+    const currentTime = new Date();
+    const currentHour = currentTime.getHours();
+
+    if (currentHour >= 9 && currentHour < 18) {
+      setCanOrder(true);
+    } else if (currentHour < 9) {
+      setCanOrder(false);
+    }
+  };
 
   const fetchFoods = async () => {
     setLoading(true);
@@ -52,9 +64,6 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
     } catch (error) {
       console.error("Error fetching foods:", error);
       setLoading(false);
-    }
-    if (loading) {
-      <div>loading...</div>;
     }
   };
 
@@ -69,8 +78,9 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
         setCartItems({});
       }
     };
-    loadCartItems();
     fetchFoods();
+    checkTime();
+    loadCartItems();
   }, []);
 
   useEffect(() => {
@@ -84,10 +94,14 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
   }, [cartItems]);
 
   const addToCart = (id: string) => {
-    setCartItems((prev) => ({
-      ...prev,
-      [id]: prev[id] ? prev[id] + 1 : 1,
-    }));
+    if (canOrder) {
+      setCartItems((prev) => ({
+        ...prev,
+        [id]: prev[id] ? prev[id] + 1 : 1,
+      }));
+    } else {
+      alert("Order booking time starts at 9oclock and ends at 12oclock");
+    }
   };
 
   const removeFromCart = (id: string) => {

@@ -3,7 +3,7 @@ import { Router, Express } from "express";
 
 const router = Router();
 
-export default (app: Express): void => {
+export default (app: Express) => {
   router.post("/", create);
   router.delete("/:id", deleteOrder);
 

@@ -27,14 +27,13 @@ export const create = async (req: Request, res: Response) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = { email, name, password: hashedPassword };
     const data = await User.create(user);
 
-    const { password: _, ...userData } = data.get({ plain: true });
-
     res.status(201).send({
       message: "User created successfully",
-      user: userData,
+      user: data,
     });
   } catch (err: unknown) {
     const errorMessage =
@@ -60,6 +59,18 @@ export const loginUser = async (req: Request, res: Response) => {
       return;
     }
 
+    console.log("User from DB:", user);
+
+    if (!user.password) {
+      res
+        .status(500)
+        .send({ message: "User password is missing in the database." });
+      return;
+    }
+
+    console.log("Password from DB:", user.password);
+    console.log("Password from request:", password);
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       res.status(401).send({ message: "Invalid email or password." });
@@ -82,6 +93,7 @@ export const loginUser = async (req: Request, res: Response) => {
       token,
     });
   } catch (err) {
+    console.error(err);
     res.status(500).send({
       message:
         (err as Error)?.message || "Some error occurred while logging in.",
