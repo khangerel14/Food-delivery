@@ -20,6 +20,7 @@ connection();
 userRoutes(app);
 foodRoutes(app);
 orderRoutes(app);
+cartRoutes(app);
 
 app.listen(PORT, "localhost", () => {
   console.log(`Server is running at http://localhost:${PORT}`);

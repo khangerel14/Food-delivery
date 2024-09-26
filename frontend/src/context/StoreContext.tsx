@@ -13,7 +13,11 @@ import {
 type FoodItem = {
   id: string;
   name: string;
+  description: string;
   price: number;
+  imgUrl: string;
+  assessment: number;
+  menu?: string;
 };
 
 type StoreContextProps = {
@@ -26,15 +30,16 @@ type StoreContextProps = {
   setIsActive: Dispatch<SetStateAction<string>>;
   inputValue: string;
   isActive: string;
+  fetchFoods: (newPage: number, itemsPerPage: number) => void;
 };
 
 export const StoreContext = createContext<StoreContextProps | undefined>(
   undefined
 );
 
-interface StoreProviderProps {
+type StoreProviderProps = {
   children: ReactNode;
-}
+};
 
 const StoreContextProvider = ({ children }: StoreProviderProps) => {
   const [cartItems, setCartItems] = useState<{ [key: string]: number }>({});
@@ -44,25 +49,25 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
   const [loading, setLoading] = useState(false);
   const [canOrder, setCanOrder] = useState(false);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(4);
+
   const checkTime = () => {
     const currentTime = new Date();
     const currentHour = currentTime.getHours();
-
-    if (currentHour >= 9 && currentHour < 18) {
-      setCanOrder(true);
-    } else if (currentHour < 9) {
-      setCanOrder(false);
-    }
+    setCanOrder(currentHour >= 9 && currentHour < 18);
   };
 
-  const fetchFoods = async () => {
+  const fetchFoods = async (newPage: number, itemsPerPage: number) => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/foods");
-      setFoodData(response.data);
-      setLoading(false);
+      const response = await axios.get(
+        `http://localhost:8000/api/foods?page=${newPage}&limit=${itemsPerPage}`
+      );
+      setFoodData(response?.data?.foods);
     } catch (error) {
       console.error("Error fetching foods:", error);
+    } finally {
       setLoading(false);
     }
   };
@@ -75,18 +80,18 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
           setCartItems(JSON.parse(storedCartItems));
         }
       } catch (error) {
+        console.error("Failed to load cart items:", error);
         setCartItems({});
       }
     };
-    fetchFoods();
+
+    fetchFoods(currentPage, itemsPerPage);
     checkTime();
     loadCartItems();
   }, []);
 
   useEffect(() => {
-    const cartIsNotEmpty = Object.keys(cartItems).length > 0;
-
-    if (cartIsNotEmpty) {
+    if (Object.keys(cartItems).length > 0) {
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
     } else {
       localStorage.removeItem("cartItems");
@@ -100,7 +105,7 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
         [id]: prev[id] ? prev[id] + 1 : 1,
       }));
     } else {
-      alert("Order booking time starts at 9oclock and ends at 12oclock");
+      alert("Order booking time starts at 9 o'clock and ends at 18 o'clock.");
     }
   };
 
@@ -132,6 +137,7 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
     setIsActive,
     inputValue,
     isActive,
+    fetchFoods,
   };
 
   return (

@@ -1,46 +1,39 @@
 "use client";
 
-import StarIcon from "@mui/icons-material/Star";
 import { useContext } from "react";
 import { StoreContext } from "@/context/StoreContext";
 import { Paginations } from "./Paginations";
+import StarIcon from "@mui/icons-material/Star";
 import { useSearchParams } from "next/navigation";
 
-type FoodItem = {
-  id: number;
-  name: string;
-  description: string;
-  price: string;
-  imgUrl: string;
-  assessment: number;
-  menu?: string;
-};
-
 export const Card = () => {
-  const { addToCart, foodData, isActive, inputValue }: any =
-    useContext(StoreContext);
+  const context = useContext(StoreContext);
   const searchParams = useSearchParams();
 
+  if (!context) {
+    throw new Error("Card must be used within a StoreContextProvider");
+  }
+  const { addToCart, foodData, isActive, inputValue } = context;
+
   const page = parseInt(searchParams.get("page") || "1", 10);
-  const per_page = parseInt(searchParams.get("per_page") || "4", 10);
+  const limit = parseInt(searchParams.get("limit") || "4", 10);
 
-  const start = (page - 1) * per_page;
-  const end = start + per_page;
+  const start = (page - 1) * limit;
+  const end = start + limit;
 
-  const filteredFood = foodData.filter((item: FoodItem) => {
-    const matchesActive =
-      isActive === "" || !isActive || item.menu === isActive;
+  const filteredFoods = foodData.filter((elem) => {
+    const matchesActive = isActive === "" || elem.menu === isActive;
     const matchesInput =
-      !inputValue || item.name.toLowerCase().includes(inputValue.toLowerCase());
+      !inputValue || elem.name.toLowerCase().includes(inputValue.toLowerCase());
     return matchesActive && matchesInput;
   });
 
-  const foods = filteredFood.slice(start, end);
+  const foods = filteredFoods.slice(start, end);
 
   return (
     <div className="flex flex-col mx-auto max-w-screen-xl items-center">
       <div className="flex flex-wrap justify-between rounded-xl py-10 max-w-screen-xl mx-auto gap-[53px]">
-        {foods.map((elem: FoodItem) => (
+        {foods.map((elem) => (
           <div
             className="flex flex-col border border-gray-400 mb-10 w-[280px] rounded-xl shadow-inner"
             key={elem.id}
@@ -77,7 +70,7 @@ export const Card = () => {
           </div>
         ))}
       </div>
-      <Paginations foodValue={foods} />
+      <Paginations foodValue={filteredFoods} />
     </div>
   );
 };

@@ -9,16 +9,16 @@ export const Paginations = ({ foodValue }: any) => {
   const searchParams = useSearchParams();
 
   const page = parseInt(searchParams.get("page") || "1", 10);
-  const per_page = parseInt(searchParams.get("per_page") || "4", 10);
+  const limit = parseInt(searchParams.get("limit") || "4", 10);
 
   const handlePrev = () => {
     if (page > 1) {
-      router.push(`?page=${page - 1}&per_page=${per_page}`);
+      router.push(`?page=${page - 1}&limit=${limit}`);
     }
   };
 
   const handleNext = () => {
-    router.push(`?page=${page + 1}&per_page=${per_page}`);
+    router.push(`?page=${page + 1}&limit=${limit}`);
   };
 
   return (
@@ -34,11 +34,11 @@ export const Paginations = ({ foodValue }: any) => {
           >
             <ChevronLeftIcon />
           </button>
-          {page} / {Math.ceil(28 / Number(per_page))}
+          {page} / {Math.ceil(28 / Number(limit))}
           <button
             onClick={handleNext}
             className={`rounded-sm px-14 p-3 text-center bg-slate-500 ${
-              foodValue.length < per_page ? "opacity-50 cursor-not-allowed" : ""
+              foodValue.length < limit ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
             <ChevronRightIcon />
