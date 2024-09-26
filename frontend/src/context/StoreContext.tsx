@@ -10,13 +10,13 @@ import {
   SetStateAction,
 } from "react";
 
-interface FoodItem {
+type FoodItem = {
   id: string;
   name: string;
   price: number;
-}
+};
 
-interface StoreContextProps {
+type StoreContextProps = {
   foodData: FoodItem[];
   cartItems: { [key: string]: number };
   addToCart: (id: string) => void;
@@ -26,7 +26,7 @@ interface StoreContextProps {
   setIsActive: Dispatch<SetStateAction<string>>;
   inputValue: string;
   isActive: string;
-}
+};
 
 export const StoreContext = createContext<StoreContextProps | undefined>(
   undefined

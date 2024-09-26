@@ -1,7 +1,5 @@
-import { Request, Response } from "express";
 import { Op } from "sequelize";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { Request, Response } from "express";
 import dotenv from "dotenv";
 import db from "../models/index.js";
 
@@ -9,95 +7,30 @@ dotenv.config();
 
 const { User } = db;
 
-export const create = async (req: Request, res: Response) => {
+export const createUser = async (req: Request, res: Response) => {
   try {
-    const { email, name, password } = req.body;
+    const { auth0Id, email, name, picture } = req.body;
 
-    if (!email || !name || !password) {
-      res
-        .status(400)
-        .send({ message: "All fields are required: email, name, password." });
-      return;
-    }
-
-    const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) {
-      res.status(400).send({ message: "User already exists with this email." });
-      return;
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = { email, name, password: hashedPassword };
-    const data = await User.create(user);
-
-    res.status(201).send({
-      message: "User created successfully",
-      user: data,
+    const [user, created] = await User.findOrCreate({
+      where: { auth0Id },
+      defaults: {
+        auth0Id,
+        email,
+        name,
+        picture,
+      },
     });
-  } catch (err: unknown) {
-    const errorMessage =
-      err instanceof Error ? err.message : "Some error occurred";
-    res.status(500).send({
-      message: errorMessage,
-    });
-  }
-};
 
-export const loginUser = async (req: Request, res: Response) => {
-  try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      res.status(400).send({ message: "Email and password are required." });
-      return;
+    if (created) {
+      console.log(`New user created: ${email}`);
+    } else {
+      console.log(`Existing user found: ${email}`);
     }
 
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
-      res.status(404).send({ message: "User not found." });
-      return;
-    }
-
-    console.log("User from DB:", user);
-
-    if (!user.password) {
-      res
-        .status(500)
-        .send({ message: "User password is missing in the database." });
-      return;
-    }
-
-    console.log("Password from DB:", user.password);
-    console.log("Password from request:", password);
-
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      res.status(401).send({ message: "Invalid email or password." });
-      return;
-    }
-
-    const { password: _, ...userData } = user.get({ plain: true });
-
-    const createToken = (id: number): string => {
-      return jwt.sign({ id }, process.env.JWT_SECRET as string, {
-        expiresIn: "1h",
-      });
-    };
-
-    const token = createToken(user.id);
-
-    res.status(200).send({
-      message: "Login successful",
-      user: userData,
-      token,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({
-      message:
-        (err as Error)?.message || "Some error occurred while logging in.",
-    });
+    return res.status(200).json(user);
+  } catch (error) {
+    console.error("Error creating user:", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -153,21 +86,6 @@ export const deleteUser = async (req: Request, res: Response) => {
   } catch (err: unknown) {
     const errorMessage =
       err instanceof Error ? err.message : "Couldn't delete User with id=" + id;
-    res.status(500).send({
-      message: errorMessage,
-    });
-  }
-};
-
-export const deleteAll = async (req: Request, res: Response) => {
-  try {
-    const num = await User.destroy({ where: {}, truncate: false });
-    res
-      .status(200)
-      .send({ message: `${num} Users were deleted successfully.` });
-  } catch (err: unknown) {
-    const errorMessage =
-      err instanceof Error ? err.message : "Couldn't delete all Users.";
     res.status(500).send({
       message: errorMessage,
     });

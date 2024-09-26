@@ -62,7 +62,7 @@ export const orderModel = (sequelize: Sequelize): typeof Order => {
           allowNull: false,
         },
         phoneNumber: {
-          type: DataTypes.FLOAT,
+          type: DataTypes.BIGINT,
           allowNull: false,
         },
       },

@@ -1,17 +1,19 @@
 import { Request, Response } from "express";
 import db from "../models/index.js";
 
-const { Order } = db;
+const { Order, User } = db;
 
-export const create = async (req: Request, res: Response) => {
+export const createOrder = async (req: Request, res: Response) => {
   try {
     const { email, khoroo, district, phoneNumber } = req.body;
-    const order = { email, khoroo, district, phoneNumber };
-
+    const orderdaat = localStorage.getItem("cartItems");
+    console.log(orderdaat);
     if (!email || !khoroo || !district || !phoneNumber) {
       res.status(400).send({ message: "All fields are required." });
       return;
     }
+
+    const order = { email, khoroo, district, phoneNumber };
 
     const data = await Order.create(order);
     res.status(201).send(data);
@@ -41,6 +43,27 @@ export const deleteOrder = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).send({
       message: "Couldn't delete Order with id=" + id,
+    });
+  }
+};
+
+export const findOrdersWithUser = async (req: Request, res: Response) => {
+  try {
+    const orders = await Order.findAll({
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: ["id", "email", "name"],
+        },
+      ],
+    });
+
+    res.status(200).send(orders);
+  } catch (error) {
+    res.status(500).send({
+      message:
+        (error as Error).message || "Error occurred while retrieving orders.",
     });
   }
 };

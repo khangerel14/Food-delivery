@@ -10,3 +10,4 @@ export * from "./MapConfiguration";
 export * from "./Basket";
 export * from "./Card";
 export * from "./Order";
+export * from "./Paginations";
