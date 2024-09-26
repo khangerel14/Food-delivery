@@ -30,7 +30,6 @@ type StoreContextProps = {
   setIsActive: Dispatch<SetStateAction<string>>;
   inputValue: string;
   isActive: string;
-  fetchFoods: (newPage: number, itemsPerPage: number) => void;
 };
 
 export const StoreContext = createContext<StoreContextProps | undefined>(
@@ -49,21 +48,17 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
   const [loading, setLoading] = useState(false);
   const [canOrder, setCanOrder] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(4);
-
   const checkTime = () => {
     const currentTime = new Date();
     const currentHour = currentTime.getHours();
+
     setCanOrder(currentHour >= 9 && currentHour < 18);
   };
 
-  const fetchFoods = async (newPage: number, itemsPerPage: number) => {
+  const fetchFoods = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/foods?page=${newPage}&limit=${itemsPerPage}`
-      );
+      const response = await axios.get("http://localhost:8000/api/foods");
       setFoodData(response?.data?.foods);
     } catch (error) {
       console.error("Error fetching foods:", error);
@@ -85,7 +80,7 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
       }
     };
 
-    fetchFoods(currentPage, itemsPerPage);
+    fetchFoods();
     checkTime();
     loadCartItems();
   }, []);
@@ -137,7 +132,6 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
     setIsActive,
     inputValue,
     isActive,
-    fetchFoods,
   };
 
   return (
