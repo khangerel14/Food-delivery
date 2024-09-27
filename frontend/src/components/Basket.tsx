@@ -3,7 +3,8 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { useState, useEffect, useContext } from "react";
+import { useContext, useMemo } from "react";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { StoreContext } from "@/context/StoreContext";
 import {
@@ -15,8 +16,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+type CartItem = {
+  id: string;
+  name: string;
+  price: number;
+  imgUrl: string;
+  qty: number;
+};
+
 export const Basket = () => {
-  const [cartItemsArray, setCartItemsArray] = useState<any[]>([]);
   const router = useRouter();
   const {
     foodData,
@@ -26,40 +34,25 @@ export const Basket = () => {
     deleteFromCart,
   }: any = useContext(StoreContext);
 
+  const cartItemsArray = useMemo<CartItem[]>(() => {
+    return Object.entries(cartItems)
+      .map(([id, qty]) => {
+        const foodItem = foodData.find((item: any) => item.id === id);
+        return foodItem ? { ...foodItem, qty } : null;
+      })
+      .filter(Boolean) as CartItem[];
+  }, [foodData, cartItems]);
+
+  const totalPrice = cartItemsArray.reduce(
+    (acc, item) => acc + item.qty * item.price,
+    0
+  );
+  const deliveryPrice = 2500;
+  const grandTotal = totalPrice + deliveryPrice;
+
   const orderPage = () => {
     router.push("/order");
   };
-
-  useEffect(() => {
-    if (cartItems && foodData.length > 0) {
-      try {
-        const parsedItems =
-          typeof cartItems === "string" ? JSON.parse(cartItems) : cartItems;
-
-        const itemsArray = Object.entries(parsedItems)
-          .map(([id, qty]) => {
-            const foodItem = foodData.find(
-              (item: any) => item.id === Number(id)
-            );
-
-            return foodItem ? { ...foodItem, qty } : null;
-          })
-          .filter(Boolean);
-
-        setCartItemsArray(itemsArray);
-      } catch (error) {
-        console.error("Error parsing cartItems", error);
-        setCartItemsArray([]);
-      }
-    }
-  }, [foodData, cartItems]);
-
-  const totalPrice = cartItemsArray.length
-    ? cartItemsArray.reduce((acc, item) => acc + item.qty * item.price, 0)
-    : 0;
-
-  const deliveryPrice = 2500;
-  const grandTotal = totalPrice + deliveryPrice;
 
   return (
     <div className="flex flex-col justify-center items-start gap-20 max-w-screen-xl mx-auto w-full py-20">
@@ -78,9 +71,9 @@ export const Basket = () => {
             </TableRow>
           </TableHeader>
           {cartItemsArray.length > 0 ? (
-            cartItemsArray.map((item: any, index: number) => (
-              <TableBody key={index} className="border-b">
-                <TableRow>
+            <TableBody>
+              {cartItemsArray.map((item, index) => (
+                <TableRow key={index}>
                   <TableCell className="flex justify-center rounded-md">
                     <img
                       src={item.imgUrl}
@@ -95,11 +88,16 @@ export const Basket = () => {
                     <button
                       className="mr-5"
                       onClick={() => removeFromCart(item.id)}
+                      aria-label={`Remove one ${item.name} from cart`}
                     >
                       <RemoveIcon />
                     </button>
                     {item.qty}
-                    <button className="ml-5" onClick={() => addToCart(item.id)}>
+                    <button
+                      className="ml-5"
+                      onClick={() => addToCart(item.id)}
+                      aria-label={`Add one ${item.name} to cart`}
+                    >
                       <AddIcon />
                     </button>
                   </TableCell>
@@ -107,14 +105,15 @@ export const Basket = () => {
                     {item.qty * item.price}₮
                   </TableCell>
                   <TableCell
-                    className="text-center"
+                    className="text-center cursor-pointer"
                     onClick={() => deleteFromCart(item.id)}
+                    aria-label={`Remove ${item.name} from cart`}
                   >
                     <DeleteIcon />
                   </TableCell>
                 </TableRow>
-              </TableBody>
-            ))
+              ))}
+            </TableBody>
           ) : (
             <TableBody>
               <TableRow>

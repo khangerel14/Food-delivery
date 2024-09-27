@@ -34,35 +34,29 @@ export const create = async (req: Request, res: Response) => {
 
 export const findAll = async (req: Request, res: Response) => {
   try {
-    // Get page and limit from query parameters, defaults are 1 and 4
     const page: number = parseInt(req.query.page as string) || 1;
     const limit: number = parseInt(req.query.limit as string) || 4;
-    const offset: number = (page - 1) * limit; // Calculate offset
+    const offset: number = (page - 1) * limit;
 
-    // Get food search term from body if applicable
-    const food: string = req.body.food;
+    const food: string = req.query.food as string;
     const condition = food ? { name: { [Op.iLike]: `%${food}%` } } : undefined;
 
-    // Fetch foods with limit and offset
     const data = await Food.findAll({
       where: condition,
       limit: limit,
       offset: offset,
     });
 
-    // Count total items matching the condition
     const totalCount = await Food.count({ where: condition });
 
-    // Send response with pagination info
     res.status(200).send({
       success: true,
       page,
-      perPage: limit, // You can return the per page value for consistency
+      perPage: limit,
       totalCount,
       foods: data,
     });
   } catch (error) {
-    // Handle error
     res.status(500).send({
       success: false,
       message:
@@ -71,6 +65,7 @@ export const findAll = async (req: Request, res: Response) => {
     });
   }
 };
+
 export const findOne = async (req: Request, res: Response) => {
   const id: string = req.params.id;
 

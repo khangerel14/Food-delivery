@@ -1,8 +1,8 @@
 import { Sequelize } from "sequelize";
-import { userModel, User } from "./user.js";
-import { foodModel, Food } from "./food.js";
-import { orderModel, Order } from "./order.js";
-import { cartModel, Cart } from "./cart.js";
+import { userModel } from "./user.js";
+import { foodModel } from "./food.js";
+import { orderModel } from "./order.js";
+import { cartModel } from "./cart.js";
 
 const sequelize = new Sequelize("sql", "postgres", "1234", {
   host: "localhost",

@@ -3,11 +3,11 @@
 import axios from "axios";
 import {
   createContext,
-  useEffect,
   useState,
   ReactNode,
   Dispatch,
   SetStateAction,
+  useEffect,
 } from "react";
 
 type FoodItem = {
@@ -30,6 +30,9 @@ type StoreContextProps = {
   setIsActive: Dispatch<SetStateAction<string>>;
   inputValue: string;
   isActive: string;
+  loading: boolean;
+  fetchFoods: (page: number, limit: number) => Promise<void>;
+  totalItems: number;
 };
 
 export const StoreContext = createContext<StoreContextProps | undefined>(
@@ -46,25 +49,13 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
   const [inputValue, setInputValue] = useState<string>("");
   const [isActive, setIsActive] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [totalItems, setTotalItems] = useState(0);
   const [canOrder, setCanOrder] = useState(false);
 
   const checkTime = () => {
     const currentTime = new Date();
     const currentHour = currentTime.getHours();
-
     setCanOrder(currentHour >= 9 && currentHour < 18);
-  };
-
-  const fetchFoods = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get("http://localhost:8000/api/foods");
-      setFoodData(response?.data?.foods);
-    } catch (error) {
-      console.error("Error fetching foods:", error);
-    } finally {
-      setLoading(false);
-    }
   };
 
   useEffect(() => {
@@ -79,10 +70,8 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
         setCartItems({});
       }
     };
-
-    fetchFoods();
-    checkTime();
     loadCartItems();
+    checkTime();
   }, []);
 
   useEffect(() => {
@@ -93,6 +82,28 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
     }
   }, [cartItems]);
 
+  const fetchFoods = async (page: number = 1, limit: number = 4) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/foods?page=${page}&limit=${limit}`
+      );
+
+      if (response.data.success) {
+        setFoodData(response.data.foods);
+        setTotalItems(response.data.totalCount);
+      } else {
+        console.error("Failed to fetch foods:", response.data.message);
+        setFoodData([]);
+      }
+    } catch (error) {
+      console.error("Error fetching foods:", error);
+      setFoodData([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const addToCart = (id: string) => {
     if (canOrder) {
       setCartItems((prev) => ({
@@ -100,7 +111,7 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
         [id]: prev[id] ? prev[id] + 1 : 1,
       }));
     } else {
-      alert("Order booking time starts at 9 o'clock and ends at 18 o'clock.");
+      alert("you missed! Booking time is between at 9 to 18.");
     }
   };
 
@@ -132,6 +143,9 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
     setIsActive,
     inputValue,
     isActive,
+    loading,
+    fetchFoods,
+    totalItems,
   };
 
   return (
