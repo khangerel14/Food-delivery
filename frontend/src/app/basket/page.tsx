@@ -1,13 +1,16 @@
 "use client";
 
 import { Basket, Footer, Navbar } from "@/components";
+import BasketContextProvider from "@/context/BasketContext";
 import StoreContextProvider from "@/context/StoreContext";
 
 const Page = () => {
   return (
     <StoreContextProvider>
       <Navbar />
-      <Basket />
+      <BasketContextProvider>
+        <Basket />
+      </BasketContextProvider>
       <Footer />
     </StoreContextProvider>
   );

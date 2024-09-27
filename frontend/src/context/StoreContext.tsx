@@ -24,8 +24,6 @@ type StoreContextProps = {
   foodData: FoodItem[];
   cartItems: { [key: string]: number };
   addToCart: (id: string) => void;
-  removeFromCart: (id: string) => void;
-  deleteFromCart: (id: string) => void;
   setInputValue: Dispatch<SetStateAction<string>>;
   setIsActive: Dispatch<SetStateAction<string>>;
   inputValue: string;
@@ -115,30 +113,10 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
     }
   };
 
-  const removeFromCart = (id: string) => {
-    setCartItems((prev) => {
-      if (prev[id] > 1) {
-        return { ...prev, [id]: prev[id] - 1 };
-      } else {
-        const { [id]: _, ...rest } = prev;
-        return rest;
-      }
-    });
-  };
-
-  const deleteFromCart = (id: string) => {
-    setCartItems((prev) => {
-      const { [id]: _, ...rest } = prev;
-      return rest;
-    });
-  };
-
   const contextValue: StoreContextProps = {
     foodData,
     cartItems,
     addToCart,
-    removeFromCart,
-    deleteFromCart,
     setInputValue,
     setIsActive,
     inputValue,

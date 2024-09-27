@@ -3,10 +3,9 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { useContext, useMemo } from "react";
-import axios from "axios";
+import { useContext } from "react";
 import { useRouter } from "next/navigation";
-import { StoreContext } from "@/context/StoreContext";
+import { BasketContext } from "@/context/BasketContext";
 import {
   Table,
   TableBody,
@@ -16,43 +15,54 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-type CartItem = {
-  id: string;
-  name: string;
-  price: number;
+interface FoodItem {
+  id: number;
   imgUrl: string;
+  name: string;
+  description: string;
+  price: number;
+}
+
+type CartItem = FoodItem & {
   qty: number;
 };
 
+type CartItems = Record<string, number>;
+
 export const Basket = () => {
   const router = useRouter();
-  const {
-    foodData,
-    cartItems,
-    removeFromCart,
-    addToCart,
-    deleteFromCart,
-  }: any = useContext(StoreContext);
 
-  const cartItemsArray = useMemo<CartItem[]>(() => {
-    return Object.entries(cartItems)
-      .map(([id, qty]) => {
-        const foodItem = foodData.find((item: any) => item.id === id);
-        return foodItem ? { ...foodItem, qty } : null;
-      })
-      .filter(Boolean) as CartItem[];
-  }, [foodData, cartItems]);
+  const {
+    foodData = [],
+    cartItems = {} as CartItems,
+    removeFromCart = () => {},
+    addToCart = () => {},
+    deleteFromCart = () => {},
+  } = useContext(BasketContext) || {};
+
+  const cartItemsArray: CartItem[] = [];
+
+  if (foodData.length > 0) {
+    const foodDataMap = new Map(foodData.map((item) => [item.id, item]));
+
+    Object.entries(cartItems).forEach(([id, qty]) => {
+      console.log(`Checking ID: ${id}`);
+      const foodItem = foodDataMap.get(Number(id));
+      if (foodItem) {
+        cartItemsArray.push({ ...foodItem, qty });
+      } else {
+        console.warn(`Food item with id ${id} not found in foodData`);
+      }
+    });
+  }
 
   const totalPrice = cartItemsArray.reduce(
-    (acc, item) => acc + item.qty * item.price,
+    (acc: number, item: CartItem) => acc + item.qty * item.price,
     0
   );
+
   const deliveryPrice = 2500;
   const grandTotal = totalPrice + deliveryPrice;
-
-  const orderPage = () => {
-    router.push("/order");
-  };
 
   return (
     <div className="flex flex-col justify-center items-start gap-20 max-w-screen-xl mx-auto w-full py-20">
@@ -72,8 +82,8 @@ export const Basket = () => {
           </TableHeader>
           {cartItemsArray.length > 0 ? (
             <TableBody>
-              {cartItemsArray.map((item, index) => (
-                <TableRow key={index}>
+              {cartItemsArray.map((item: CartItem) => (
+                <TableRow key={item.id}>
                   <TableCell className="flex justify-center rounded-md">
                     <img
                       src={item.imgUrl}
@@ -143,7 +153,7 @@ export const Basket = () => {
         </div>
         <button
           className="w-64 p-3 text-center bg-[#48A860] rounded-xl text-white"
-          onClick={orderPage}
+          onClick={() => router.push("/order")}
         >
           Захиалга баталгаажуулах
         </button>

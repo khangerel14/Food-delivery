@@ -21,13 +21,12 @@ export const Card = () => {
     loading,
     totalItems,
   } = context;
+
   const searchParams = useSearchParams();
 
-  // Get page and limit from URL
   const page = parseInt(searchParams.get("page") || "1", 10);
   const limit = parseInt(searchParams.get("limit") || "4", 10);
 
-  // Fetch new food data on page change
   useEffect(() => {
     fetchFoods(page, limit);
   }, [page, limit]);
