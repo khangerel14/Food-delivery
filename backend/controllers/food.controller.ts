@@ -66,20 +66,29 @@ export const findAll = async (req: Request, res: Response) => {
   }
 };
 
-export const findOne = async (req: Request, res: Response) => {
-  const id: string = req.params.id;
-
+export const findMultiple = async (req: Request, res: Response) => {
   try {
-    const data = await Food.findByPk(id);
-    if (data) {
-      res.status(200).send(data);
-    } else {
-      res.status(404).send({ message: `Cannot find Food with id=${id}.` });
-    }
+    const ids =
+      req.query.ids
+        ?.toString()
+        .split(",")
+        .map((id) => Number(id)) || [];
+
+    const foods = await Food.findAll({
+      where: {
+        id: ids.length ? ids : undefined,
+      },
+    });
+
+    res.status(200).send({
+      success: true,
+      foods,
+    });
   } catch (error) {
+    console.error("Error retrieving foods:", error);
     res.status(500).send({
       success: false,
-      message: "Error retrieving Food with id=" + id,
+      message: "Error retrieving foods.",
     });
   }
 };
