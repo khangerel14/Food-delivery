@@ -2,6 +2,7 @@
 
 import { createContext, ReactNode, useState, useEffect } from "react";
 import axios from "axios";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 type FoodItem = {
   id: number;
@@ -33,6 +34,7 @@ type BasketProviderProps = {
 const BasketContextProvider = ({ children }: BasketProviderProps) => {
   const [cartItems, setCartItems] = useState<{ [key: string]: number }>({});
   const [foodData, setFoodData] = useState<FoodItem[]>([]);
+  const { user }: any = useUser();
 
   const foodById = async (ids: string[]) => {
     if (ids.length === 0) return;
@@ -56,6 +58,8 @@ const BasketContextProvider = ({ children }: BasketProviderProps) => {
     const storedCartItems = localStorage.getItem("cartItems");
     if (storedCartItems) {
       setCartItems(JSON.parse(storedCartItems));
+    } else {
+      localStorage.removeItem("cartItems");
     }
   }, []);
 
@@ -88,11 +92,26 @@ const BasketContextProvider = ({ children }: BasketProviderProps) => {
     });
   };
 
-  const deleteFromCart = (id: number) => {
-    setCartItems((prev) => {
-      const { [id]: _, ...rest } = prev;
-      return rest;
-    });
+  const deleteFromCart = async (id: number) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8000/api/cart/${user.sub}/${id}`
+      );
+      if (response.status === 200) {
+        setCartItems((prev) => {
+          const { [id]: _, ...rest } = prev;
+
+          if (Object.keys(rest).length === 0) {
+            localStorage.removeItem("cartItems");
+          }
+          return rest;
+        });
+      } else {
+        console.error("Error removing item from cart:", response.data);
+      }
+    } catch (error) {
+      console.error("Error removing item from cart:", error);
+    }
   };
 
   const totalItems = Object.values(cartItems).reduce(

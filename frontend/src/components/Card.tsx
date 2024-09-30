@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { StoreContext } from "@/context/StoreContext";
 import { Paginations } from "./Paginations";
 import StarIcon from "@mui/icons-material/Star";
@@ -25,11 +25,20 @@ export const Card = () => {
   const searchParams = useSearchParams();
 
   const page = parseInt(searchParams.get("page") || "1", 10);
-  const limit = parseInt(searchParams.get("limit") || "4", 10);
+  const limit = parseInt(searchParams.get("limit") || "8", 10);
 
   useEffect(() => {
     fetchFoods(page, limit);
   }, [page, limit]);
+
+  const handleAddToCart = async (foodId: number, quantity: number = 1) => {
+    try {
+      await addToCart(foodId, quantity);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    } finally {
+    }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -78,7 +87,7 @@ export const Card = () => {
                   </div>
                   <button
                     className="p-2 px-3 rounded-full flex items-center justify-center bg-[#85BB65]"
-                    onClick={() => addToCart(elem.id)}
+                    onClick={() => handleAddToCart(elem.id, 1)}
                   >
                     Сагслах
                   </button>
@@ -87,7 +96,6 @@ export const Card = () => {
             </div>
           ))}
       </div>
-
       <Paginations currentPage={page} limit={limit} totalItems={totalItems} />
     </div>
   );

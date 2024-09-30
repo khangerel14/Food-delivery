@@ -2,16 +2,14 @@
 
 import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import { useContext, useEffect, useState, useRef } from "react";
-import { StoreContext } from "@/context/StoreContext";
-import { useUser } from "@auth0/nextjs-auth0/client";
-import axios from "axios";
+import { BasketContext } from "@/context/BasketContext";
 import toast, { Toaster } from "react-hot-toast";
 import { SendBtn } from "./SendBtn";
+import axios from "axios";
 
 export const Order = () => {
-  const { user }: any = useUser();
   const [cartItemsArray, setCartItemsArray] = useState<any[]>([]);
-  const { cartItems, foodData }: any = useContext(StoreContext);
+  const { cartItems, foodData }: any = useContext(BasketContext);
   const formDataRef = useRef({
     email: "",
     khoroo: "",
@@ -22,6 +20,7 @@ export const Order = () => {
   const handleRef = (field: string, value: number | string) => {
     formDataRef.current = { ...formDataRef.current, [field]: value };
   };
+
   const orderPost = async () => {
     try {
       const data = await axios.post("http://localhost:8000/api/orders", {
@@ -34,6 +33,7 @@ export const Order = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     if (cartItems && foodData.length > 0) {
       try {
@@ -64,6 +64,7 @@ export const Order = () => {
 
   const deliveryPrice = 2500;
   const grandTotal = totalPrice + deliveryPrice;
+
   return (
     <div className="flex justify-between items-start w-[1200px] my-32 mx-auto">
       <Toaster position="top-right" />

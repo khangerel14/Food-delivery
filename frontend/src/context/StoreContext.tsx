@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "axios";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import {
   createContext,
   useState,
@@ -23,7 +24,6 @@ type FoodItem = {
 type StoreContextProps = {
   foodData: FoodItem[];
   cartItems: { [key: string]: number };
-  addToCart: (id: string) => void;
   setInputValue: Dispatch<SetStateAction<string>>;
   setIsActive: Dispatch<SetStateAction<string>>;
   inputValue: string;
@@ -31,6 +31,7 @@ type StoreContextProps = {
   loading: boolean;
   fetchFoods: (page: number, limit: number) => Promise<void>;
   totalItems: number;
+  addToCart: (foodId: number, quantity: number) => Promise<void>;
 };
 
 export const StoreContext = createContext<StoreContextProps | undefined>(
@@ -49,11 +50,12 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
   const [loading, setLoading] = useState(false);
   const [totalItems, setTotalItems] = useState(0);
   const [canOrder, setCanOrder] = useState(false);
+  const { user }: any = useUser();
 
   const checkTime = () => {
     const currentTime = new Date();
     const currentHour = currentTime.getHours();
-    setCanOrder(currentHour >= 9 && currentHour < 18);
+    setCanOrder(currentHour >= 9 && currentHour < 23);
   };
 
   useEffect(() => {
@@ -80,18 +82,18 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
     }
   }, [cartItems]);
 
-  const fetchFoods = async (page: number = 1, limit: number = 4) => {
+  const fetchFoods = async (page: number = 1, limit: number = 8) => {
     setLoading(true);
     try {
       const response = await axios.get(
         `http://localhost:8000/api/foods?page=${page}&limit=${limit}`
       );
+      console.log(response.data, "response.data");
 
       if (response.data.success) {
         setFoodData(response.data.foods);
         setTotalItems(response.data.totalCount);
       } else {
-        console.error("Failed to fetch foods:", response.data.message);
         setFoodData([]);
       }
     } catch (error) {
@@ -102,14 +104,23 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
     }
   };
 
-  const addToCart = (id: string) => {
-    if (canOrder) {
-      setCartItems((prev) => ({
-        ...prev,
-        [id]: prev[id] ? prev[id] + 1 : 1,
-      }));
-    } else {
-      alert("you missed! Booking time is between at 9 to 18.");
+  const addToCart = async (foodId: number, quantity: number) => {
+    try {
+      if (user && user.sub) {
+        await axios.post("http://localhost:8000/api/cart", {
+          foodId,
+          quantity,
+          auth0Id: user.sub,
+        });
+        setCartItems((prev) => ({
+          ...prev,
+          [foodId]: prev[foodId] ? prev[foodId] + quantity : quantity,
+        }));
+      } else {
+        console.error("User is not authenticated");
+      }
+    } catch (error) {
+      console.error("Error adding to cart:", error);
     }
   };
 

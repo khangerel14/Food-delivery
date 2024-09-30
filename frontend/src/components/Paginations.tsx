@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
@@ -14,8 +14,7 @@ export const Paginations = ({
   totalItems: number;
 }) => {
   const router = useRouter();
-  const totalPages = Math.ceil(totalItems / limit); // Calculate total number of pages
-
+  const totalPages = Math.ceil(totalItems / limit);
   const handlePrev = () => {
     if (currentPage > 1) {
       router.push(`?page=${currentPage - 1}&limit=${limit}`);

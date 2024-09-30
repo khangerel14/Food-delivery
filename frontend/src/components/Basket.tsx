@@ -6,6 +6,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { useContext } from "react";
 import { useRouter } from "next/navigation";
 import { BasketContext } from "@/context/BasketContext";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import {
   Table,
   TableBody,
@@ -14,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import axios from "axios";
 
 interface FoodItem {
   id: number;
@@ -30,6 +32,7 @@ type CartItem = FoodItem & {
 type CartItems = Record<string, number>;
 
 export const Basket = () => {
+  const { user }: any = useUser();
   const router = useRouter();
 
   const {
@@ -46,7 +49,6 @@ export const Basket = () => {
     const foodDataMap = new Map(foodData.map((item) => [item.id, item]));
 
     Object.entries(cartItems).forEach(([id, qty]) => {
-      console.log(`Checking ID: ${id}`);
       const foodItem = foodDataMap.get(Number(id));
       if (foodItem) {
         cartItemsArray.push({ ...foodItem, qty });
@@ -55,6 +57,18 @@ export const Basket = () => {
       }
     });
   }
+
+  const deleteTable = async () => {
+    router.push("/order");
+    try {
+      const response = await axios.delete(
+        `http://localhost:8000/api/cart/${user.sub}`
+      );
+      return response;
+    } catch (error) {
+      console.log("error happend for deleting action", error);
+    }
+  };
 
   const totalPrice = cartItemsArray.reduce(
     (acc: number, item: CartItem) => acc + item.qty * item.price,
@@ -153,7 +167,7 @@ export const Basket = () => {
         </div>
         <button
           className="w-64 p-3 text-center bg-[#48A860] rounded-xl text-white"
-          onClick={() => router.push("/order")}
+          onClick={deleteTable}
         >
           Захиалга баталгаажуулах
         </button>
