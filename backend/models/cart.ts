@@ -4,7 +4,7 @@ import { Food } from "./food";
 
 interface CartAttributes {
   id?: number;
-  userId: number;
+  auth0Id: string;
   foodId: number;
   quantity: number;
   createdAt?: Date;
@@ -18,7 +18,7 @@ export class Cart
   implements CartAttributes
 {
   public id!: number;
-  public userId!: number;
+  public auth0Id!: string;
   public foodId!: number;
   public quantity!: number;
   public readonly createdAt!: Date;
@@ -30,7 +30,11 @@ export class Cart
   };
 
   public static associate(models: { User: typeof User; Food: typeof Food }) {
-    Cart.belongsTo(models.User, { foreignKey: "userId", as: "user" });
+    Cart.belongsTo(models.User, {
+      foreignKey: "auth0Id",
+      targetKey: "auth0Id",
+      as: "user",
+    });
     Cart.belongsTo(models.Food, { foreignKey: "foodId", as: "food" });
   }
 }
@@ -38,12 +42,12 @@ export class Cart
 export const cartModel = (sequelize: Sequelize): typeof Cart => {
   Cart.init(
     {
-      userId: {
-        type: DataTypes.INTEGER,
+      auth0Id: {
+        type: DataTypes.STRING,
         allowNull: false,
         references: {
           model: "users",
-          key: "id",
+          key: "auth0Id",
         },
       },
       foodId: {

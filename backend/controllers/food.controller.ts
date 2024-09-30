@@ -6,16 +6,15 @@ const { Food } = db;
 
 export const create = async (req: Request, res: Response) => {
   try {
-    const { imgUrl, name, description, price, assessment, menu } = req.body;
-    const food = { imgUrl, name, description, price, assessment, menu };
+    const food = req.body;
 
     if (
-      !imgUrl ||
-      !name ||
-      !description ||
-      price === undefined ||
-      assessment === undefined ||
-      menu === undefined
+      !food.imgUrl ||
+      !food.name ||
+      !food.description ||
+      food.price === undefined ||
+      food.assessment === undefined ||
+      food.menu === undefined
     ) {
       res.status(400).send({ message: "All fields are required." });
       return;
@@ -35,26 +34,22 @@ export const create = async (req: Request, res: Response) => {
 export const findAll = async (req: Request, res: Response) => {
   try {
     const page: number = parseInt(req.query.page as string) || 1;
-    const limit: number = parseInt(req.query.limit as string) || 4;
+    const limit: number = parseInt(req.query.limit as string) || 8;
     const offset: number = (page - 1) * limit;
-
     const food: string = req.query.food as string;
     const condition = food ? { name: { [Op.iLike]: `%${food}%` } } : undefined;
-
-    const data = await Food.findAll({
+    const { count, rows } = await Food.findAndCountAll({
       where: condition,
-      limit: limit,
       offset: offset,
+      limit: limit,
     });
-
-    const totalCount = await Food.count({ where: condition });
 
     res.status(200).send({
       success: true,
       page,
       perPage: limit,
-      totalCount,
-      foods: data,
+      totalCount: count,
+      foods: rows,
     });
   } catch (error) {
     res.status(500).send({
