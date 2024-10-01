@@ -18,20 +18,32 @@ type FoodItem = {
   price: number;
   imgUrl: string;
   assessment: number;
-  menu?: string;
+  categoryId: number;
+};
+
+type User = {
+  sub: string;
 };
 
 type StoreContextProps = {
-  foodData: FoodItem[];
   cartItems: { [key: string]: number };
+  foodData: FoodItem[];
   setInputValue: Dispatch<SetStateAction<string>>;
-  setIsActive: Dispatch<SetStateAction<string>>;
   inputValue: string;
-  isActive: string;
+  setIsActive: Dispatch<SetStateAction<number>>;
+  isActive: number;
+  setCurrentPage: Dispatch<SetStateAction<number>>;
+  currentPageDef: number;
   loading: boolean;
-  fetchFoods: (page: number, limit: number) => Promise<void>;
+  fetchFoods: (
+    page: number,
+    limit: number,
+    categoryId?: number
+  ) => Promise<void>;
   totalItems: number;
-  addToCart: (foodId: number, quantity: number) => Promise<void>;
+  addToCart: (foodId: string, quantity: number) => Promise<void>;
+  getCategoryIdByName: (category: string) => number;
+  errorMessage: string | null;
 };
 
 export const StoreContext = createContext<StoreContextProps | undefined>(
@@ -46,15 +58,16 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
   const [cartItems, setCartItems] = useState<{ [key: string]: number }>({});
   const [foodData, setFoodData] = useState<FoodItem[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
-  const [isActive, setIsActive] = useState<string>("");
+  const [isActive, setIsActive] = useState<number>(1);
+  const [currentPageDef, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [totalItems, setTotalItems] = useState(0);
   const [canOrder, setCanOrder] = useState(false);
-  const { user }: any = useUser();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { user } = useUser() as { user: User };
 
   const checkTime = () => {
-    const currentTime = new Date();
-    const currentHour = currentTime.getHours();
+    const currentHour = new Date().getHours();
     setCanOrder(currentHour >= 9 && currentHour < 23);
   };
 
@@ -82,13 +95,15 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
     }
   }, [cartItems]);
 
-  const fetchFoods = async (page: number = 1, limit: number = 8) => {
+  const fetchFoods = async (page = 1, limit = 8, categoryId?: number) => {
     setLoading(true);
+    setErrorMessage(null);
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/foods?page=${page}&limit=${limit}`
+        `http://localhost:8000/api/foods?page=${page}&limit=${limit}${
+          categoryId !== undefined ? `&categoryId=${categoryId}` : ""
+        }`
       );
-      console.log(response.data, "response.data");
 
       if (response.data.success) {
         setFoodData(response.data.foods);
@@ -97,14 +112,26 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
         setFoodData([]);
       }
     } catch (error) {
-      console.error("Error fetching foods:", error);
+      console.error("Error fetching data:", error);
       setFoodData([]);
+      setErrorMessage("Failed to fetch food items. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  const addToCart = async (foodId: number, quantity: number) => {
+  const categoryMap: { [key: string]: number } = {
+    Breakfast: 1,
+    Soup: 2,
+    "Main Course": 3,
+    Dessert: 4,
+  };
+
+  const getCategoryIdByName = (category: string) => {
+    return categoryMap[category] || -1;
+  };
+
+  const addToCart = async (foodId: string, quantity: number) => {
     try {
       if (user && user.sub) {
         await axios.post("http://localhost:8000/api/cart", {
@@ -114,7 +141,7 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
         });
         setCartItems((prev) => ({
           ...prev,
-          [foodId]: prev[foodId] ? prev[foodId] + quantity : quantity,
+          [foodId]: (prev[foodId] || 0) + quantity,
         }));
       } else {
         console.error("User is not authenticated");
@@ -125,16 +152,20 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
   };
 
   const contextValue: StoreContextProps = {
-    foodData,
     cartItems,
-    addToCart,
+    foodData,
     setInputValue,
-    setIsActive,
     inputValue,
+    setIsActive,
     isActive,
+    setCurrentPage,
+    currentPageDef,
     loading,
     fetchFoods,
     totalItems,
+    addToCart,
+    getCategoryIdByName,
+    errorMessage,
   };
 
   return (

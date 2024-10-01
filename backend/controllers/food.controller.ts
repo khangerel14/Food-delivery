@@ -14,7 +14,7 @@ export const create = async (req: Request, res: Response) => {
       !food.description ||
       food.price === undefined ||
       food.assessment === undefined ||
-      food.menu === undefined
+      food.categoryId === undefined
     ) {
       res.status(400).send({ message: "All fields are required." });
       return;
@@ -33,16 +33,49 @@ export const create = async (req: Request, res: Response) => {
 
 export const findAll = async (req: Request, res: Response) => {
   try {
-    const page: number = parseInt(req.query.page as string) || 1;
-    const limit: number = parseInt(req.query.limit as string) || 8;
+    const page: number = parseInt(req.query.page as string, 10) || 1;
+    const limit: number = parseInt(req.query.limit as string, 10) || 8;
     const offset: number = (page - 1) * limit;
-    const food: string = req.query.food as string;
-    const condition = food ? { name: { [Op.iLike]: `%${food}%` } } : undefined;
+
+    const food: string = (req.query.food as string) || "";
+    const categoryId: string = req.query.categoryId as string;
+
+    let parsedCategoryId: number | undefined;
+    if (categoryId) {
+      const id = parseInt(categoryId, 10);
+      if (!isNaN(id)) {
+        parsedCategoryId = id;
+      } else {
+        return res.status(400).send({
+          success: false,
+          message: "Invalid categoryId parameter. It must be a number.",
+        });
+      }
+    }
+
+    const condition: any = {
+      ...(food ? { name: { [Op.iLike]: `%${food}%` } } : {}),
+      ...(parsedCategoryId !== undefined
+        ? { categoryId: parsedCategoryId }
+        : {}),
+    };
+
     const { count, rows } = await Food.findAndCountAll({
       where: condition,
       offset: offset,
       limit: limit,
     });
+
+    if (rows.length === 0) {
+      return res.status(404).send({
+        success: true,
+        message: "No foods found for the given criteria.",
+        page,
+        perPage: limit,
+        totalCount: count,
+        foods: [],
+      });
+    }
 
     res.status(200).send({
       success: true,
@@ -52,6 +85,7 @@ export const findAll = async (req: Request, res: Response) => {
       foods: rows,
     });
   } catch (error) {
+    console.error("Error retrieving foods:", error);
     res.status(500).send({
       success: false,
       message:
@@ -103,54 +137,6 @@ export const deleteFood = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).send({
       message: "Couldn't delete Food with id=" + id,
-    });
-  }
-};
-
-export const deleteAll = async (req: Request, res: Response) => {
-  try {
-    const num = await Food.destroy({ where: {}, truncate: false });
-    res
-      .status(200)
-      .send({ message: `${num} Foods were deleted successfully.` });
-  } catch (error) {
-    res.status(500).send({
-      message: "Couldn't delete all Foods.",
-    });
-  }
-};
-
-export const update = async (req: Request, res: Response) => {
-  const id: string = req.params.id;
-  const { imgUrl, name, description, price, assessment, menu } = req.body;
-
-  if (
-    !imgUrl ||
-    !name ||
-    !description ||
-    price === undefined ||
-    assessment === undefined ||
-    menu === undefined
-  ) {
-    res.status(400).send({ message: "All fields are required." });
-    return;
-  }
-
-  try {
-    const [num] = await Food.update(
-      { imgUrl, name, description, price, assessment, menu },
-      { where: { id } }
-    );
-    if (num === 1) {
-      res.status(200).send({ message: "Food was updated successfully!" });
-    } else {
-      res
-        .status(404)
-        .send({ message: `Cannot update Food with id=${id}. Food not found!` });
-    }
-  } catch (error) {
-    res.status(500).send({
-      message: "Error updating Food with id=" + id,
     });
   }
 };

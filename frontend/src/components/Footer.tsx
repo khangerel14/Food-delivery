@@ -20,7 +20,7 @@ export const Footer = () => {
         <div>
           <h1 className="font-bold text-2xl">Food Delivery</h1>
         </div>
-        <div className="flex w-[1280px] justify-between">
+        <div className="flex max-w-screen-xl gap-14 justify-between">
           <button className="border-b" onClick={home}>
             Нүүр
           </button>

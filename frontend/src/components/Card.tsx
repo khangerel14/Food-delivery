@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { StoreContext } from "@/context/StoreContext";
 import { Paginations } from "./Paginations";
 import StarIcon from "@mui/icons-material/Star";
@@ -15,11 +15,11 @@ export const Card = () => {
   const {
     addToCart,
     foodData,
-    isActive,
     inputValue,
     fetchFoods,
     loading,
     totalItems,
+    isActive, // Add this line to access the current active category
   } = context;
 
   const searchParams = useSearchParams();
@@ -27,16 +27,20 @@ export const Card = () => {
   const page = parseInt(searchParams.get("page") || "1", 10);
   const limit = parseInt(searchParams.get("limit") || "8", 10);
 
-  useEffect(() => {
-    fetchFoods(page, limit);
-  }, [page, limit]);
+  const categoryIdStr = searchParams.get("categoryId");
+  const categoryId: number | undefined = categoryIdStr
+    ? parseInt(categoryIdStr, 10)
+    : undefined;
 
-  const handleAddToCart = async (foodId: number, quantity: number = 1) => {
+  useEffect(() => {
+    fetchFoods(page, limit, isActive);
+  }, [page, limit, isActive]);
+
+  const handleAddToCart = async (foodId: string, quantity: number = 1) => {
     try {
       await addToCart(foodId, quantity);
     } catch (error) {
       console.error("Error adding to cart:", error);
-    } finally {
     }
   };
 
@@ -53,11 +57,10 @@ export const Card = () => {
       <div className="flex flex-wrap justify-between rounded-xl py-10 max-w-screen-xl mx-auto gap-[53px]">
         {foodData
           .filter((elem: any) => {
-            const matchesActive = isActive === "" || elem.menu === isActive;
             const matchesInput =
               !inputValue ||
               elem.name.toLowerCase().includes(inputValue.toLowerCase());
-            return matchesActive && matchesInput;
+            return matchesInput;
           })
           .map((elem: any) => (
             <div
@@ -82,14 +85,14 @@ export const Card = () => {
                 <p>{elem.description}</p>
                 <div className="flex justify-between items-center">
                   <div>
-                    <h1 className="text-gray-600">Үнэ:</h1>
+                    <h1 className="text-gray-600">Price:</h1>
                     <p className="font-semibold">{elem.price}</p>
                   </div>
                   <button
                     className="p-2 px-3 rounded-full flex items-center justify-center bg-[#85BB65]"
                     onClick={() => handleAddToCart(elem.id, 1)}
                   >
-                    Сагслах
+                    Add to Cart
                   </button>
                 </div>
               </div>

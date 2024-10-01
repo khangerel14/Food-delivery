@@ -1,8 +1,9 @@
 import { Sequelize } from "sequelize";
 import { userModel } from "./user.js";
-import { foodModel } from "./food.js";
+import { Food, foodModel } from "./food.js";
 import { orderModel } from "./order.js";
 import { cartModel } from "./cart.js";
+import { categoryModel } from "./category.js";
 
 const sequelize = new Sequelize("sql", "postgres", "1234", {
   host: "localhost",
@@ -16,12 +17,27 @@ const db = {
   Food: foodModel(sequelize),
   Order: orderModel(sequelize),
   Cart: cartModel(sequelize),
+  Category: categoryModel(sequelize),
 };
 
-const syncModels = async (): Promise<void> => {
+const setupAssociations = () => {
+  db.Category.hasMany(db.Food, { foreignKey: "categoryId", as: "foods" });
+  db.Food.belongsTo(db.Category, {
+    foreignKey: "categoryId",
+    as: "categories",
+  });
+
+  db.User.hasMany(db.Order, { foreignKey: "userId" });
+  db.Order.belongsTo(db.User, { foreignKey: "userId" });
+};
+
+const syncModels = async () => {
   try {
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
+
+    setupAssociations();
+
     await sequelize.sync();
     console.log("Data tables created successfully.");
   } catch (error) {

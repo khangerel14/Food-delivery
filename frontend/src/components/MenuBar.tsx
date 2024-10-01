@@ -1,54 +1,68 @@
 "use client";
 
 import { useContext } from "react";
+import { useRouter } from "next/navigation";
 import { StoreContext } from "@/context/StoreContext";
 
 export const MenuBar = () => {
-  const { isActive, setIsActive }: any = useContext(StoreContext);
+  const router = useRouter();
+  const { isActive, setIsActive, getCategoryIdByName, setCurrentPage }: any =
+    useContext(StoreContext);
 
-  const handleClick = (e: any) => {
-    setIsActive(e);
+  const page: number = 1;
+  const limit: number = 8;
+
+  const handleClick = (categoryId: number) => {
+    setIsActive(categoryId);
+    getCategoryIdByName(categoryId);
+    setCurrentPage(1);
+    router.push(
+      `http://localhost:3000/menu?page=${page}&limit=${limit}${
+        categoryId ? `&categoryId=${categoryId}` : ""
+      }`
+    );
   };
+
   return (
     <div className="flex flex-col max-w-screen-xl mx-auto">
       <div className="flex justify-between my-8">
         <button
           className="w-[280px] border border-gray-400 h-10 rounded-md"
           style={{
-            background: isActive === "Breakfast" ? "#3dbf0c" : "",
-            color: isActive === "Breakfast" ? "white" : "",
+            background: isActive === 1 ? "#3dbf0c" : "",
+            color: isActive === 1 ? "white" : "",
           }}
-          onClick={() => handleClick("Breakfast")}
+          onClick={() => handleClick(1)}
         >
           Breakfast
         </button>
         <button
           className="w-[280px] border border-gray-400 h-10 rounded-md"
           style={{
-            background: isActive === "Soup" ? "#3dbf0c" : "",
-            color: isActive === "Soup" ? "white" : "",
+            background: isActive === 2 ? "#3dbf0c" : "",
+            color: isActive === 2 ? "white" : "",
           }}
-          onClick={() => handleClick("Soup")}
+          onClick={() => handleClick(2)}
         >
           Soup
         </button>
         <button
           className="w-[280px] border border-gray-400 h-10 rounded-md"
           style={{
-            background: isActive === "Main Course" ? "#3dbf0c" : "",
-            color: isActive === "Main Course" ? "white" : "",
+            background: isActive === 3 ? "#3dbf0c" : "",
+            color: isActive === 3 ? "white" : "",
           }}
-          onClick={() => handleClick("Main Course")}
+          onClick={() => handleClick(3)}
         >
           Main Course
         </button>
         <button
           className="w-[280px] border border-gray-400 h-10 rounded-md"
           style={{
-            background: isActive === "Dessert" ? "#3dbf0c" : "",
-            color: isActive === "Dessert" ? "white" : "",
+            background: isActive === 4 ? "#3dbf0c" : "",
+            color: isActive === 4 ? "white" : "",
           }}
-          onClick={() => handleClick("Dessert")}
+          onClick={() => handleClick(4)}
         >
           Dessert
         </button>

@@ -3,8 +3,6 @@ import {
   create,
   findAll,
   findMultiple,
-  update,
-  deleteAll,
   deleteFood,
 } from "../controllers/food.controller.js";
 
@@ -14,9 +12,7 @@ export default (app: Express) => {
   router.post("/", create);
   router.get("/", findAll);
   router.get("/multiple", findMultiple);
-  router.put("/:id", update);
   router.delete("/:id", deleteFood);
-  router.delete("/", deleteAll);
 
   app.use("/api/foods", router);
 };

@@ -1,4 +1,5 @@
 import { Sequelize, DataTypes, Model, Optional } from "sequelize";
+import { categoryModel } from "./category";
 
 interface FoodAttributes {
   id?: number;
@@ -7,7 +8,7 @@ interface FoodAttributes {
   description: string;
   price: number;
   assessment: number;
-  menu: "Breakfast" | "Soup" | "Main Course" | "Dessert";
+  categoryId: number; // New category reference
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -24,7 +25,7 @@ export class Food
   public description!: string;
   public price!: number;
   public assessment!: number;
-  public menu!: "Breakfast" | "Soup" | "Main Course" | "Dessert";
+  public categoryId!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -67,15 +68,19 @@ export const foodModel = (sequelize: Sequelize): typeof Food => {
           max: 5,
         },
       },
-      menu: {
-        type: DataTypes.ENUM("Breakfast", "Soup", "Main Course", "Dessert"),
+      categoryId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: "categories",
+          key: "id",
+        },
       },
     },
     {
       sequelize,
       modelName: "Food",
-      tableName: "food",
+      tableName: "foods",
       timestamps: true,
     }
   );

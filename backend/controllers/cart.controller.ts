@@ -52,11 +52,10 @@ export const removeFromCart = async (req: Request, res: Response) => {
 
 export const deleteAllCartItems = async (req: Request, res: Response) => {
   try {
-    const { auth0Id } = req.params; // Get auth0Id from request parameters
+    const { auth0Id } = req.params;
 
-    // Delete all items in the cart for the specified user
     const deletedCount = await Cart.destroy({
-      where: { auth0Id }, // Filter by auth0Id
+      where: { auth0Id },
     });
 
     if (deletedCount === 0) {
