@@ -45,11 +45,11 @@ export const Card = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="w-36 mx-auto h-full py-52">Loading...</div>;
   }
 
   if (foodData.length === 0) {
-    return <div>No Food Available</div>;
+    return <div className="w-36 mx-auto h-full py-52">No Food Available</div>;
   }
 
   return (

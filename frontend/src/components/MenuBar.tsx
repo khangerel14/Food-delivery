@@ -6,7 +6,7 @@ import { StoreContext } from "@/context/StoreContext";
 
 export const MenuBar = () => {
   const router = useRouter();
-  const { isActive, setIsActive, getCategoryIdByName, setCurrentPage }: any =
+  const { isActive, setIsActive, getCategoryIdByName }: any =
     useContext(StoreContext);
 
   const page: number = 1;
@@ -15,7 +15,6 @@ export const MenuBar = () => {
   const handleClick = (categoryId: number) => {
     setIsActive(categoryId);
     getCategoryIdByName(categoryId);
-    setCurrentPage(1);
     router.push(
       `http://localhost:3000/menu?page=${page}&limit=${limit}${
         categoryId ? `&categoryId=${categoryId}` : ""

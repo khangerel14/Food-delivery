@@ -32,8 +32,6 @@ type StoreContextProps = {
   inputValue: string;
   setIsActive: Dispatch<SetStateAction<number>>;
   isActive: number;
-  setCurrentPage: Dispatch<SetStateAction<number>>;
-  currentPageDef: number;
   loading: boolean;
   fetchFoods: (
     page: number,
@@ -59,7 +57,6 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
   const [foodData, setFoodData] = useState<FoodItem[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const [isActive, setIsActive] = useState<number>(1);
-  const [currentPageDef, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [totalItems, setTotalItems] = useState(0);
   const [canOrder, setCanOrder] = useState(false);
@@ -130,7 +127,6 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
   const getCategoryIdByName = (category: string) => {
     return categoryMap[category] || -1;
   };
-
   const addToCart = async (foodId: string, quantity: number) => {
     try {
       if (user && user.sub) {
@@ -158,8 +154,6 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
     inputValue,
     setIsActive,
     isActive,
-    setCurrentPage,
-    currentPageDef,
     loading,
     fetchFoods,
     totalItems,
