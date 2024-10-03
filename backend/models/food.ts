@@ -1,17 +1,17 @@
 import { Sequelize, DataTypes, Model, Optional } from "sequelize";
 import { categoryModel } from "./category";
 
-interface FoodAttributes {
+type FoodAttributes = {
   id?: number;
   imgUrl: string;
   name: string;
   description: string;
   price: number;
   assessment: number;
-  categoryId: number; // New category reference
+  categoryId: number;
   createdAt?: Date;
   updatedAt?: Date;
-}
+};
 
 interface FoodCreationAttributes extends Optional<FoodAttributes, "id"> {}
 

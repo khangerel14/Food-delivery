@@ -11,3 +11,5 @@ export * from "./Basket";
 export * from "./Card";
 export * from "./Order";
 export * from "./Paginations";
+export * from "./MenuBtn";
+export * from "./Modal";

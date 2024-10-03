@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, ReactNode, useState, useEffect } from "react";
+import {
+  createContext,
+  ReactNode,
+  useState,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import axios from "axios";
 import { useUser } from "@auth0/nextjs-auth0/client";
 
@@ -17,9 +24,10 @@ type FoodItem = {
 type BasketContextProps = {
   foodData: FoodItem[];
   cartItems: { [key: string]: number };
+  setCartItems: Dispatch<SetStateAction<{ [key: string]: number }>>;
   addToCart: (id: number) => void;
-  removeFromCart: (id: number) => void;
   deleteFromCart: (id: number) => void;
+  removeFromCart: (id: number) => void;
   totalItems: number;
 };
 
@@ -97,15 +105,15 @@ const BasketContextProvider = ({ children }: BasketProviderProps) => {
       const response = await axios.delete(
         `http://localhost:8000/api/cart/${user.sub}/${id}`
       );
-      if (response.status === 200) {
-        setCartItems((prev) => {
-          const { [id]: _, ...rest } = prev;
+      setCartItems((prev) => {
+        const { [id]: _, ...rest } = prev;
 
-          if (Object.keys(rest).length === 0) {
-            localStorage.removeItem("cartItems");
-          }
-          return rest;
-        });
+        if (Object.keys(rest).length === 0) {
+          localStorage.removeItem("cartItems");
+        }
+        return rest;
+      });
+      if (response.status === 200) {
       } else {
         console.error("Error removing item from cart:", response.data);
       }
@@ -122,9 +130,10 @@ const BasketContextProvider = ({ children }: BasketProviderProps) => {
   const contextValue: BasketContextProps = {
     foodData,
     cartItems,
+    setCartItems,
     addToCart,
-    removeFromCart,
     deleteFromCart,
+    removeFromCart,
     totalItems,
   };
 

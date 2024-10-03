@@ -15,14 +15,14 @@ export const Paginations = ({
   limit: number;
   totalItems: number;
 }) => {
-  const { categoryId }: any = useContext(StoreContext);
+  const { isActive }: any = useContext(StoreContext);
   const router = useRouter();
   const totalPages = Math.ceil(totalItems / limit);
-  console.log(categoryId);
+
   const handlePrev = () => {
     if (currentPage > 1) {
       router.push(
-        `?page=${currentPage - 1}&limit=${limit}&categoryId=${categoryId}`
+        `?page=${currentPage - 1}&limit=${limit}&categoryId=${isActive}`
       );
     }
   };
@@ -30,7 +30,7 @@ export const Paginations = ({
   const handleNext = () => {
     if (currentPage < totalPages) {
       router.push(
-        `?page=${currentPage + 1}&limit=${limit}&categoryId=${categoryId}`
+        `?page=${currentPage + 1}&limit=${limit}&categoryId=${isActive}`
       );
     }
   };

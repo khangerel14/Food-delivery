@@ -15,12 +15,12 @@ export const Footer = () => {
     router.push("/dashboard");
   };
   return (
-    <div className="flex relative items-center justify-center w-full h-[400px] bg-[#2c2c2c] text-white bg-cover">
+    <div className="flex relative items-center justify-center w-full h-[400px] bg-cover max-xl:px-12">
       <div className="flex flex-col items-center justify-center gap-9 absolute">
         <div>
           <h1 className="font-bold text-2xl">Food Delivery</h1>
         </div>
-        <div className="flex max-w-screen-xl gap-14 justify-between">
+        <div className="flex max-w-screen-xl gap-32 justify-between max-xl:gap-12 max-md:gap-5 max-sm:flex-wrap max-sm:px-12">
           <button className="border-b" onClick={home}>
             Нүүр
           </button>

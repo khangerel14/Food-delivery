@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 import { userModel } from "./user.js";
-import { Food, foodModel } from "./food.js";
+import { foodModel } from "./food.js";
 import { orderModel } from "./order.js";
 import { cartModel } from "./cart.js";
 import { categoryModel } from "./category.js";

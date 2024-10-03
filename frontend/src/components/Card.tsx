@@ -19,7 +19,7 @@ export const Card = () => {
     fetchFoods,
     loading,
     totalItems,
-    isActive, // Add this line to access the current active category
+    isActive,
   } = context;
 
   const searchParams = useSearchParams();
@@ -45,16 +45,16 @@ export const Card = () => {
   };
 
   if (loading) {
-    return <div className="w-36 mx-auto h-full py-52">Loading...</div>;
+    return <div className="w-36 mx-cover h-full py-52">Loading...</div>;
   }
 
   if (foodData.length === 0) {
-    return <div className="w-36 mx-auto h-full py-52">No Food Available</div>;
+    return <div className="w-36 mx-cover h-full py-52">No Food Available</div>;
   }
 
   return (
     <div className="flex flex-col mx-auto max-w-screen-xl items-center">
-      <div className="flex flex-wrap justify-between rounded-xl py-10 max-w-screen-xl mx-auto gap-[53px]">
+      <div className="flex flex-wrap justify-between rounded-xl py-10 max-w-screen-xl mx-auto gap-[53px] max-xl:px-12 max-xl:justify-center">
         {foodData
           .filter((elem: any) => {
             const matchesInput =
@@ -62,20 +62,20 @@ export const Card = () => {
               elem.name.toLowerCase().includes(inputValue.toLowerCase());
             return matchesInput;
           })
-          .map((elem: any) => (
+          .map((elem: any, index: number) => (
             <div
-              className="flex flex-col border border-gray-400 mb-10 w-[280px] rounded-xl shadow-inner"
-              key={elem.id}
+              className="flex flex-col border border-gray-400 mb-10 w-[280px] rounded-xl shadow-inner max-xl:w-[400px] max-md:w-[260px] max-sm:w-[340px]"
+              key={index}
             >
               <div className="relative">
                 <img
                   src={elem.imgUrl}
                   alt={elem.name}
-                  className="rounded-t-xl bg-cover h-[180px]"
+                  className="rounded-t-xl bg-cover h-[180px] bg-full"
                   height={180}
-                  width={280}
+                  width={400}
                 />
-                <div className="absolute flex top-2 right-2 bg-white rounded-full text-center px-2 z-20">
+                <div className="absolute flex top-2 right-2 bg-white rounded-full text-center px-3 p-1 gap-1 items-center z-20">
                   <StarIcon sx={{ color: "#ffff00" }} />
                   <p>{elem.assessment}</p>
                 </div>
@@ -89,7 +89,7 @@ export const Card = () => {
                     <p className="font-semibold">{elem.price}</p>
                   </div>
                   <button
-                    className="p-2 px-3 rounded-full flex items-center justify-center bg-[#85BB65]"
+                    className="p-2 px-3 rounded-full flex items-center justify-center bg-[#85BB65] text-white"
                     onClick={() => handleAddToCart(elem.id, 1)}
                   >
                     Add to Cart

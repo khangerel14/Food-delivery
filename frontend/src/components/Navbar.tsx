@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useContext } from "react";
 import { StoreContext } from "@/context/StoreContext";
+import { MenuBtn } from "./MenuBtn";
+import { Modal } from "./Modal";
 
 export const Navbar = () => {
   const { user, error } = useUser();
@@ -33,7 +35,7 @@ export const Navbar = () => {
   };
   return (
     <div>
-      <div className="flex items-center justify-between max-w-screen-xl mx-auto font-semibold h-20">
+      <div className="flex items-center justify-between max-w-screen-xl mx-auto font-semibold bg-white h-20 inset-0 fixed z-30 max-xl:px-12">
         <div className="flex items-center gap-10">
           <button>
             <Icon />
@@ -50,14 +52,14 @@ export const Navbar = () => {
         </div>
         <div className="flex items-center gap-10">
           <input
-            className="border rounded-lg h-10 font-normal px-4 outline-none"
+            className="border rounded-lg h-10 font-normal px-4 outline-none max-lg:hidden"
             type="search"
             placeholder="Хайх"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
           <button
-            className="flex items-center gap-4 hover:text-green-600"
+            className="flex items-center gap-4 hover:text-green-600 max-md:hidden"
             onClick={basket}
           >
             <div className="relative">
@@ -67,11 +69,16 @@ export const Navbar = () => {
             Сагс
           </button>
           <button
-            className="flex items-center gap-4 hover:text-green-600"
+            className="flex items-center gap-4 hover:text-green-600 max-md:hidden"
             onClick={logIn}
           >
             <User />
-            {user ? user.nickname : "Нэвтрэх"}
+            <span className="max-md:hidden">
+              {user ? user.nickname : "Нэвтрэх"}
+            </span>
+          </button>
+          <button className="md:hidden max-md:block">
+            <MenuBtn />
           </button>
         </div>
       </div>

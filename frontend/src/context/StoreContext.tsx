@@ -32,6 +32,7 @@ type StoreContextProps = {
   inputValue: string;
   setIsActive: Dispatch<SetStateAction<number>>;
   isActive: number;
+  addToCart: (foodId: string, quantity: number) => Promise<void>;
   loading: boolean;
   fetchFoods: (
     page: number,
@@ -39,8 +40,7 @@ type StoreContextProps = {
     categoryId?: number
   ) => Promise<void>;
   totalItems: number;
-  addToCart: (foodId: string, quantity: number) => Promise<void>;
-  getCategoryIdByName: (category: string) => number;
+  getCategoryIdByName: (category: number) => string;
   errorMessage: string | null;
 };
 
@@ -67,7 +67,6 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
     const currentHour = new Date().getHours();
     setCanOrder(currentHour >= 9 && currentHour < 23);
   };
-
   useEffect(() => {
     const loadCartItems = () => {
       try {
@@ -117,16 +116,17 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
     }
   };
 
-  const categoryMap: { [key: string]: number } = {
-    Breakfast: 1,
-    Soup: 2,
-    "Main Course": 3,
-    Dessert: 4,
+  const getCategoryIdByName = (category: number) => {
+    const categoryMap: { [key: number]: string } = {
+      1: "Breakfast",
+      2: "Soup",
+      3: "Main Course",
+      4: "Dessert",
+    };
+
+    return categoryMap[category] || "Breakfast";
   };
 
-  const getCategoryIdByName = (category: string) => {
-    return categoryMap[category] || -1;
-  };
   const addToCart = async (foodId: string, quantity: number) => {
     try {
       if (user && user.sub) {

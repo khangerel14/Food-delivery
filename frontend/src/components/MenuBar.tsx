@@ -23,8 +23,8 @@ export const MenuBar = () => {
   };
 
   return (
-    <div className="flex flex-col max-w-screen-xl mx-auto">
-      <div className="flex justify-between my-8">
+    <div className="flex flex-col max-w-screen-xl mx-auto pt-24 max-xl:px-12">
+      <div className="flex justify-between my-8 max-sm:flex-wrap max-sm:justify-center gap-5">
         <button
           className="w-[280px] border border-gray-400 h-10 rounded-md"
           style={{

@@ -3,7 +3,7 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { BasketContext } from "@/context/BasketContext";
 import { useUser } from "@auth0/nextjs-auth0/client";
@@ -17,13 +17,13 @@ import {
 } from "@/components/ui/table";
 import axios from "axios";
 
-interface FoodItem {
+type FoodItem = {
   id: number;
   imgUrl: string;
   name: string;
   description: string;
   price: number;
-}
+};
 
 type CartItem = FoodItem & {
   qty: number;
@@ -41,17 +41,23 @@ export const Basket = () => {
     removeFromCart = () => {},
     addToCart = () => {},
     deleteFromCart = () => {},
-  } = useContext(BasketContext) || {};
+    setCartItems,
+  }: any = useContext(BasketContext) || {};
 
   const cartItemsArray: CartItem[] = [];
 
   if (foodData.length > 0) {
-    const foodDataMap = new Map(foodData.map((item) => [item.id, item]));
+    const foodDataMap = new Map<number, FoodItem>(
+      foodData.map((item: FoodItem) => [item.id, item])
+    );
 
-    Object.entries(cartItems).forEach(([id, qty]) => {
+    Object.entries(cartItems as Record<string, number>).forEach(([id, qty]) => {
       const foodItem = foodDataMap.get(Number(id));
       if (foodItem) {
-        cartItemsArray.push({ ...foodItem, qty });
+        cartItemsArray.push({
+          ...foodItem,
+          qty,
+        });
       } else {
         console.warn(`Food item with id ${id} not found in foodData`);
       }
@@ -61,12 +67,13 @@ export const Basket = () => {
   const deleteTable = async () => {
     router.push("/order");
     try {
-      const response = await axios.delete(
-        `http://localhost:8000/api/cart/${user.sub}`
-      );
-      return response;
+      await axios.delete(`http://localhost:8000/api/cart/${user.sub}`);
+
+      setCartItems({});
+      localStorage.removeItem("cartItems");
     } catch (error) {
-      console.log("error happend for deleting action", error);
+      console.error("An error occurred while deleting the cart:", error);
+      alert("Failed to clear the cart. Please try again.");
     }
   };
 
