@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model, Optional } from "sequelize";
 
-interface OrderAttributes {
+type OrderAttributes = {
   id?: number;
   email: string;
   district:
@@ -14,7 +14,7 @@ interface OrderAttributes {
   phoneNumber: number;
   createdAt?: Date;
   updatedAt?: Date;
-}
+};
 
 interface OrderCreationAttributes extends Optional<OrderAttributes, "id"> {}
 

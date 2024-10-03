@@ -5,11 +5,12 @@ import { useContext, useEffect, useState, useRef } from "react";
 import { BasketContext } from "@/context/BasketContext";
 import toast, { Toaster } from "react-hot-toast";
 import { SendBtn } from "./SendBtn";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import axios from "axios";
 
 export const Order = () => {
   const [cartItemsArray, setCartItemsArray] = useState<any[]>([]);
-  const { cartItems, foodData }: any = useContext(BasketContext);
+  const { cartItems, foodData, setCartItems }: any = useContext(BasketContext);
   const formDataRef = useRef({
     email: "",
     khoroo: "",
@@ -22,6 +23,8 @@ export const Order = () => {
   };
 
   const orderPost = async () => {
+    const { user }: any = useUser();
+
     try {
       const data = await axios.post("http://localhost:8000/api/orders", {
         ...formDataRef.current,
@@ -31,6 +34,18 @@ export const Order = () => {
       return data;
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const deleteTable = async (user: any) => {
+    try {
+      await axios.delete(`http://localhost:8000/api/cart/${user.sub}`);
+
+      setCartItems({});
+      localStorage.removeItem("cartItems");
+    } catch (error) {
+      console.error("An error occurred while deleting the cart:", error);
+      alert("Failed to clear the cart. Please try again.");
     }
   };
 
@@ -66,7 +81,7 @@ export const Order = () => {
   const grandTotal = totalPrice + deliveryPrice;
 
   return (
-    <div className="flex justify-between items-start w-[1200px] my-32 mx-auto">
+    <div className="flex justify-between items-start w-[1200px] my-32 mx-auto pt-20">
       <Toaster position="top-right" />
       <div className="flex flex-col gap-10 w-[480px]">
         <h1 className="text-2xl font-semibold">Хүргэлтийн мэдээлэл</h1>
@@ -121,7 +136,10 @@ export const Order = () => {
             <p>{grandTotal}₮</p>
           </div>
         </div>
-        <button className="flex gap-5 items-center justify-center w-64 p-3 text-center bg-[#48A860] rounded-xl text-white">
+        <button
+          className="flex gap-5 items-center justify-center w-64 p-3 text-center bg-[#48A860] rounded-xl text-white"
+          onClick={deleteTable}
+        >
           <a href="/api/create-invoice">Төлбөр төлөх</a>
           <QrCodeScannerIcon />
         </button>

@@ -2,14 +2,14 @@ import { Sequelize, DataTypes, Model, Association } from "sequelize";
 import { User } from "./user";
 import { Food } from "./food";
 
-interface CartAttributes {
+type CartAttributes = {
   id?: number;
   auth0Id: string;
   foodId: number;
   quantity: number;
   createdAt?: Date;
   updatedAt?: Date;
-}
+};
 
 interface CartCreationAttributes extends Omit<CartAttributes, "id"> {}
 
@@ -26,7 +26,7 @@ export class Cart
 
   public static associations: {
     user: Association<Cart, User>;
-    food: Association<Cart, Food>;
+    foods: Association<Cart, Food>;
   };
 
   public static associate(models: { User: typeof User; Food: typeof Food }) {
@@ -35,7 +35,7 @@ export class Cart
       targetKey: "auth0Id",
       as: "user",
     });
-    Cart.belongsTo(models.Food, { foreignKey: "foodId", as: "food" });
+    Cart.belongsTo(models.Food, { foreignKey: "foodId", as: "foods" });
   }
 }
 
@@ -54,7 +54,7 @@ export const cartModel = (sequelize: Sequelize): typeof Cart => {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "food",
+          model: "foods",
           key: "id",
         },
       },

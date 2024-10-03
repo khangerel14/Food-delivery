@@ -6,21 +6,21 @@ const { Food } = db;
 
 export const create = async (req: Request, res: Response) => {
   try {
-    const food = req.body;
+    const foods = req.body;
 
     if (
-      !food.imgUrl ||
-      !food.name ||
-      !food.description ||
-      food.price === undefined ||
-      food.assessment === undefined ||
-      food.categoryId === undefined
+      !foods.imgUrl ||
+      !foods.name ||
+      !foods.description ||
+      foods.price === undefined ||
+      foods.assessment === undefined ||
+      foods.categoryId === undefined
     ) {
       res.status(400).send({ message: "All fields are required." });
       return;
     }
 
-    const data = await Food.create(food);
+    const data = await Food.create(foods);
     res.status(201).send(data);
   } catch (error) {
     res.status(500).send({

@@ -72,27 +72,3 @@ export const deleteAllCartItems = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
-export const getCart = async (req: Request, res: Response) => {
-  try {
-    const { auth0Id } = req.params;
-
-    if (!auth0Id) {
-      return res.status(400).json({ error: "Missing auth0Id" });
-    }
-
-    const cartItems = await Cart.findAll({
-      where: { auth0Id },
-    });
-
-    if (!cartItems || cartItems.length === 0) {
-      return res.status(404).json({ error: "No cart items found" });
-    }
-
-    console.log("Fetched cart items:", cartItems);
-
-    return res.status(200).json(cartItems);
-  } catch (error) {
-    console.error("Error fetching cart:", error);
-    return res.status(500).json({ error: "Internal server error" });
-  }
-};

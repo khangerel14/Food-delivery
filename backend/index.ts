@@ -1,4 +1,4 @@
-import express, { Request, Response, Express } from "express";
+import express, { Express } from "express";
 import { connection } from "./postgresql.js";
 import bodyParser from "body-parser";
 import cors from "cors";

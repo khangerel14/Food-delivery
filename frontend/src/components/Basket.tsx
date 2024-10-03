@@ -3,10 +3,9 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { useRouter } from "next/navigation";
 import { BasketContext } from "@/context/BasketContext";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import {
   Table,
   TableBody,
@@ -15,7 +14,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import axios from "axios";
 
 type FoodItem = {
   id: number;
@@ -32,7 +30,6 @@ type CartItem = FoodItem & {
 type CartItems = Record<string, number>;
 
 export const Basket = () => {
-  const { user }: any = useUser();
   const router = useRouter();
 
   const {
@@ -41,7 +38,6 @@ export const Basket = () => {
     removeFromCart = () => {},
     addToCart = () => {},
     deleteFromCart = () => {},
-    setCartItems,
   }: any = useContext(BasketContext) || {};
 
   const cartItemsArray: CartItem[] = [];
@@ -64,19 +60,6 @@ export const Basket = () => {
     });
   }
 
-  const deleteTable = async () => {
-    router.push("/order");
-    try {
-      await axios.delete(`http://localhost:8000/api/cart/${user.sub}`);
-
-      setCartItems({});
-      localStorage.removeItem("cartItems");
-    } catch (error) {
-      console.error("An error occurred while deleting the cart:", error);
-      alert("Failed to clear the cart. Please try again.");
-    }
-  };
-
   const totalPrice = cartItemsArray.reduce(
     (acc: number, item: CartItem) => acc + item.qty * item.price,
     0
@@ -86,7 +69,7 @@ export const Basket = () => {
   const grandTotal = totalPrice + deliveryPrice;
 
   return (
-    <div className="flex flex-col justify-center items-start gap-20 max-w-screen-xl mx-auto w-full py-20">
+    <div className="flex flex-col justify-center items-start gap-20 max-w-screen-xl mx-auto w-full py-20 pt-32">
       <div className="flex items-center flex-col max-w-screen-xl mx-auto">
         <Table>
           <TableHeader>
@@ -174,7 +157,7 @@ export const Basket = () => {
         </div>
         <button
           className="w-64 p-3 text-center bg-[#48A860] rounded-xl text-white"
-          onClick={deleteTable}
+          onClick={() => router.push("/order")}
         >
           Захиалга баталгаажуулах
         </button>

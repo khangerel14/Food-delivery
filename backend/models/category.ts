@@ -1,12 +1,12 @@
 import { Sequelize, DataTypes, Model, Optional } from "sequelize";
 
-interface CategoryAttributes {
+type CategoryAttributes = {
   id?: number;
   name: string;
   parentId?: number;
   createdAt?: Date;
   updatedAt?: Date;
-}
+};
 
 interface CategoryCreationAttributes
   extends Optional<CategoryAttributes, "id"> {}

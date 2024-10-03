@@ -1,7 +1,7 @@
 import { Sequelize, DataTypes, Model, Optional, Association } from "sequelize";
 import { Order } from "./order";
 
-interface UserAttributes {
+type UserAttributes = {
   id?: number;
   auth0Id: string;
   email: string;
@@ -9,7 +9,7 @@ interface UserAttributes {
   picture?: string;
   createdAt?: Date;
   updatedAt?: Date;
-}
+};
 
 interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
 
