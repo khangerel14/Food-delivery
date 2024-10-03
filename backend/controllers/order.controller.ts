@@ -9,7 +9,7 @@ export const createOrder = async (req: Request, res: Response) => {
     const orderdaat = localStorage.getItem("cartItems");
     console.log(orderdaat);
     if (!email || !khoroo || !district || !phoneNumber) {
-      res.status(400).send({ message: "All fields are required." });
+      res.status(400).send({ message: "Мэдээлэл дутуу байна." });
       return;
     }
 
@@ -19,9 +19,7 @@ export const createOrder = async (req: Request, res: Response) => {
     res.status(201).send(data);
   } catch (error) {
     res.status(500).send({
-      message:
-        (error as Error).message ||
-        "Some error occurred while creating the order.",
+      message: (error as Error).message || "Захиалга үүсгэхэд алдаа гарсан.",
     });
   }
 };
@@ -33,16 +31,16 @@ export const deleteOrder = async (req: Request, res: Response) => {
     const num = await Order.destroy({ where: { id } });
     if (num === 1) {
       res.status(200).send({
-        message: "Order was deleted successfully!",
+        message: "Захиалга амжилттай устгагдлаа!",
       });
     } else {
       res.status(404).send({
-        message: `Cannot delete Order with id=${id}. Order not found!`,
+        message: `Захиалга олдсонгүй id=${id}!`,
       });
     }
   } catch (error) {
     res.status(500).send({
-      message: "Couldn't delete Order with id=" + id,
+      message: "Захиалга устгахад алдаа гарлаа id=" + id,
     });
   }
 };
@@ -63,7 +61,7 @@ export const findOrdersWithUser = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).send({
       message:
-        (error as Error).message || "Error occurred while retrieving orders.",
+        (error as Error).message || "Захиалга хүлээн авахад алдаа гарсан.",
     });
   }
 };

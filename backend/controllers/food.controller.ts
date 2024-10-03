@@ -16,7 +16,7 @@ export const create = async (req: Request, res: Response) => {
       foods.assessment === undefined ||
       foods.categoryId === undefined
     ) {
-      res.status(400).send({ message: "All fields are required." });
+      res.status(400).send({ message: "Мэдээлэл дутуу байна." });
       return;
     }
 
@@ -25,8 +25,7 @@ export const create = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).send({
       message:
-        (error as Error)?.message ||
-        "Some error occurred while creating the food.",
+        (error as Error)?.message || "Бүтээгдхүүн үүсгэхэд алдаа гарлаа.",
     });
   }
 };
@@ -48,7 +47,7 @@ export const findAll = async (req: Request, res: Response) => {
       } else {
         return res.status(400).send({
           success: false,
-          message: "Invalid categoryId parameter. It must be a number.",
+          message: "Тоо оруулах!!!",
         });
       }
     }
@@ -69,7 +68,7 @@ export const findAll = async (req: Request, res: Response) => {
     if (rows.length === 0) {
       return res.status(404).send({
         success: true,
-        message: "No foods found for the given criteria.",
+        message: "Тодорхой хоол байхгүй байна.",
         page,
         perPage: limit,
         totalCount: count,
@@ -85,12 +84,9 @@ export const findAll = async (req: Request, res: Response) => {
       foods: rows,
     });
   } catch (error) {
-    console.error("Error retrieving foods:", error);
     res.status(500).send({
       success: false,
-      message:
-        (error as Error)?.message ||
-        "Some error occurred while retrieving foods.",
+      message: "Бүтээгдхүүн хүлээн авах боломжгүй.",
     });
   }
 };
@@ -114,10 +110,9 @@ export const findMultiple = async (req: Request, res: Response) => {
       foods,
     });
   } catch (error) {
-    console.error("Error retrieving foods:", error);
     res.status(500).send({
       success: false,
-      message: "Error retrieving foods.",
+      message: "Бүтээгдхүүн хүлээн авах боломжгүй.",
     });
   }
 };
@@ -128,15 +123,13 @@ export const deleteFood = async (req: Request, res: Response) => {
   try {
     const num = await Food.destroy({ where: { id } });
     if (num === 1) {
-      res.status(200).send({ message: "Food was deleted successfully!" });
+      res.status(200).send({ message: "Хоол амжилттай устгагдлаа!" });
     } else {
-      res
-        .status(404)
-        .send({ message: `Cannot delete Food with id=${id}. Food not found!` });
+      res.status(404).send({ message: `id=${id}-тай хоол олдсонгүй!` });
     }
   } catch (error) {
     res.status(500).send({
-      message: "Couldn't delete Food with id=" + id,
+      message: "Устгаж чадсангүй id=" + id,
     });
   }
 };

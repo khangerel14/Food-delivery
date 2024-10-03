@@ -11,7 +11,7 @@ export const createCategory = async (req: Request, res: Response) => {
     const newCategory = await Category.create({ name });
     res.status(201).json(newCategory);
   } catch (error) {
-    res.status(500).json({ error: "Error creating category" });
+    res.status(500).json({ error: "Амжилтгүй..." });
   }
 };
 
@@ -25,14 +25,14 @@ export const getCategory = async (req: Request, res: Response) => {
     if (category) {
       res.status(200).json(category);
     } else {
-      res.status(400).json({ error: "category not found" });
+      res.status(400).json({ error: "Категори олдсонгүй." });
     }
   } catch (error) {
-    res.status(500).json({ error: "Error getting category" });
+    res.status(500).json({ error: "Категори авч чадсангүй" });
   }
 };
 
-export const getAllCategory = async (req: Request, res: Response) => {
+export const getAllCategory = async (_: Request, res: Response) => {
   try {
     const allCategory = await Category.findAndCountAll({
       include: {
@@ -42,6 +42,6 @@ export const getAllCategory = async (req: Request, res: Response) => {
     });
     res.status(200).json(allCategory);
   } catch (error) {
-    return res.status(500).json({ error: "internal error" });
+    return res.status(500).json({ error: "Алдааа.." });
   }
 };

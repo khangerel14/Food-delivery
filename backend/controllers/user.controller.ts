@@ -22,14 +22,14 @@ export const createUser = async (req: Request, res: Response) => {
     });
 
     if (created) {
-      console.log(`New user created: ${email}`);
+      console.log(`Шинэ хэрэглэгч: ${email}`);
     } else {
-      console.log(`Existing user found: ${email}`);
+      console.log(`Өмнөн бүртгэгдсэн байна: ${email}`);
     }
 
     return res.status(200).json(user);
   } catch (error) {
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Амжилтгүй..." });
   }
 };
 
@@ -41,31 +41,8 @@ export const findAll = async (req: Request, res: Response) => {
     const data = await User.findAll({ where: condition });
     res.status(200).send(data);
   } catch (err: unknown) {
-    const errorMessage =
-      err instanceof Error ? err.message : "Some error occurred";
     res.status(500).send({
-      message: errorMessage,
-    });
-  }
-};
-
-export const findOne = async (req: Request, res: Response) => {
-  const id: string = req.params.id;
-
-  try {
-    const data = await User.findByPk(id);
-    if (data) {
-      res.status(200).send(data);
-    } else {
-      res.status(404).send({ message: `Cannot find User with id=${id}.` });
-    }
-  } catch (err: unknown) {
-    const errorMessage =
-      err instanceof Error
-        ? err.message
-        : "Error retrieving User with id=" + id;
-    res.status(500).send({
-      message: errorMessage,
+      message: "Алдаа гарсан...",
     });
   }
 };
@@ -76,45 +53,13 @@ export const deleteUser = async (req: Request, res: Response) => {
   try {
     const num = await User.destroy({ where: { id } });
     if (num === 1) {
-      res.status(200).send({ message: "User was deleted successfully!" });
+      res.status(200).send({ message: "Хэрэглэгч амжилттай устгагдлаа!" });
     } else {
-      res
-        .status(404)
-        .send({ message: `Cannot delete User with id=${id}. User not found!` });
+      res.status(404).send({ message: `id=${id} тай хэрэглэгч олдсонгүй!` });
     }
   } catch (err: unknown) {
-    const errorMessage =
-      err instanceof Error ? err.message : "Couldn't delete User with id=" + id;
     res.status(500).send({
-      message: errorMessage,
-    });
-  }
-};
-
-export const update = async (req: Request, res: Response) => {
-  const id: string = req.params.id;
-  const { email, name } = req.body;
-
-  if (!email) {
-    res.status(400).send({ message: "Email is required." });
-    return;
-  }
-
-  try {
-    const [num] = await User.update({ email, name }, { where: { id } });
-
-    if (num === 1) {
-      res.status(200).send({ message: "User was updated successfully!" });
-    } else {
-      res
-        .status(404)
-        .send({ message: `Cannot update User with id=${id}. User not found!` });
-    }
-  } catch (err: unknown) {
-    const errorMessage =
-      err instanceof Error ? err.message : "Error updating User with id=" + id;
-    res.status(500).send({
-      message: errorMessage,
+      message: "Амжилтгүй...",
     });
   }
 };
