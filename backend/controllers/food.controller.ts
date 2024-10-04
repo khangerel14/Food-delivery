@@ -24,8 +24,7 @@ export const create = async (req: Request, res: Response) => {
     res.status(201).send(data);
   } catch (error) {
     res.status(500).send({
-      message:
-        (error as Error)?.message || "Бүтээгдхүүн үүсгэхэд алдаа гарлаа.",
+      message: "Бүтээгдхүүн үүсгэхэд алдаа гарлаа.",
     });
   }
 };
@@ -131,5 +130,57 @@ export const deleteFood = async (req: Request, res: Response) => {
     res.status(500).send({
       message: "Устгаж чадсангүй id=" + id,
     });
+  }
+};
+
+export const getAllFood = async (req: Request, res: Response) => {
+  const { page = 1, limit = 8, searchQuery } = req.query;
+
+  const pageNumber = Number(page);
+  const limitNumber = Number(limit);
+
+  if (pageNumber < 1 || limitNumber < 1) {
+    return res.status(400).json({ error: "Invalid page or limit." });
+  }
+
+  try {
+    const offset = (pageNumber - 1) * limitNumber;
+
+    let condition = {};
+    if (searchQuery) {
+      condition = {
+        name: {
+          [Op.iLike]: `%${searchQuery}%`,
+        },
+      };
+    }
+
+    const { count, rows } = await Food.findAndCountAll({
+      where: condition,
+      offset: offset,
+      limit: limitNumber,
+    });
+
+    if (rows.length === 0) {
+      return res.status(404).json({
+        success: true,
+        message: "Тодорхой хоол байхгүй байна.",
+        page: pageNumber,
+        perPage: limitNumber,
+        totalCount: count,
+        foods: [],
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      page: pageNumber,
+      perPage: limitNumber,
+      totalCount: count,
+      foods: rows,
+    });
+  } catch (error) {
+    console.error("Error fetching foods:", error);
+    return res.status(500).json({ error: "Алдаа гарлаа." });
   }
 };

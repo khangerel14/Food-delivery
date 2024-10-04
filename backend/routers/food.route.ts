@@ -4,6 +4,7 @@ import {
   findAll,
   findMultiple,
   deleteFood,
+  getAllFood,
 } from "../controllers/food.controller.js";
 
 const router = Router();
@@ -11,6 +12,7 @@ const router = Router();
 export default (app: Express) => {
   router.post("/", create);
   router.get("/", findAll);
+  router.get("/all", getAllFood);
   router.get("/multiple", findMultiple);
   router.delete("/:id", deleteFood);
 

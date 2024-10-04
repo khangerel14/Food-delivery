@@ -31,17 +31,3 @@ export const getCategory = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Категори авч чадсангүй" });
   }
 };
-
-export const getAllCategory = async (_: Request, res: Response) => {
-  try {
-    const allCategory = await Category.findAndCountAll({
-      include: {
-        model: Food,
-        as: "foods",
-      },
-    });
-    res.status(200).json(allCategory);
-  } catch (error) {
-    return res.status(500).json({ error: "Алдааа.." });
-  }
-};
