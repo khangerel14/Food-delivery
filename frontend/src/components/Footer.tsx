@@ -15,8 +15,8 @@ export const Footer = () => {
     router.push("/dashboard");
   };
   return (
-    <div className="flex relative items-center justify-center w-full h-[400px] bg-cover max-xl:px-12">
-      <div className="flex flex-col items-center justify-center gap-9 absolute">
+    <div className="flex relative items-center justify-center w-full h-[400px] pt-10 rounded-t-3xl bg-gray-400 bg-cover max-xl:px-12">
+      <div className="flex flex-col items-center justify-center gap-9 absolute text-gray-800">
         <div>
           <h1 className="font-bold text-2xl">Food Delivery</h1>
         </div>

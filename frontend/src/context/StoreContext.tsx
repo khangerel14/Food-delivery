@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { usePathname } from "next/navigation";
 import {
   createContext,
   useState,
@@ -62,6 +63,7 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
   const [canOrder, setCanOrder] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { user } = useUser() as { user: User };
+  const path = usePathname();
 
   const checkTime = () => {
     const currentHour = new Date().getHours();
@@ -95,11 +97,13 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/foods?page=${page}&limit=${limit}${
-          categoryId !== undefined ? `&categoryId=${categoryId}` : ""
-        }`
-      );
+      const url =
+        path === "/dashboard"
+          ? `http://localhost:8000/api/foods/all?page=${page}&limit=${limit}`
+          : `http://localhost:8000/api/foods?page=${page}&limit=${limit}${
+              categoryId !== undefined ? `&categoryId=${categoryId}` : ""
+            }`;
+      const response = await axios.get(url);
 
       if (response.data.success) {
         setFoodData(response.data.foods);

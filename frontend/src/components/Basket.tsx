@@ -70,7 +70,7 @@ export const Basket = () => {
 
   return (
     <div className="flex flex-col justify-center items-start gap-20 max-w-screen-xl mx-auto w-full py-20 pt-32">
-      <div className="flex items-center flex-col max-w-screen-xl mx-auto">
+      <div className="flex items-center flex-col max-w-screen-xl mx-auto max-md:items-center">
         <Table>
           <TableHeader>
             <TableRow className="w-full">
@@ -139,7 +139,7 @@ export const Basket = () => {
           )}
         </Table>
       </div>
-      <div className="flex flex-col gap-6 w-[480px] h-fit">
+      <div className="flex flex-col gap-6 w-[480px] h-fit max-xl:px-12">
         <h1 className="text-2xl font-semibold">Төлбөрийн мэдээлэл</h1>
         <div className="flex flex-col gap-6">
           <div className="flex justify-between items-center h-8 border-b">

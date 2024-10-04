@@ -1,6 +1,13 @@
 "use client";
 
-import { Carousel, Card, Footer, ManageMent, Navbar } from "@/components";
+import {
+  Carousel,
+  Card,
+  Footer,
+  ManageMent,
+  Navbar,
+  Dashcart,
+} from "@/components";
 import StoreContextProvider from "@/context/StoreContext";
 
 const Page = () => {

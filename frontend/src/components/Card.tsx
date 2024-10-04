@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 export const Card = () => {
   const context = useContext(StoreContext);
   if (!context) {
-    throw new Error("Card must be used within a StoreContextProvider");
+    throw new Error("Card iig StoreContext dotor ashiglah ystoi");
   }
 
   const {

@@ -6,7 +6,6 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import { useContext } from "react";
 import { StoreContext } from "@/context/StoreContext";
 import { MenuBtn } from "./MenuBtn";
-import { Modal } from "./Modal";
 
 export const Navbar = () => {
   const { user, error } = useUser();
@@ -34,7 +33,7 @@ export const Navbar = () => {
     router.push("/basket");
   };
   return (
-    <div>
+    <div className="bg-white w-full z-50">
       <div className="flex items-center justify-between max-w-screen-xl mx-auto font-semibold bg-white h-20 inset-0 fixed z-30 max-xl:px-12">
         <div className="flex items-center gap-10">
           <button>

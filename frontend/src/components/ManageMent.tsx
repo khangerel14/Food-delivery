@@ -7,7 +7,7 @@ export const ManageMent = () => {
         data.map((e, index) => {
           return (
             <button
-              className="flex flex-col gap-8 p-4 border-2 rounded-lg shadow-lg max-md:w-[260px] max-sm:w-[360px]"
+              className="flex flex-col gap-8 p-4 border-gray-400 border-2 rounded-lg shadow-lg max-md:w-[260px] max-sm:w-[360px]"
               key={index}
             >
               <div className="p-2">{e.icon}</div>

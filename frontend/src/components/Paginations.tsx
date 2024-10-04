@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useContext } from "react";
@@ -16,13 +16,16 @@ export const Paginations = ({
   totalItems: number;
 }) => {
   const { isActive }: any = useContext(StoreContext);
+  const path = usePathname();
   const router = useRouter();
-  const totalPages = Math.ceil(totalItems / limit);
+  const totalPages = Math.ceil(path === "/dashboard" ? 4 : totalItems / limit);
 
   const handlePrev = () => {
     if (currentPage > 1) {
       router.push(
-        `?page=${currentPage - 1}&limit=${limit}&categoryId=${isActive}`
+        `?page=${currentPage - 1}&limit=${limit}${
+          path === "/dashboard" ? "" : `&categoryId=${isActive}`
+        }`
       );
     }
   };
@@ -30,7 +33,9 @@ export const Paginations = ({
   const handleNext = () => {
     if (currentPage < totalPages) {
       router.push(
-        `?page=${currentPage + 1}&limit=${limit}&categoryId=${isActive}`
+        `?page=${currentPage + 1}&limit=${limit}${
+          path === "/dashboard" ? "" : `&categoryId=${isActive}`
+        }`
       );
     }
   };
