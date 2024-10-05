@@ -1,6 +1,6 @@
 "use client";
 
-import { Basket, Icon, User } from "@/images";
+import { Basket, User } from "@/images";
 import { useRouter } from "next/navigation";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useContext } from "react";
@@ -36,16 +36,14 @@ export const Navbar = () => {
     <div className="bg-white w-full z-50">
       <div className="flex items-center justify-between max-w-screen-xl mx-auto font-semibold bg-white h-20 inset-0 fixed z-30 max-xl:px-12">
         <div className="flex items-center gap-10">
-          <button>
-            <Icon />
-          </button>
-          <button className="hover:text-green-600" onClick={homePage}>
+          <button className="navBtn font-black text-xl">ICT</button>
+          <button className="navBtn" onClick={homePage}>
             НҮҮР
           </button>
-          <button className="hover:text-green-600" onClick={menu}>
+          <button className="navBtn" onClick={menu}>
             ХООЛНЫ ЦЭС
           </button>
-          <button className="hover:text-green-600" onClick={deliverZone}>
+          <button className="navBtn" onClick={deliverZone}>
             ХҮРГЭЛТИЙН БҮС
           </button>
         </div>
@@ -57,20 +55,14 @@ export const Navbar = () => {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
-          <button
-            className="flex items-center gap-4 hover:text-green-600 max-md:hidden"
-            onClick={basket}
-          >
+          <button className="flex items-center gap-4 navBtn" onClick={basket}>
             <div className="relative">
               <Basket />
               <p className="absolute inset-0 -top-2 pl-4">{foodLength}</p>
             </div>
             Сагс
           </button>
-          <button
-            className="flex items-center gap-4 hover:text-green-600 max-md:hidden"
-            onClick={logIn}
-          >
+          <button className="flex items-center gap-4 navBtn" onClick={logIn}>
             <User />
             <span className="max-md:hidden">
               {user ? user.nickname : "Нэвтрэх"}
