@@ -29,6 +29,11 @@ const setupAssociations = () => {
 
   db.User.hasMany(db.Order, { foreignKey: "userId" });
   db.Order.belongsTo(db.User, { foreignKey: "userId" });
+
+  db.Cart.belongsTo(db.Order, {
+    foreignKey: "orderId",
+    as: "order",
+  });
 };
 
 const syncModels = async () => {

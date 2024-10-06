@@ -140,7 +140,7 @@ export const getAllFood = async (req: Request, res: Response) => {
   const limitNumber = Number(limit);
 
   if (pageNumber < 1 || limitNumber < 1) {
-    return res.status(400).json({ error: "Invalid page or limit." });
+    return res.status(400).json({ error: "page || limit alga." });
   }
 
   try {
@@ -180,7 +180,6 @@ export const getAllFood = async (req: Request, res: Response) => {
       foods: rows,
     });
   } catch (error) {
-    console.error("Error fetching foods:", error);
     return res.status(500).json({ error: "Алдаа гарлаа." });
   }
 };
