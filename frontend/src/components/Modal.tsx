@@ -1,6 +1,6 @@
 "use client";
 
-import { Basket, User } from "@/images";
+import { Basketsvg, User } from "@/images";
 import { useRouter } from "next/navigation";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useContext } from "react";
@@ -46,7 +46,7 @@ export const Modal = () => {
           onClick={basket}
         >
           <div className="relative">
-            <Basket />
+            <Basketsvg />
             <p className="absolute inset-0 -top-2 pl-4">{foodLength}</p>
           </div>
           Сагс

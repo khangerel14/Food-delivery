@@ -16,50 +16,54 @@ export const MenuBar = () => {
     setIsActive(categoryId);
     getCategoryIdByName(categoryId);
     router.push(
-      `http://localhost:3000/menu?page=${page}&limit=${limit}${
+      `http://localhost:3000/dashboard?page=${page}&limit=${limit}${
         categoryId ? `&categoryId=${categoryId}` : ""
       }`
     );
   };
 
   return (
-    <div className="flex flex-col max-w-screen-xl mx-auto pt-24 max-xl:px-12">
-      <div className="flex justify-between my-8 max-sm:flex-wrap max-sm:justify-center gap-5">
+    <div className="flex flex-col max-w-screen-xl mx-auto z-50">
+      <div className="flex justify-center my-8 max-sm:flex-wrap max-sm:justify-center gap-3">
         <button
-          className="w-[280px] border border-gray-400 h-10 rounded-md"
+          className="h-10 px-3"
           style={{
-            background: isActive === 1 ? "#3dbf0c" : "",
+            background: isActive === 1 ? "#F91944" : "",
             color: isActive === 1 ? "white" : "",
+            borderRadius: isActive === 1 ? "9999px" : "",
           }}
           onClick={() => handleClick(1)}
         >
           Breakfast
         </button>
         <button
-          className="w-[280px] border border-gray-400 h-10 rounded-md"
+          className="h-10 px-3"
           style={{
-            background: isActive === 2 ? "#3dbf0c" : "",
+            background: isActive === 2 ? "#F91944" : "",
             color: isActive === 2 ? "white" : "",
+            borderRadius: isActive === 2 ? "9999px" : "",
           }}
           onClick={() => handleClick(2)}
         >
           Soup
         </button>
         <button
-          className="w-[280px] border border-gray-400 h-10 rounded-md"
+          className="h-10 px-3"
           style={{
-            background: isActive === 3 ? "#3dbf0c" : "",
+            background: isActive === 3 ? "#F91944" : "",
             color: isActive === 3 ? "white" : "",
+            borderRadius: isActive === 3 ? "9999px" : "",
           }}
           onClick={() => handleClick(3)}
         >
           Main Course
         </button>
         <button
-          className="w-[280px] border border-gray-400 h-10 rounded-md"
+          className="h-10 px-3"
           style={{
-            background: isActive === 4 ? "#3dbf0c" : "",
+            background: isActive === 4 ? "#F91944" : "",
             color: isActive === 4 ? "white" : "",
+            borderRadius: isActive === 4 ? "9999px" : "",
           }}
           onClick={() => handleClick(4)}
         >

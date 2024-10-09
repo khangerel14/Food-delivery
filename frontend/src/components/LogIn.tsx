@@ -48,7 +48,7 @@ export const LogIn = () => {
   if (error) return <p>{error.message}</p>;
 
   return (
-    <div className="flex flex-col w-full items-center my-24 gap-10">
+    <div className="flex flex-col w-full items-center py-24 gap-10">
       {user ? (
         <div className="flex flex-col items-center gap-7 my-5">
           {user.picture && (

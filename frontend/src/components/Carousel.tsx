@@ -1,23 +1,20 @@
-import { Food } from "@/images";
+import { StoreContext } from "@/context/StoreContext";
+import { useContext } from "react";
 
 export const Carousel = () => {
+  const { inputValue, setInputValue }: any = useContext(StoreContext);
   return (
-    <div className="flex items-center w-full h-[600px] pt-32 max-xl:pl-12 max-md:pl-0">
-      <div className="flex justify-between w-[1280px] mx-auto items-center">
-        <div className="flex flex-col gap-5 mx-auto w-[550px] max-md:text-center max-sm:w-[300px]">
-          <h1 className="font-bold text-7xl text-[#626567] max-sm:text-5xl">
-            <span className="text-[#85BB65] pr-3">Welcome</span>
-            to the World of Taste & Fresh food
-          </h1>
-          <div className="w-full h-1 bg-[#85BB65] rounded-full"></div>
-          <p className="text-xl font-normal text-[#626567]">
-            People who love to eat are always the best people
-          </p>
-        </div>
-        <div className="pr-10 max-md:hidden">
-          <Food />
-        </div>
-      </div>
+    <div className="flex items-center flex-col w-full h-full justify-center gap-3 md:gap-10 max-sm:pt-24">
+      <h1 className="text-xl text-slate-800 font-bold md:text-5xl">
+        Best food waiting for your belly
+      </h1>
+      <input
+        className="border rounded-full w-96 h-10 font-normal px-4 outline-none"
+        type="search"
+        placeholder="Хайх..."
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+      />
     </div>
   );
 };

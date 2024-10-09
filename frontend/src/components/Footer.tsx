@@ -1,7 +1,7 @@
 "use client";
 
-import { Facebook, Instagram, Twitter } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
+import { Instagram, Github, LinkedIn, RedOnion } from "@/images";
 
 export const Footer = () => {
   const router = useRouter();
@@ -15,32 +15,38 @@ export const Footer = () => {
     router.push("/dashboard");
   };
   return (
-    <div className="flex relative items-center justify-center w-full h-[400px] pt-10 rounded-t-3xl bg-gray-400 bg-cover max-xl:px-12">
-      <div className="flex flex-col items-center justify-center gap-9 absolute text-gray-800">
-        <div>
-          <h1 className="font-bold text-2xl">Food Delivery</h1>
+    <div className="bg-slate-800 w-full">
+      <div className="flex justify-between py-10 h-[310px] w-[1230px] mx-auto max-xl:w-full max-md:px-8">
+        <div className="flex flex-col justify-between">
+          <RedOnion />
+          <p className="text-gray-400 text-lg">Developed by 💗 khaankoo</p>
         </div>
-        <div className="flex max-w-screen-xl gap-32 justify-between max-xl:gap-12 max-md:gap-5 max-sm:flex-wrap max-sm:px-12">
-          <button className="border-b" onClick={home}>
-            Нүүр
-          </button>
-          <button className="border-b">Холбоо барих</button>
-          <button className="border-b" onClick={menu}>
-            Хоолны цэс
-          </button>
-          <button className="border-b">Үйлчилгээний нөхцөл</button>
-          <button className="border-b" onClick={deliveryZone}>
-            Хүргэлтийн бүс
-          </button>
-        </div>
-        <div className="flex gap-5 items-center">
-          <Facebook sx={{ fontSize: 35, borderRadius: 40 }} />
-          <Instagram sx={{ fontSize: 35 }} />
-          <Twitter sx={{ fontSize: 35 }} />
-        </div>
-        <div className="flex flex-col items-center gap-2 w-full border-t-2 border-white pt-8">
-          <p>© 2024 Pinecone Foods LLC </p>
-          <p>Зохиогчийн эрх хуулиар хамгаалагдсан.</p>
+        <div className="flex flex-col justify-between">
+          <div className="flex gap-9 text-white">
+            <div className="flex flex-col gap-2">
+              <h1>About Online Food</h1>
+              <h1>Read our blog</h1>
+              <h1>Sign up to deliver</h1>
+              <h1>Add your restaurant</h1>
+            </div>
+            <div className="flex flex-col gap-2">
+              <h1>Get Help</h1>
+              <h1>Ask any question</h1>
+              <h1>Order Now</h1>
+              <h1>Contact</h1>
+            </div>
+            <div className="flex flex-col gap-2">
+              <h1>Facebook</h1>
+              <h1>Instagram</h1>
+              <h1>Twitter</h1>
+              <h1>Youtube</h1>
+            </div>
+          </div>
+          <div className="flex gap-5 text-white justify-end">
+            <p>Privacy Policy</p>
+            <p>Terms of Use</p>
+            <p>Pricing</p>
+          </div>
         </div>
       </div>
     </div>

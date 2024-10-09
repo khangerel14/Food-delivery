@@ -11,7 +11,6 @@ const Page = () => {
       <BasketContextProvider>
         <Order />
       </BasketContextProvider>
-      <Footer />
     </StoreContextProvider>
   );
 };

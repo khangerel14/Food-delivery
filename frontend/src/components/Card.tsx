@@ -3,13 +3,12 @@
 import { useContext, useEffect } from "react";
 import { StoreContext } from "@/context/StoreContext";
 import { Paginations } from "./Paginations";
-import StarIcon from "@mui/icons-material/Star";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export const Card = () => {
   const context = useContext(StoreContext);
   if (!context) {
-    throw new Error("Card iig StoreContext dotor ashiglah ystoi");
+    throw new Error("Card must be used within StoreContext");
   }
 
   const {
@@ -21,7 +20,7 @@ export const Card = () => {
     totalItems,
     isActive,
   } = context;
-
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   const page = parseInt(searchParams.get("page") || "1", 10);
@@ -32,6 +31,16 @@ export const Card = () => {
     ? parseInt(categoryIdStr, 10)
     : undefined;
 
+  const categoryIdToName = (categoryId: number | undefined) => {
+    const categoryMap: { [key: number]: string } = {
+      1: "Breakfast",
+      2: "Soup",
+      3: "Main Course",
+      4: "Dessert",
+    };
+    return categoryId ? categoryMap[categoryId] || "Unknown" : "All Categories";
+  };
+
   useEffect(() => {
     fetchFoods(page, limit, isActive);
   }, [page, limit, isActive]);
@@ -39,22 +48,27 @@ export const Card = () => {
   const handleAddToCart = async (foodId: string, quantity: number = 1) => {
     try {
       await addToCart(foodId, quantity);
+      router.push("/basket", { scroll: false });
     } catch (error) {
       console.error("Error adding to cart:", error);
     }
   };
 
   if (loading) {
-    return <div className="w-36 mx-cover h-full py-52">Loading...</div>;
+    return <div className="w-36 mx-auto h-full py-52">Loading...</div>;
   }
 
   if (foodData.length === 0) {
-    return <div className="w-36 mx-cover h-full py-52">No Food Available</div>;
+    return (
+      <div className="w-36 mx-auto h-full py-52">
+        No Food Available. Try adjusting your search or filter.
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col mx-auto max-w-screen-xl items-center">
-      <div className="flex flex-wrap justify-between rounded-xl py-10 max-w-screen-xl mx-auto gap-[53px] max-xl:px-12 max-xl:justify-center">
+    <div className="flex flex-col mx-auto w-[1230px] items-center max-xl:w-full">
+      <div className="flex flex-wrap justify-between rounded-xl py-10 mx-auto gap-[53px] max-xl:px-12 max-xl:justify-center max-xl:flex-wrap">
         {foodData
           .filter((elem: any) => {
             const matchesInput =
@@ -64,37 +78,32 @@ export const Card = () => {
           })
           .map((elem: any, index: number) => (
             <div
-              className="flex flex-col border border-gray-400 mb-10 w-[280px] rounded-xl shadow-inner max-xl:w-[400px] max-md:w-[260px] max-sm:w-[340px]"
+              className="flex flex-col gap-6 rounded-lg border border-gray-100 h-[500px] w-[360px] items-center p-5 justify-between transition-transform hover:shadow-lg hover:scale-105 ease-linear"
               key={index}
             >
-              <div className="relative">
+              <div className="flex justify-start w-full">
+                <h1 className="rounded-full px-3 bg-[#f3d7dd] border-red-500 border text-red-500">
+                  {categoryIdToName(elem.categoryId)}
+                </h1>
+              </div>
+              <div className="rounded-full h-48 w-48">
                 <img
                   src={elem.imgUrl}
-                  alt={elem.name}
-                  className="rounded-t-xl bg-cover h-[180px] bg-full"
-                  height={180}
-                  width={400}
+                  alt={`Image of ${elem.name}`}
+                  loading="lazy"
+                  className="object-cover h-full w-full rounded-full hover:scale-105 transition-transform ease-out"
                 />
-                <div className="absolute flex top-2 right-2 bg-white rounded-full text-center px-3 p-1 gap-1 items-center z-20">
-                  <StarIcon sx={{ color: "#ffff00" }} />
-                  <p>{elem.assessment}</p>
-                </div>
               </div>
-              <div className="flex flex-col p-3 justify-between gap-3 h-full">
-                <h1 className="font-semibold">{elem.name}</h1>
-                <p>{elem.description}</p>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h1 className="text-gray-600">Price:</h1>
-                    <p className="font-semibold">{elem.price}</p>
-                  </div>
-                  <button
-                    className="p-2 px-3 rounded-full flex items-center justify-center bg-[#85BB65] text-white"
-                    onClick={() => handleAddToCart(elem.id, 1)}
-                  >
-                    Add to Cart
-                  </button>
-                </div>
+              <div className="flex flex-col items-center gap-2">
+                <h1 className="text-xl font-semibold">{elem.name}</h1>
+                <p className="text-center">{elem.description}</p>
+                <h1 className="text-lg font-bold">{elem.price}₮</h1>
+                <button
+                  className="p-2 px-7 text-white rounded-full bg-[#F91944]"
+                  onClick={() => handleAddToCart(elem.id, 1)}
+                >
+                  Order Now
+                </button>
               </div>
             </div>
           ))}

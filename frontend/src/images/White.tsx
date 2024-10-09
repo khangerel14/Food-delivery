@@ -1,5 +1,5 @@
-import icon from "./../../public/420182384_1824558871346633_7203207693841930919_n.png";
+import icon from "./../../public/bg.png";
 
 export const White = () => {
-  return <img src={icon.src} alt="" />;
+  return <img src={icon.src} height={1000} className="h-[400px]" />;
 };

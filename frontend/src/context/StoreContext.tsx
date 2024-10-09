@@ -93,16 +93,13 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
     }
   }, [cartItems]);
 
-  const fetchFoods = async (page = 1, limit = 8, categoryId?: number) => {
+  const fetchFoods = async (page = 1, limit = 6, categoryId?: number) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const url =
-        path === "/dashboard"
-          ? `http://localhost:8000/api/foods/all?page=${page}&limit=${limit}`
-          : `http://localhost:8000/api/foods?page=${page}&limit=${limit}${
-              categoryId !== undefined ? `&categoryId=${categoryId}` : ""
-            }`;
+      const url = `http://localhost:8000/api/foods?page=${page}&limit=${limit}${
+        categoryId !== undefined ? `&categoryId=${categoryId}` : ""
+      }`;
       const response = await axios.get(url);
 
       if (response.data.success) {
