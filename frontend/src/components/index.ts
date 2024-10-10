@@ -14,3 +14,4 @@ export * from "./Paginations";
 export * from "./MenuBtn";
 export * from "./Modal";
 export * from "./ChooseUs";
+export * from "./OrderRight";

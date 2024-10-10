@@ -32,11 +32,11 @@ export const create = async (req: Request, res: Response) => {
 export const findAll = async (req: Request, res: Response) => {
   try {
     const page: number = parseInt(req.query.page as string, 10) || 1;
-    const limit: number = parseInt(req.query.limit as string, 10) || 8;
+    const limit: number = 6;
     const offset: number = (page - 1) * limit;
 
     const food: string = (req.query.food as string) || "";
-    const categoryId: string = req.query.categoryId as string;
+    const categoryId: string | undefined = req.query.categoryId as string;
 
     let parsedCategoryId: number | undefined;
     if (categoryId) {
@@ -46,7 +46,7 @@ export const findAll = async (req: Request, res: Response) => {
       } else {
         return res.status(400).send({
           success: false,
-          message: "Тоо оруулах!!!",
+          message: "Invalid categoryId. Please provide a valid number.",
         });
       }
     }
@@ -60,14 +60,14 @@ export const findAll = async (req: Request, res: Response) => {
 
     const { count, rows } = await Food.findAndCountAll({
       where: condition,
-      offset: offset,
-      limit: limit,
+      offset,
+      limit,
     });
 
     if (rows.length === 0) {
       return res.status(404).send({
         success: true,
-        message: "Тодорхой хоол байхгүй байна.",
+        message: "No food items found.",
         page,
         perPage: limit,
         totalCount: count,
@@ -75,17 +75,20 @@ export const findAll = async (req: Request, res: Response) => {
       });
     }
 
+    const totalPages = Math.ceil(count / limit);
+
     res.status(200).send({
       success: true,
       page,
       perPage: limit,
+      totalPages,
       totalCount: count,
       foods: rows,
     });
   } catch (error) {
     res.status(500).send({
       success: false,
-      message: "Бүтээгдхүүн хүлээн авах боломжгүй.",
+      message: "Unable to fetch food items.",
     });
   }
 };

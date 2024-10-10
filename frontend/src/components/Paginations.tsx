@@ -41,7 +41,7 @@ export const Paginations = ({
       <button
         onClick={handlePrev}
         disabled={currentPage <= 1}
-        className={`rounded-sm px-14 p-3 text-center bg-slate-500 ${
+        className={`rounded-sm px-14 p-3 text-center bg-[#F91944] ${
           currentPage <= 1 ? "opacity-50 cursor-not-allowed" : ""
         }`}
       >
@@ -55,7 +55,7 @@ export const Paginations = ({
       <button
         onClick={handleNext}
         disabled={currentPage >= totalPages}
-        className={`rounded-sm px-14 p-3 text-center bg-slate-500 ${
+        className={`rounded-sm px-14 p-3 text-center bg-[#F91944] ${
           currentPage >= totalPages ? "opacity-50 cursor-not-allowed" : ""
         }`}
       >

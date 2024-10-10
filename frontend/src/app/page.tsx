@@ -4,7 +4,6 @@ import {
   Carousel,
   Card,
   Footer,
-  ManageMent,
   Navbar,
   MenuBar,
   ChooseUs,
@@ -12,14 +11,16 @@ import {
 import StoreContextProvider from "@/context/StoreContext";
 import { White } from "@/images";
 
-export default function Home() {
+const Page = () => {
   return (
     <StoreContextProvider>
-      <div className="relative">
-        <White />
-        <div className="absolute inset-0">
-          <Navbar />
-          <Carousel />
+      <div className="mx-auto overflow-x-hidden overflow-y-hidden">
+        <div className="relative w-[115%] flex flex-col items-center">
+          <White />
+          <div className="absolute inset-0 mx-auto">
+            <Navbar />
+            <Carousel />
+          </div>
         </div>
       </div>
       <MenuBar />
@@ -28,4 +29,6 @@ export default function Home() {
       <Footer />
     </StoreContextProvider>
   );
-}
+};
+
+export default Page;

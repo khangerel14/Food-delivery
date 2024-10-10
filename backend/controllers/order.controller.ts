@@ -6,24 +6,22 @@ const { Order, User } = db;
 export const createOrder = async (req: Request, res: Response) => {
   try {
     const { email, khoroo, district, phoneNumber } = req.body;
-    const orderdaat = localStorage.getItem("cartItems");
-    console.log(orderdaat);
+
     if (!email || !khoroo || !district || !phoneNumber) {
-      res.status(400).send({ message: "Мэдээлэл дутуу байна." });
-      return;
+      return res.status(400).send({ message: "Мэдээлэл дутуу байна." });
     }
 
     const order = { email, khoroo, district, phoneNumber };
 
     const data = await Order.create(order);
-    res.status(201).send(data);
+    return res.status(201).send(data);
   } catch (error) {
-    res.status(500).send({
+    console.error("Error creating order:", error);
+    return res.status(500).send({
       message: (error as Error).message || "Захиалга үүсгэхэд алдаа гарсан.",
     });
   }
 };
-
 export const deleteOrder = async (req: Request, res: Response) => {
   const id: string = req.params.id;
 
@@ -45,23 +43,19 @@ export const deleteOrder = async (req: Request, res: Response) => {
   }
 };
 
-export const findOrdersWithUser = async (req: Request, res: Response) => {
+export const getLastOrder = async (req: Request, res: Response) => {
   try {
-    const orders = await Order.findAll({
-      include: [
-        {
-          model: User,
-          as: "user",
-          attributes: ["id", "email", "name"],
-        },
-      ],
+    const lastOrder = await Order.findOne({
+      order: [["id", "DESC"]],
     });
 
-    res.status(200).send(orders);
+    if (!lastOrder) {
+      return res.status(404).json({ message: "No orders found" });
+    }
+
+    return res.status(200).json(lastOrder);
   } catch (error) {
-    res.status(500).send({
-      message:
-        (error as Error).message || "Захиалга хүлээн авахад алдаа гарсан.",
-    });
+    console.error("Error retrieving last order:", error);
+    return res.status(500).json({ message: "Server error" });
   }
 };

@@ -1,22 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { Instagram, Github, LinkedIn, RedOnion } from "@/images";
+import { RedOnion } from "@/images";
 
 export const Footer = () => {
-  const router = useRouter();
-  const menu = () => {
-    router.push("/menu");
-  };
-  const deliveryZone = () => {
-    router.push("/deliverZone");
-  };
-  const home = () => {
-    router.push("/dashboard");
-  };
   return (
     <div className="bg-slate-800 w-full">
-      <div className="flex justify-between py-10 h-[310px] w-[1230px] mx-auto max-xl:w-full max-md:px-8">
+      <div className="flex justify-between py-10 h-[310px] w-[1230px] mx-auto max-xl:w-full max-md:px-8 max-sm:text-xs">
         <div className="flex flex-col justify-between">
           <RedOnion />
           <p className="text-gray-400 text-lg">Developed by 💗 khaankoo</p>

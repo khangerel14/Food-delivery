@@ -21,7 +21,7 @@ const mock = [
 
 export const ChooseUs = () => {
   return (
-    <div className="flex flex-col w-[1230px] mx-auto py-20 max-xl:px-10 max-xl:w-full">
+    <div className="flex flex-col w-[1230px] mx-auto py-20 max-xl:px-10 max-sm:px-2 max-xl:w-full">
       <div className="flex flex-col gap-4">
         <h1 className="text-3xl font-medium">Why you choose us</h1>
         <p className="text-gray-500 w-[620px] max-md:w-full">
@@ -34,17 +34,18 @@ export const ChooseUs = () => {
         {mock.map((elem: any, index: number) => {
           return (
             <div
-              className="flex flex-col w-[360px] h-[500px] gap-7 p-4 transition-transform hover:scale-105 hover:shadow-lg rounded-lg ease-in-out"
+              className="flex flex-col w-[360px] h-[500px] gap-7 p-4 transition duration-300 hover:scale-105 hover:shadow-lg rounded-lg ease-in-out"
               key={index}
             >
-              <div className="w-[320px] bg-contain">
+              <div className="w-[320px] overflow-hidden transition duration-300 ease-linear hover:scale-105 rounded-xl">
                 <img
                   src={elem.img}
                   alt=""
                   width={320}
-                  className="transition-transform hover:scale-105 ease-linear bg-cover"
+                  className="transition duration-300 ease-linear hover:scale-110 bg-cover"
                 />
               </div>
+
               <div className="flex gap-5 justify-between h-10">
                 <img src={elem.icon} alt="" width={45} height={2} />
                 <div className="flex flex-col items-start gap-3">

@@ -7,6 +7,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { useContext } from "react";
 import { useRouter } from "next/navigation";
 import { BasketContext } from "@/context/BasketContext";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 type FoodItem = {
   id: number;
@@ -30,6 +31,7 @@ export const Basket = () => {
     cartItems = {} as CartItems,
     removeFromCart = () => {},
     addToCart = () => {},
+    deleteFromCart,
   }: any = useContext(BasketContext) || {};
 
   const cartItemsArray: CartItem[] = [];
@@ -54,16 +56,23 @@ export const Basket = () => {
 
   return (
     <div className="flex flex-col justify-center items-start gap-20 w-[1230px] mx-auto py-20 pt-32 max-xl:w-full">
-      <div className="flex items-center flex-col w-[1230px] mx-auto max-md:items-center max-xl:w-full max-xl:px-10">
-        <div className="w-full flex justify-start gap-2 items-center">
-          <KeyboardBackspaceIcon />
+      <div className="flex items-center flex-col w-[1230px] mx-auto max-md:items-center max-xl:w-full max-xl:px-10 max-sm:px-2">
+        <div className="w-full flex justify-between gap-2 items-center mb-10">
           <button onClick={() => router.push("/dashboard", { scroll: false })}>
+            <KeyboardBackspaceIcon />
             Back
+          </button>
+          <button
+            className="flex gap-4 px-4 p-3 bg-[#F91944] text-white rounded-full w-44 items-center justify-center"
+            onClick={() => router.push("/order", { scroll: false })}
+          >
+            <Basketsvg />
+            Add to Order
           </button>
         </div>
         {cartItemsArray.length > 0 ? (
-          <div className="max-xl:w-full w-[1230px]">
-            {cartItemsArray.slice(-1).map((item: CartItem) => (
+          <div className="max-xl:w-full w-[1230px] flex flex-col gap-10">
+            {cartItemsArray.map((item: CartItem) => (
               <div
                 className="flex justify-between items-center w-full max-lg:flex-col-reverse max-lg:gap-10"
                 key={item.id}
@@ -83,7 +92,6 @@ export const Basket = () => {
                       <button
                         className="mr-5 bg-[#f91944] rounded-full h-9 w-9"
                         onClick={() => removeFromCart(item.id)}
-                        aria-label={`Remove one ${item.name} from cart`}
                       >
                         <RemoveIcon sx={{ color: "white" }} />
                       </button>
@@ -91,24 +99,23 @@ export const Basket = () => {
                       <button
                         className="ml-5 bg-[#F91944] rounded-full h-9 w-9"
                         onClick={() => addToCart(item.id)}
-                        aria-label={`Add one ${item.name} to cart`}
                       >
                         <AddIcon sx={{ color: "white" }} />
                       </button>
                     </div>
                   </div>
-                  <button
-                    className="flex gap-4 px-4 p-3 bg-[#F91944] text-white rounded-full w-44 items-center justify-center"
-                    onClick={() => router.push("/order", { scroll: false })}
-                  >
-                    <Basketsvg />
-                    Add to Order
+                  <button className="p-3 rounded-full bg-[#F91944]">
+                    <DeleteIcon
+                      sx={{
+                        color: "white",
+                      }}
+                      onClick={() => deleteFromCart(item.id)}
+                    />
                   </button>
                 </div>
                 <div>
                   <img
                     src={item.imgUrl}
-                    alt=""
                     width={700}
                     height={500}
                     className="rounded-full h-[500px] w-[500px]"

@@ -34,19 +34,16 @@ export const Navbar = () => {
   if (error) return <p>{error.message}</p>;
 
   const logIn = () => {
-    router.push("/logIn");
+    router.push("/logIn", { scroll: false });
   };
 
   const logOut = () => {
     router.push("/api/auth/logout", { scroll: false });
+    localStorage.removeItem("cartItems");
   };
 
   const homePage = () => {
     router.push("dashboard", { scroll: false });
-  };
-
-  const basket = () => {
-    router.push("/basket");
   };
 
   return (
@@ -57,18 +54,18 @@ export const Navbar = () => {
         boxShadow: header ? "0 4px 10px rgba(0, 0, 0, 0.1)" : "none",
       }}
     >
-      <div className="flex items-center justify-between w-[1230px] mx-auto font-semibold h-20 max-xl:px-12 max-xl:w-full">
+      <div className="flex items-center justify-between w-[1225px] mx-auto font-semibold h-[60px] max-xl:px-12 max-xl:w-full max-sm:px-2">
         <button onClick={homePage}>
           <RedOnion />
         </button>
         {user ? (
-          <div className="flex gap-3 items-center">
+          <div className="flex gap-4 items-center">
             <button
-              className="relative flex itecen"
-              onClick={() => router.push("/order", { scroll: false })}
+              className="relative flex items-center justify-end"
+              onClick={() => router.push("/basket", { scroll: false })}
             >
               <Basketsvg />
-              <p className="absolute inset-0 -top-2 text-white h-5 w-5 pr-0 rounded-full bg-red-500">
+              <p className="absolute inset-0 -top-2 left-3 text-white h-5 w-5 pr-0 rounded-full bg-red-500 flex justify-center items-center">
                 {foodLength}
               </p>
             </button>
@@ -77,11 +74,11 @@ export const Navbar = () => {
               alt="User avatar"
               className="w-10 h-10 rounded-full"
             />
-            <span className="text-[#313132] max-sm:hidden">
+            <span className="text-[#565656] font-normal max-sm:hidden">
               {user.nickname}
             </span>
             <button onClick={logOut}>
-              <LogoutIcon sx={{ color: "#313132" }} />
+              <LogoutIcon sx={{ color: "#565656" }} />
             </button>
           </div>
         ) : (

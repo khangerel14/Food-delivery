@@ -68,7 +68,7 @@ export const Card = () => {
 
   return (
     <div className="flex flex-col mx-auto w-[1230px] items-center max-xl:w-full">
-      <div className="flex flex-wrap justify-between rounded-xl py-10 mx-auto gap-[53px] max-xl:px-12 max-xl:justify-center max-xl:flex-wrap">
+      <div className="flex flex-wrap justify-between rounded-xl py-10 mx-auto gap-[53px] max-xl:px-12 max-sm:px-2 max-xl:justify-center max-xl:flex-wrap">
         {foodData
           .filter((elem: any) => {
             const matchesInput =
@@ -78,7 +78,7 @@ export const Card = () => {
           })
           .map((elem: any, index: number) => (
             <div
-              className="flex flex-col gap-6 rounded-lg border border-gray-100 h-[500px] w-[360px] items-center p-5 justify-between transition-transform hover:shadow-lg hover:scale-105 ease-linear"
+              className="flex flex-col gap-6 rounded-lg border border-gray-100 h-[500px] w-[360px] items-center p-5 justify-between transition hover:shadow-lg hover:scale-105 ease-linear duration-300"
               key={index}
             >
               <div className="flex justify-start w-full">
@@ -91,7 +91,7 @@ export const Card = () => {
                   src={elem.imgUrl}
                   alt={`Image of ${elem.name}`}
                   loading="lazy"
-                  className="object-cover h-full w-full rounded-full hover:scale-105 transition-transform ease-out"
+                  className="object-cover h-full w-full rounded-full hover:scale-105 transition duration-300 ease-out"
                 />
               </div>
               <div className="flex flex-col items-center gap-2">
