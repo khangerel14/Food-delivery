@@ -104,12 +104,14 @@ export const Basket = () => {
                       </button>
                     </div>
                   </div>
-                  <button className="p-3 rounded-full bg-[#F91944]">
+                  <button
+                    className="p-3 rounded-full bg-[#F91944] w-full"
+                    onClick={() => deleteFromCart(item.id)}
+                  >
                     <DeleteIcon
                       sx={{
                         color: "white",
                       }}
-                      onClick={() => deleteFromCart(item.id)}
                     />
                   </button>
                 </div>

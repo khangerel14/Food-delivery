@@ -21,7 +21,7 @@ const mock = [
 
 export const ChooseUs = () => {
   return (
-    <div className="flex flex-col w-[1230px] mx-auto py-20 max-xl:px-10 max-sm:px-2 max-xl:w-full">
+    <div className="flex flex-col w-[1230px] mx-auto py-20 max-xl:px-10 max-xl:w-full">
       <div className="flex flex-col gap-4">
         <h1 className="text-3xl font-medium">Why you choose us</h1>
         <p className="text-gray-500 w-[620px] max-md:w-full">
