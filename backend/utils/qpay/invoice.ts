@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import i18n from "i18n";
 
-import { INVOICE_STATUS, QPAY_INVOICE_STATUS, QPAY_URLS } from "../consts";
+import { INVOICE_STATUS, QPAY_INVOICE_STATUS, QPAY_URLS } from "../consts.js";
 import {
   ICreateQpayInvoice,
   IQpayAuthResponse,

@@ -15,3 +15,4 @@ export * from "./MenuBtn";
 export * from "./Modal";
 export * from "./ChooseUs";
 export * from "./OrderRight";
+export * from "./Qpay";

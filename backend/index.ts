@@ -7,12 +7,14 @@ import foodRoutes from "./routers/food.route.js";
 import orderRoutes from "./routers/order.route.js";
 import cartRoutes from "./routers/cart.route.js";
 import categoryRoute from "./routers/category.route.js";
+import qpayRoutes from "./routers/qpay.route.js";
 
 const app: Express = express();
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use("/api/qpay", qpayRoutes);
 
 const PORT = 8000;
 

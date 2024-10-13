@@ -1,11 +1,18 @@
 "use client";
 
 import { BasketContext } from "@/context/BasketContext";
-import axios from "axios";
 import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import InvoiceDisplay from "./Qpay";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 type FoodItem = {
   id: number;
@@ -17,33 +24,61 @@ type FoodItem = {
 };
 
 export const OrderRight = ({ formData }: { formData: any }) => {
-  const [cartItemsArray, setCartItemsArray] = useState<FoodItem[]>([]);
   const { cartItems, foodData }: any = useContext(BasketContext);
   const router = useRouter();
-  const { isLoading } = useUser();
+  const { user, isLoading }: any = useUser();
+  const code = "invoice_code";
 
-  useEffect(() => {
-    if (cartItems && foodData.length > 0) {
-      try {
-        const parsedItems =
-          typeof cartItems === "string" ? JSON.parse(cartItems) : cartItems;
+  const parsedItems =
+    typeof cartItems === "string" ? JSON.parse(cartItems) : cartItems;
 
-        const itemsArray = Object.entries(parsedItems)
-          .map(([id, qty]) => {
-            const foodItem = foodData.find(
-              (item: any) => item.id === Number(id)
-            );
-            return foodItem ? { ...foodItem, qty } : null;
-          })
-          .filter(Boolean) as FoodItem[];
+  const itemsArray = Object.entries(parsedItems)
+    .map(([id, qty]) => {
+      const foodItem = foodData.find((item: any) => item.id === Number(id));
+      return foodItem ? { ...foodItem, qty } : null;
+    })
+    .filter(Boolean) as FoodItem[];
 
-        setCartItemsArray(itemsArray);
-      } catch (error) {
-        console.error("Error parsing cartItems", error);
-        setCartItemsArray([]);
-      }
+  const totalPrice = itemsArray.reduce(
+    (acc, item) => acc + item.qty * item.price,
+    0
+  );
+  const deliveryPrice = 2500;
+  const grandTotal = totalPrice + deliveryPrice;
+
+  const createInvoice = async () => {
+    if (isLoading || !user) {
+      console.log("User is loading or not authenticated");
+      return;
     }
-  }, [foodData, cartItems]);
+
+    const encodedUserId = encodeURIComponent(user.sub);
+
+    const invoiceData = {
+      amount: grandTotal,
+      user_id: encodedUserId,
+      code: code,
+      invoice_id: "invoice_12345",
+    };
+
+    try {
+      const response = await fetch(
+        "http://localhost:8000/api/qpay/create-invoice",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(invoiceData),
+        }
+      );
+
+      const data = await response.json();
+      localStorage.setItem("invoice", JSON.stringify(data));
+    } catch (error) {
+      console.error("Error in request:", error);
+    }
+  };
 
   const categoryIdToName = (categoryId: number | undefined) => {
     const categoryMap: { [key: number]: string } = {
@@ -54,13 +89,6 @@ export const OrderRight = ({ formData }: { formData: any }) => {
     };
     return categoryId ? categoryMap[categoryId] : "All Categories";
   };
-
-  const totalPrice = cartItemsArray.length
-    ? cartItemsArray.reduce((acc, item) => acc + item.qty * item.price, 0)
-    : 0;
-
-  const deliveryPrice = 2500;
-  const grandTotal = totalPrice + deliveryPrice;
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -73,7 +101,7 @@ export const OrderRight = ({ formData }: { formData: any }) => {
         <p>Утас: {formData.phoneNumber || "-----"}</p>
         <p>Email хаяг: {formData.email || "-----"}</p>
       </div>
-      {cartItemsArray.map((item: FoodItem, index: number) => (
+      {itemsArray.map((item: FoodItem, index: number) => (
         <div className="flex items-center w-full justify-between" key={index}>
           <div className="flex items-center gap-3">
             <img
@@ -99,17 +127,21 @@ export const OrderRight = ({ formData }: { formData: any }) => {
       </div>
       <div className="flex justify-between items-center">
         <h1 className="font-semibold">Delivery Price</h1>
-        <h1>{deliveryPrice} ₮</h1>
+        <h1>2500 ₮</h1>
       </div>
       <hr className="w-full" />
       <div className="flex justify-between items-center">
         <h1 className="font-semibold">Grand Total</h1>
         <h1 className="font-semibold text-lg">{grandTotal} ₮</h1>
       </div>
-      <button className="flex gap-5 items-center justify-center w-full p-3 text-center bg-[#F91944] rounded-xl text-white">
+      <button
+        className="flex gap-5 items-center justify-center w-full p-3 text-center bg-[#F91944] rounded-xl text-white"
+        onClick={createInvoice}
+      >
         Proceed to Payment
         <QrCodeScannerIcon />
       </button>
+      <InvoiceDisplay />
     </div>
   );
 };
