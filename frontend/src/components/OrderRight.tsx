@@ -3,16 +3,8 @@
 import { BasketContext } from "@/context/BasketContext";
 import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import InvoiceDisplay from "./Qpay";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 type FoodItem = {
   id: number;
@@ -23,8 +15,16 @@ type FoodItem = {
   qty: number;
 };
 
-export const OrderRight = ({ formData }: { formData: any }) => {
+type FormData = {
+  khoroo?: string;
+  district?: string;
+  phoneNumber?: string;
+  email?: string;
+};
+
+export const OrderRight = ({ formData }: { formData: FormData }) => {
   const { cartItems, foodData }: any = useContext(BasketContext);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { user, isLoading }: any = useUser();
   const code = "invoice_code";
@@ -34,7 +34,9 @@ export const OrderRight = ({ formData }: { formData: any }) => {
 
   const itemsArray = Object.entries(parsedItems)
     .map(([id, qty]) => {
-      const foodItem = foodData.find((item: any) => item.id === Number(id));
+      const foodItem = foodData.find(
+        (item: FoodItem) => item.id === Number(id)
+      );
       return foodItem ? { ...foodItem, qty } : null;
     })
     .filter(Boolean) as FoodItem[];
@@ -52,6 +54,7 @@ export const OrderRight = ({ formData }: { formData: any }) => {
       return;
     }
 
+    setLoading(true);
     const encodedUserId = encodeURIComponent(user.sub);
 
     const invoiceData = {
@@ -75,11 +78,13 @@ export const OrderRight = ({ formData }: { formData: any }) => {
 
       const data = await response.json();
       localStorage.setItem("invoice", JSON.stringify(data));
+      router.push("/qpay", { scroll: false });
     } catch (error) {
       console.error("Error in request:", error);
+    } finally {
+      setLoading(false);
     }
   };
-
   const categoryIdToName = (categoryId: number | undefined) => {
     const categoryMap: { [key: number]: string } = {
       1: "Breakfast",
@@ -91,7 +96,6 @@ export const OrderRight = ({ formData }: { formData: any }) => {
   };
 
   if (isLoading) return <div>Loading...</div>;
-
   return (
     <div className="flex flex-col gap-10 w-[50%] p-3 py-5 border-2 rounded-md max-xl:w-[500px] max-lg:w-full backdrop-blur-sm bg-white/30">
       <div className="flex flex-col gap-3">
@@ -127,7 +131,7 @@ export const OrderRight = ({ formData }: { formData: any }) => {
       </div>
       <div className="flex justify-between items-center">
         <h1 className="font-semibold">Delivery Price</h1>
-        <h1>2500 ₮</h1>
+        <h1>{deliveryPrice} ₮</h1>
       </div>
       <hr className="w-full" />
       <div className="flex justify-between items-center">
@@ -137,11 +141,11 @@ export const OrderRight = ({ formData }: { formData: any }) => {
       <button
         className="flex gap-5 items-center justify-center w-full p-3 text-center bg-[#F91944] rounded-xl text-white"
         onClick={createInvoice}
+        disabled={loading}
       >
-        Proceed to Payment
+        {loading ? "Processing..." : "Proceed to Payment"}
         <QrCodeScannerIcon />
       </button>
-      <InvoiceDisplay />
     </div>
   );
 };

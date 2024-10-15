@@ -42,7 +42,10 @@ export const Order = () => {
       toast.error("Order submission failed. Please try again.");
     }
   };
-
+  const back = () => {
+    router.push("/basket", { scroll: false });
+    localStorage.removeItem("invoice");
+  };
   if (isLoading) return <div>Loading...</div>;
 
   return (
@@ -54,9 +57,7 @@ export const Order = () => {
         <div className="w-[60%] max-lg:w-full">
           <div className="w-full flex justify-start gap-2 items-center py-8">
             <KeyboardBackspaceIcon />
-            <button onClick={() => router.push("/basket", { scroll: false })}>
-              Back
-            </button>
+            <button onClick={back}>Back</button>
           </div>
           <Toaster position="top-right" />
           <div className="flex flex-col gap-5 items-start max-xl:w-[100%]">

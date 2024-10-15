@@ -1,14 +1,14 @@
 "use client";
 
-import { Card, Footer, MenuBar, Navbar } from "@/components";
+import { Footer, Navbar } from "@/components";
+import { InvoiceDisplay } from "@/components/Qpay";
 import StoreContextProvider from "@/context/StoreContext";
 
 const Page = () => {
   return (
     <StoreContextProvider>
       <Navbar />
-      <MenuBar />
-      <Card />
+      <InvoiceDisplay />
       <Footer />
     </StoreContextProvider>
   );
