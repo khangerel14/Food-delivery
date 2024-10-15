@@ -66,3 +66,12 @@ export const deleteAllCartItems = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Алдаа гарсан." });
   }
 };
+
+export const getCart = async (req: Request, res: Response) => {
+  try {
+    const data = await Cart.findAll();
+    return res.status(200).send(data);
+  } catch (error) {
+    return res.status(500).json({ error: "Алдаа гарсан." });
+  }
+};

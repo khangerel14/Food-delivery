@@ -15,7 +15,6 @@ router.post("/create-invoice", async (req, res) => {
       });
     }
 
-    // Create the QPay invoice
     const result = await createQpayInvoice({
       amount,
       user_id,
@@ -23,12 +22,10 @@ router.post("/create-invoice", async (req, res) => {
       invoice_id,
     });
 
-    // Return success response
     res.status(200).json({ status: "success", data: result });
   } catch (error) {
     console.error("Error creating invoice:", error);
 
-    // Return error response
     res.status(500).json({
       status: "error",
       message: "Failed to create invoice. Please try again.",

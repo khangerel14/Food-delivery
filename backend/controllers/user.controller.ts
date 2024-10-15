@@ -63,3 +63,19 @@ export const deleteUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const deleteAllUsers = async (req: Request, res: Response) => {
+  try {
+    const num = await User.destroy({ where: {} });
+
+    if (num > 0) {
+      res.status(200).send({ message: "хэрэглэгч амжилттай устгагдлаа!" });
+    } else {
+      res.status(404).send({ message: "Устгах хэрэглэгч олдсонгүй!" });
+    }
+  } catch (err: unknown) {
+    res.status(500).send({
+      message: "Амжилтгүй...",
+    });
+  }
+};

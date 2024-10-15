@@ -36,8 +36,6 @@ export const Basket = () => {
   const cartItemsArray: CartItem[] = [];
 
   const handleAddToCart = async (foodId: number, quantity: number) => {
-    console.log("food:", foodId);
-    console.log("quantity:", quantity);
     try {
       await addToCart(foodId.toString(), quantity);
     } catch (error) {
