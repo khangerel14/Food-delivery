@@ -5,6 +5,7 @@ import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 type FoodItem = {
   id: number;
@@ -23,7 +24,8 @@ type FormData = {
 };
 
 export const OrderRight = ({ formData }: { formData: FormData }) => {
-  const { cartItems, foodData }: any = useContext(BasketContext);
+  const { cartItems, foodData, deleteFromCart }: any =
+    useContext(BasketContext);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { user, isLoading }: any = useUser();
@@ -121,7 +123,15 @@ export const OrderRight = ({ formData }: { formData: FormData }) => {
               </p>
             </div>
           </div>
-          <p>{item.qty} items</p>
+          <div className="flex gap-2 items-center w-fit">
+            <p className="flex items-center">{item.qty} items</p>
+            <button
+              className="p-2 rounded-full bg-[#F91944]"
+              onClick={() => deleteFromCart(item.id)}
+            >
+              <DeleteIcon sx={{ color: "white" }} />
+            </button>
+          </div>
         </div>
       ))}
       <hr className="w-full" />

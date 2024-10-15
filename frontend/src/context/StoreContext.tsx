@@ -33,7 +33,7 @@ type StoreContextProps = {
   inputValue: string;
   setIsActive: Dispatch<SetStateAction<number>>;
   isActive: number;
-  addToCart: (foodId: string, quantity: number) => Promise<void>;
+  addToCart: (id: number) => void;
   loading: boolean;
   fetchFoods: (
     page: number,
@@ -128,24 +128,11 @@ const StoreContextProvider = ({ children }: StoreProviderProps) => {
     return categoryMap[category] || "Breakfast";
   };
 
-  const addToCart = async (foodId: string, quantity: number) => {
-    try {
-      if (user && user.sub) {
-        await axios.post("http://localhost:8000/api/cart", {
-          foodId,
-          quantity,
-          auth0Id: user.sub,
-        });
-        setCartItems((prev) => ({
-          ...prev,
-          [foodId]: (prev[foodId] || 0) + quantity,
-        }));
-      } else {
-        console.error("User is not authenticated");
-      }
-    } catch (error) {
-      console.error("Error adding to cart:", error);
-    }
+  const addToCart = (id: number) => {
+    setCartItems((prev) => ({
+      ...prev,
+      [id]: prev[id] ? prev[id] + 1 : 1,
+    }));
   };
 
   const contextValue: StoreContextProps = {

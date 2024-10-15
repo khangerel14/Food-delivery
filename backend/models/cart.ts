@@ -1,14 +1,13 @@
 import { Sequelize, DataTypes, Model, Association } from "sequelize";
 import { User } from "./user";
 import { Food } from "./food";
-import { Order } from "./order";
 
 type CartAttributes = {
   id?: number;
   auth0Id: string;
   foodId: number;
   quantity: number;
-  orderId?: number; // Add this field for the association with Order
+  name: string;
   createdAt?: Date;
   updatedAt?: Date;
 };
@@ -23,23 +22,18 @@ export class Cart
   public auth0Id!: string;
   public foodId!: number;
   public quantity!: number;
-  public orderId!: number;
+  public name!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
   public static associations: {
     user: Association<Cart, User>;
     foods: Association<Cart, Food>;
-    order: Association<Cart, Order>;
   };
 
-  public static associate(models: {
-    User: typeof User;
-    Food: typeof Food;
-    Order: typeof Order;
-  }) {
-    Cart.belongsTo(models.Order, { foreignKey: "orderId", as: "orders" });
-    Cart.belongsTo(models.Food, { foreignKey: "foodId", as: "foods" });
+  public static associate(models: { User: typeof User; Food: typeof Food }) {
+    Cart.belongsTo(models.User, { foreignKey: "auth0Id", as: "user" });
+    Cart.belongsTo(models.Food, { foreignKey: "foodId", as: "food" });
   }
 }
 
@@ -62,18 +56,13 @@ export const cartModel = (sequelize: Sequelize): typeof Cart => {
           key: "id",
         },
       },
-      orderId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-          model: "orders",
-          key: "id",
-        },
-      },
       quantity: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 1,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
     },
     {

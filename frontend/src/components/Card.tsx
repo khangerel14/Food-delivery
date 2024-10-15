@@ -45,15 +45,6 @@ export const Card = () => {
     fetchFoods(page, limit, isActive);
   }, [page, limit, isActive]);
 
-  const handleAddToCart = async (foodId: string, quantity: number = 1) => {
-    try {
-      await addToCart(foodId, quantity);
-      router.push("/basket", { scroll: false });
-    } catch (error) {
-      console.error("Error adding to cart:", error);
-    }
-  };
-
   if (loading) {
     return <div className="w-36 mx-auto h-full py-52">Loading...</div>;
   }
@@ -66,6 +57,14 @@ export const Card = () => {
     );
   }
 
+  const handleToCart = (id: number) => {
+    try {
+      addToCart(id);
+      router.push("/basket", { scroll: false });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="flex flex-col mx-auto w-[1230px] items-center max-xl:w-full">
       <div className="flex flex-wrap justify-between rounded-xl py-10 mx-auto gap-[53px] max-xl:px-12 max-sm:px-2 max-xl:justify-center max-xl:flex-wrap">
@@ -100,7 +99,7 @@ export const Card = () => {
                 <h1 className="text-lg font-bold">{elem.price}₮</h1>
                 <button
                   className="p-2 px-7 text-white rounded-full bg-[#F91944]"
-                  onClick={() => handleAddToCart(elem.id, 1)}
+                  onClick={() => handleToCart(elem.id)}
                 >
                   Order Now
                 </button>

@@ -5,7 +5,7 @@ const { Cart, User } = db;
 
 export const addToCart = async (req: Request, res: Response) => {
   try {
-    const { auth0Id, foodId, quantity } = req.body;
+    const { auth0Id, foodId, quantity, name } = req.body;
 
     const user = await User.findOne({ where: { auth0Id } });
     if (!user) {
@@ -14,14 +14,13 @@ export const addToCart = async (req: Request, res: Response) => {
 
     const [cartItem, created] = await Cart.findOrCreate({
       where: { auth0Id, foodId },
-      defaults: { auth0Id, foodId, quantity },
+      defaults: { auth0Id, foodId, quantity, name },
     });
 
     if (!created) {
       cartItem.quantity += quantity;
       await cartItem.save();
     }
-
     return res.status(200).json(cartItem);
   } catch (error) {
     return res.status(500).json({ error: "Алдааа гарлаа!!!" });

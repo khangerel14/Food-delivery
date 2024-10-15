@@ -25,7 +25,8 @@ type BasketContextProps = {
   foodData: FoodItem[];
   cartItems: { [key: string]: number };
   setCartItems: Dispatch<SetStateAction<{ [key: string]: number }>>;
-  addToCart: (id: number) => void;
+  addToCart: (foodId: string, quantity: number) => Promise<void>;
+  addToQty: (id: number) => void;
   deleteFromCart: (id: number) => void;
   removeFromCart: (id: number) => void;
   totalItems: number;
@@ -82,7 +83,23 @@ const BasketContextProvider = ({ children }: BasketProviderProps) => {
     foodById(ids);
   }, [cartItems]);
 
-  const addToCart = (id: number) => {
+  const addToCart = async (foodId: string, quantity: number) => {
+    try {
+      if (user && user.sub) {
+        await axios.post("http://localhost:8000/api/cart", {
+          foodId,
+          quantity,
+          auth0Id: user.sub,
+          name: user.nickname,
+        });
+      } else {
+        console.error("User is not authenticated");
+      }
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
+  };
+  const addToQty = (id: number) => {
     setCartItems((prev) => ({
       ...prev,
       [id]: prev[id] ? prev[id] + 1 : 1,
@@ -101,19 +118,24 @@ const BasketContextProvider = ({ children }: BasketProviderProps) => {
   };
 
   const deleteFromCart = async (id: number) => {
+    console.log(`Deleting item with id: ${id}`);
     try {
       const response = await axios.delete(
         `http://localhost:8000/api/cart/${user.sub}/${id}`
       );
-      setCartItems((prev) => {
-        const { [id]: _, ...rest } = prev;
 
-        if (Object.keys(rest).length === 0) {
-          localStorage.removeItem("cartItems");
-        }
-        return rest;
-      });
       if (response.status === 200) {
+        setCartItems((prev) => {
+          const { [id]: _, ...rest } = prev;
+
+          if (Object.keys(rest).length === 0) {
+            localStorage.removeItem("cartItems");
+          } else {
+            localStorage.setItem("cartItems", JSON.stringify(rest));
+          }
+
+          return rest;
+        });
       } else {
         console.error("Error removing item from cart:", response.data);
       }
@@ -132,6 +154,7 @@ const BasketContextProvider = ({ children }: BasketProviderProps) => {
     cartItems,
     setCartItems,
     addToCart,
+    addToQty,
     deleteFromCart,
     removeFromCart,
     totalItems,

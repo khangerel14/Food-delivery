@@ -7,7 +7,6 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { useContext } from "react";
 import { useRouter } from "next/navigation";
 import { BasketContext } from "@/context/BasketContext";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 type FoodItem = {
   id: number;
@@ -30,18 +29,28 @@ export const Basket = () => {
     foodData = [],
     cartItems = {} as CartItems,
     removeFromCart = () => {},
+    addToQty = () => {},
     addToCart = () => {},
-    deleteFromCart,
-  }: any = useContext(BasketContext) || {};
+  } = useContext(BasketContext) || {};
 
   const cartItemsArray: CartItem[] = [];
+
+  const handleAddToCart = async (foodId: number, quantity: number) => {
+    console.log("food:", foodId);
+    console.log("quantity:", quantity);
+    try {
+      await addToCart(foodId.toString(), quantity);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
+  };
 
   if (foodData.length > 0) {
     const foodDataMap = new Map<number, FoodItem>(
       foodData.map((item: FoodItem) => [item.id, item])
     );
 
-    Object.entries(cartItems as Record<string, number>).forEach(([id, qty]) => {
+    Object.entries(cartItems).forEach(([id, qty]) => {
       const foodItem = foodDataMap.get(Number(id));
       if (foodItem) {
         cartItemsArray.push({
@@ -58,16 +67,19 @@ export const Basket = () => {
     <div className="flex flex-col justify-center items-start gap-20 w-[1230px] mx-auto py-20 pt-32 max-xl:w-full">
       <div className="flex items-center flex-col w-[1230px] mx-auto max-md:items-center max-xl:w-full max-xl:px-10 max-sm:px-2">
         <div className="w-full flex justify-between gap-2 items-center mb-10">
-          <button onClick={() => router.push("/dashboard", { scroll: false })}>
+          <button
+            onClick={() => router.push("/dashboard", { scroll: false })}
+            className="flex items-center"
+          >
             <KeyboardBackspaceIcon />
             Back
           </button>
           <button
-            className="flex gap-4 px-4 p-3 bg-[#F91944] text-white rounded-full w-44 items-center justify-center"
+            className="flex gap-4 px-4 p-3 bg-[#F91944] text-white rounded-full w-48 items-center justify-center"
             onClick={() => router.push("/order", { scroll: false })}
           >
             <Basketsvg />
-            Add to Order
+            Move to Order
           </button>
         </div>
         {cartItemsArray.length > 0 ? (
@@ -92,32 +104,34 @@ export const Basket = () => {
                       <button
                         className="mr-5 bg-[#f91944] rounded-full h-9 w-9"
                         onClick={() => removeFromCart(item.id)}
+                        aria-label={`Remove ${item.name} from cart`}
                       >
                         <RemoveIcon sx={{ color: "white" }} />
                       </button>
                       {item.qty}
                       <button
                         className="ml-5 bg-[#F91944] rounded-full h-9 w-9"
-                        onClick={() => addToCart(item.id)}
+                        onClick={() => addToQty(item.id)}
+                        aria-label={`Add ${item.name} to quantity`}
                       >
                         <AddIcon sx={{ color: "white" }} />
                       </button>
                     </div>
                   </div>
-                  <button
-                    className="p-3 rounded-full bg-[#F91944] w-full"
-                    onClick={() => deleteFromCart(item.id)}
-                  >
-                    <DeleteIcon
-                      sx={{
-                        color: "white",
-                      }}
-                    />
-                  </button>
+                  <div>
+                    <button
+                      className="flex gap-4 px-4 p-3 bg-[#F91944] text-white rounded-full w-44 items-center justify-center"
+                      onClick={() => handleAddToCart(item.id, item.qty)}
+                    >
+                      <Basketsvg />
+                      Add to Cart
+                    </button>
+                  </div>
                 </div>
                 <div>
                   <img
                     src={item.imgUrl}
+                    alt={item.name}
                     width={700}
                     height={500}
                     className="rounded-full h-[500px] w-[500px]"
