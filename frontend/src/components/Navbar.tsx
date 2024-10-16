@@ -6,6 +6,7 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import { useContext, useEffect, useState } from "react";
 import { StoreContext } from "@/context/StoreContext";
 import LogoutIcon from "@mui/icons-material/Logout";
+import axios from "axios";
 
 export const Navbar = () => {
   const { user, error } = useUser();
@@ -37,9 +38,17 @@ export const Navbar = () => {
     router.push("/logIn", { scroll: false });
   };
 
-  const logOut = () => {
-    router.push("/api/auth/logout", { scroll: false });
-    localStorage.removeItem("cartItems");
+  const logOut = async () => {
+    try {
+      await axios.delete(`http://localhost:8000/api/cart/${user?.sub}`);
+
+      localStorage.removeItem("invoice");
+      localStorage.removeItem("cartItems");
+
+      await router.push("/api/auth/logout", { scroll: false });
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
   };
 
   const homePage = () => {

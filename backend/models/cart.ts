@@ -30,7 +30,7 @@ export class Cart
   public static associations: {
     user: Association<Cart, User>;
     food: Association<Cart, Food>;
-    order: Association<Cart, Order>; // Add order association
+    order: Association<Cart, Order>;
   };
 
   public static associate(models: {
@@ -40,11 +40,10 @@ export class Cart
   }) {
     Cart.belongsTo(models.User, { foreignKey: "auth0Id", as: "user" });
     Cart.belongsTo(models.Food, { foreignKey: "foodId", as: "food" });
-    Cart.belongsTo(models.Order, { foreignKey: "auth0Id", as: "orders" }); // Establish one-to-many relationship
+    Cart.belongsTo(models.Order, { foreignKey: "auth0Id", as: "orders" });
   }
 }
 
-// Define the Cart model
 export const cartModel = (sequelize: Sequelize): typeof Cart => {
   Cart.init(
     {

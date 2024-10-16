@@ -137,52 +137,26 @@ export const deleteFood = async (req: Request, res: Response) => {
 };
 
 export const getAllFood = async (req: Request, res: Response) => {
-  const { page = 1, limit = 8, searchQuery } = req.query;
-
-  const pageNumber = Number(page);
-  const limitNumber = Number(limit);
-
-  if (pageNumber < 1 || limitNumber < 1) {
-    return res.status(400).json({ error: "page || limit alga." });
-  }
-
   try {
-    const offset = (pageNumber - 1) * limitNumber;
+    const foods = await Food.findAll();
 
-    let condition = {};
-    if (searchQuery) {
-      condition = {
-        name: {
-          [Op.iLike]: `%${searchQuery}%`,
-        },
-      };
-    }
-
-    const { count, rows } = await Food.findAndCountAll({
-      where: condition,
-      offset: offset,
-      limit: limitNumber,
-    });
-
-    if (rows.length === 0) {
+    if (foods.length === 0) {
       return res.status(404).json({
         success: true,
-        message: "Тодорхой хоол байхгүй байна.",
-        page: pageNumber,
-        perPage: limitNumber,
-        totalCount: count,
+        message: "No food items found.",
         foods: [],
       });
     }
 
     res.status(200).json({
       success: true,
-      page: pageNumber,
-      perPage: limitNumber,
-      totalCount: count,
-      foods: rows,
+      totalCount: foods.length,
+      foods: foods,
     });
   } catch (error) {
-    return res.status(500).json({ error: "Алдаа гарлаа." });
+    console.error("Error fetching foods:", error);
+    return res
+      .status(500)
+      .json({ error: "An error occurred while fetching food items." });
   }
 };

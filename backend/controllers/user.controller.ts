@@ -48,18 +48,19 @@ export const findAll = async (req: Request, res: Response) => {
 };
 
 export const deleteUser = async (req: Request, res: Response) => {
-  const id: string = req.params.id;
-
+  const auth0Id: string = req.params.auth0Id;
   try {
-    const num = await User.destroy({ where: { id } });
+    const num = await User.destroy({ where: { auth0Id } });
     if (num === 1) {
       res.status(200).send({ message: "Хэрэглэгч амжилттай устгагдлаа!" });
     } else {
-      res.status(404).send({ message: `id=${id} тай хэрэглэгч олдсонгүй!` });
+      res
+        .status(404)
+        .send({ message: `id=${auth0Id} тай хэрэглэгч олдсонгүй!` });
     }
   } catch (err: unknown) {
     res.status(500).send({
-      message: "Амжилтгүй...",
+      message: "Хэрэглэгч устгах үйлдэл амжилтгүй боллоо. Дахин оролдоно уу.",
     });
   }
 };

@@ -118,7 +118,6 @@ const BasketContextProvider = ({ children }: BasketProviderProps) => {
   };
 
   const deleteFromCart = async (id: number) => {
-    console.log(`Deleting item with id: ${id}`);
     try {
       const response = await axios.delete(
         `http://localhost:8000/api/cart/${user.sub}/${id}`
