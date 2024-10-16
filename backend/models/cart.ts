@@ -1,6 +1,7 @@
-import { Sequelize, DataTypes, Model, Association } from "sequelize";
+import { Sequelize, DataTypes, Model, Optional, Association } from "sequelize";
 import { User } from "./user";
 import { Food } from "./food";
+import { Order } from "./order";
 
 type CartAttributes = {
   id?: number;
@@ -12,7 +13,7 @@ type CartAttributes = {
   updatedAt?: Date;
 };
 
-interface CartCreationAttributes extends Omit<CartAttributes, "id"> {}
+interface CartCreationAttributes extends Optional<CartAttributes, "id"> {}
 
 export class Cart
   extends Model<CartAttributes, CartCreationAttributes>
@@ -28,15 +29,22 @@ export class Cart
 
   public static associations: {
     user: Association<Cart, User>;
-    foods: Association<Cart, Food>;
+    food: Association<Cart, Food>;
+    order: Association<Cart, Order>; // Add order association
   };
 
-  public static associate(models: { User: typeof User; Food: typeof Food }) {
+  public static associate(models: {
+    User: typeof User;
+    Food: typeof Food;
+    Order: typeof Order;
+  }) {
     Cart.belongsTo(models.User, { foreignKey: "auth0Id", as: "user" });
     Cart.belongsTo(models.Food, { foreignKey: "foodId", as: "food" });
+    Cart.belongsTo(models.Order, { foreignKey: "auth0Id", as: "orders" }); // Establish one-to-many relationship
   }
 }
 
+// Define the Cart model
 export const cartModel = (sequelize: Sequelize): typeof Cart => {
   Cart.init(
     {

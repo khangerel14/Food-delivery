@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import db from "../models/index.js";
 
-const { Order, User } = db;
+const { Order, Cart } = db;
 
 export const createOrder = async (req: Request, res: Response) => {
   try {
@@ -14,6 +14,7 @@ export const createOrder = async (req: Request, res: Response) => {
     const order = { email, khoroo, district, phoneNumber };
 
     const data = await Order.create(order);
+
     return res.status(201).send(data);
   } catch (error) {
     console.error("Error creating order:", error);
@@ -22,6 +23,7 @@ export const createOrder = async (req: Request, res: Response) => {
     });
   }
 };
+
 export const deleteOrder = async (req: Request, res: Response) => {
   const id: string = req.params.id;
 
@@ -43,19 +45,38 @@ export const deleteOrder = async (req: Request, res: Response) => {
   }
 };
 
-export const getLastOrder = async (req: Request, res: Response) => {
-  try {
-    const lastOrder = await Order.findOne({
-      order: [["id", "DESC"]],
-    });
+// export const getOrderByCartAuth0Id = async (req: Request, res: Response) => {
+//   try {
+//     const { auth0Id } = req.params; // Extract auth0Id from the request parameters
 
-    if (!lastOrder) {
-      return res.status(404).json({ message: "No orders found" });
-    }
+//     // Validate the presence of auth0Id
+//     if (!auth0Id) {
+//       return res.status(400).send({ message: "auth0Id is required" });
+//     }
 
-    return res.status(200).json(lastOrder);
-  } catch (error) {
-    console.error("Error retrieving last order:", error);
-    return res.status(500).json({ message: "Server error" });
-  }
-};
+//     // Find the order where auth0Id matches
+//     const order = await Order.findOne({
+//       where: { auth0Id }, // Filter orders by auth0Id
+//       include: [
+//         {
+//           model: Cart, // Include the Cart model
+//           as: "cart", // Ensure the association name is correct
+//         },
+//       ],
+//     });
+
+//     // Check if the order was found
+//     if (!order) {
+//       return res.status(404).send({ message: "Order not found" });
+//     }
+
+//     // Respond with the found order
+//     return res.status(200).send(order);
+//   } catch (error) {
+//     // Handle any errors that occur during the database operation
+//     console.error("Error retrieving order:", error);
+//     return res.status(500).send({
+//       message: (error as Error).message || "Error retrieving order",
+//     });
+//   }
+// };
