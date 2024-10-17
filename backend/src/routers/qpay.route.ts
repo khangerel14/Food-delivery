@@ -1,5 +1,5 @@
 import express from "express";
-import { createQpayInvoice } from "../utils/qpay/invoice.js";
+import { createQpayInvoice } from "../../utils/qpay/invoice.js";
 
 const router = express.Router();
 

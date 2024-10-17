@@ -24,7 +24,7 @@ export const Card = () => {
   const searchParams = useSearchParams();
 
   const page = parseInt(searchParams.get("page") || "1", 10);
-  const limit = parseInt(searchParams.get("limit") || "8", 10);
+  const limit = parseInt(searchParams.get("limit") || "6", 10);
 
   const categoryIdStr = searchParams.get("categoryId");
   const categoryId: number | undefined = categoryIdStr

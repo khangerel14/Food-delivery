@@ -9,7 +9,7 @@ const { User } = db;
 
 export const createUser = async (req: Request, res: Response) => {
   try {
-    const { auth0Id, email, name, picture } = req.body;
+    const { auth0Id, email, name, picture, password } = req.body;
 
     const [user, created] = await User.findOrCreate({
       where: { auth0Id },
@@ -18,6 +18,7 @@ export const createUser = async (req: Request, res: Response) => {
         email,
         name,
         picture,
+        password,
       },
     });
 

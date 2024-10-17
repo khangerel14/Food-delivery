@@ -7,6 +7,8 @@ type UserAttributes = {
   email: string;
   name: string;
   picture?: string;
+  password?: string;
+  role?: string;
   createdAt?: Date;
   updatedAt?: Date;
 };
@@ -22,6 +24,8 @@ export class User
   public email!: string;
   public name!: string;
   public picture!: string;
+  public password!: string;
+  public role!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -32,7 +36,7 @@ export class User
 
   public static associate(models: any) {
     User.hasMany(models.Order, {
-      foreignKey: "userId",
+      foreignKey: "auth0Id",
       as: "orders",
     });
   }
@@ -60,6 +64,15 @@ export const userModel = (sequelize: Sequelize): typeof User => {
       },
       picture: {
         type: DataTypes.STRING,
+      },
+      role: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: "user",
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
     },
     {
