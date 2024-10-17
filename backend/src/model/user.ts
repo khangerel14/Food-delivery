@@ -23,9 +23,9 @@ export class User
   public auth0Id!: string;
   public email!: string;
   public name!: string;
-  public picture!: string;
+  public picture?: string;
   public password!: string;
-  public role!: string;
+  public role?: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;

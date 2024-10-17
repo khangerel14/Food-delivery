@@ -1,7 +1,7 @@
 import { Op } from "sequelize";
 import { Request, Response } from "express";
 import dotenv from "dotenv";
-import db from "../models/index.js";
+import db from "../model/index.js";
 
 dotenv.config();
 

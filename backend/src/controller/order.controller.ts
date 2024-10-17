@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import db from "../models/index.js";
+import db from "../model/index.js";
 
 const { Order, Cart } = db;
 

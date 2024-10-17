@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import db from "../models/index.js";
-import { Food } from "../models/food.js";
+import db from "../model/index.js";
+import { Food } from "../model/food.js";
 
 const { Category } = db;
 

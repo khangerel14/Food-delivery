@@ -2,7 +2,7 @@ import {
   createUser,
   findAll,
   deleteUser,
-} from "../controllers/user.controller.js";
+} from "../controller/user.controller.js";
 import { Router, Express } from "express";
 
 const router = Router();

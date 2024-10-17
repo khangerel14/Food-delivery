@@ -5,7 +5,7 @@ import {
   findMultiple,
   deleteFood,
   getAllFood,
-} from "../controllers/food.controller.js";
+} from "../controller/food.controller.js";
 
 const router = Router();
 

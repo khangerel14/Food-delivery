@@ -1,8 +1,8 @@
 import { Sequelize } from "sequelize";
-import { userModel } from "./models/user.js";
-import { foodModel } from "./models/food.js";
-import { orderModel } from "./models/order.js";
-import { cartModel } from "./models/cart.js";
+import { userModel } from "./model/user.js";
+import { foodModel } from "./model/food.js";
+import { orderModel } from "./model/order.js";
+import { cartModel } from "./model/cart.js";
 
 export const connection = async (): Promise<void> => {
   const sequelize = new Sequelize("sql", "postgres", "1234", {
