@@ -3,12 +3,39 @@ import db from "../model/index.js";
 
 const { Cart, User } = db;
 
+// export const addToCart = async (req: Request, res: Response) => {
+//   try {
+//     const { auth0Id, foodId, quantity, name } = req.body;
+
+//     const user = await User.findOne({ where: { auth0Id } });
+//     if (!user) {
+//       return res.status(404).json({ error: "Хэрэглэгч олдсонгүй" });
+//     }
+
+//     const [cartItem, created] = await Cart.findOrCreate({
+//       where: { auth0Id, foodId },
+//       defaults: { auth0Id, foodId, quantity, name },
+//     });
+
+//     if (!created) {
+//       cartItem.quantity += quantity;
+//       await cartItem.save();
+//     }
+//     return res.status(200).json(cartItem);
+//   } catch (error) {
+//     return res.status(500).json({ error: "Алдааа гарлаа!!!" });
+//   }
+// };
+
 export const addToCart = async (req: Request, res: Response) => {
   try {
     const { auth0Id, foodId, quantity, name } = req.body;
 
+    console.log("Received data:", { auth0Id, foodId, quantity, name });
+
     const user = await User.findOne({ where: { auth0Id } });
     if (!user) {
+      console.error("User not found with auth0Id:", auth0Id);
       return res.status(404).json({ error: "Хэрэглэгч олдсонгүй" });
     }
 
@@ -17,12 +44,11 @@ export const addToCart = async (req: Request, res: Response) => {
       defaults: { auth0Id, foodId, quantity, name },
     });
 
-    if (!created) {
-      cartItem.quantity += quantity;
-      await cartItem.save();
-    }
+    console.log("Cart item created:", created);
+
     return res.status(200).json(cartItem);
   } catch (error) {
+    console.error("Error adding to cart:");
     return res.status(500).json({ error: "Алдааа гарлаа!!!" });
   }
 };

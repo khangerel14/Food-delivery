@@ -9,5 +9,9 @@ declare global {
 }
 
 interface CustomJwtPayload extends JwtPayload {
-  id: number; // Ensure this matches the type you expect
+  id: number;
+}
+
+export interface CustomJwtPayload extends JwtPayload {
+  id: string;
 }

@@ -84,6 +84,7 @@ const BasketContextProvider = ({ children }: BasketProviderProps) => {
   }, [cartItems]);
 
   const addToCart = async (foodId: string, quantity: number) => {
+    console.log("cart", user);
     try {
       if (user && user.sub) {
         await axios.post("http://localhost:8000/api/cart", {
@@ -99,6 +100,7 @@ const BasketContextProvider = ({ children }: BasketProviderProps) => {
       console.error("Error adding to cart:", error);
     }
   };
+
   const addToQty = (id: number) => {
     setCartItems((prev) => ({
       ...prev,

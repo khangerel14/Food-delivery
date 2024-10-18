@@ -1,36 +1,41 @@
 import dotenv from "dotenv";
-import db from "../model/index.js"; // Ensure the correct path to your models
+import db from "../model/index.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { Request, Response } from "express";
-import { CustomJwtPayload } from "../types/express.js"; // Ensure this type is defined in your project
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { Request, Response, NextFunction } from "express";
+import { CustomJwtPayload } from "../types/express.js";
 
 dotenv.config();
 
 const { User } = db;
 
-// Get user profile
-export const getProfile = async (req: Request, res: Response) => {
-  try {
-    const userId = (req.user as CustomJwtPayload)?.id; // Extract user ID from JWT payload
+interface CustomRequest extends Request {
+  user?: JwtPayload;
+}
 
-    if (!userId) {
+export const getProfile = async (
+  req: CustomRequest,
+  res: Response
+): Promise<Response> => {
+  try {
+    if (req.user) {
+      const userId = req.user.id;
+      const userProfile = await User.findOne({ where: { auth0Id: userId } });
+
+      if (!userProfile) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      return res.status(200).json(userProfile);
+    } else {
       return res.status(401).json({ message: "Unauthorized" });
     }
-
-    const user = await User.findByPk(userId); // Fetch user from the database
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    res.json(user); // Respond with user data
   } catch (error) {
-    console.error("Error fetching profile:", error); // Log error for debugging
-    res.status(500).json({ message: "Error fetching profile" });
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
-// Create admin account
 export const createAdmin = async () => {
   try {
     const existingAdmin = await User.findOne({
@@ -61,29 +66,56 @@ export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({
+      where: { email },
+      attributes: [
+        "id",
+        "auth0Id",
+        "email",
+        "name",
+        "picture",
+        "role",
+        "password",
+        "createdAt",
+        "updatedAt",
+      ],
+    });
 
-    console.log("User object:", JSON.stringify(user, null, 2));
+    const userData = user ? user.get({ plain: true }) : null;
 
-    if (!user) {
+    console.log("User object:", JSON.stringify(userData, null, 2));
+
+    if (!userData || !userData.password) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-
-    console.log("Provided password:", password);
-    console.log("User's hashed password:", user.password);
-
-    const match = await bcrypt.compare(password, user.password);
+    const match = await bcrypt.compare(password, userData.password);
     if (!match) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+      { id: userData.id },
+      process.env.JWT_SECRET as string,
+      {
+        expiresIn: "1h",
+      }
+    );
 
     res.json({ token });
   } catch (error) {
     console.error("Error logging in:", error);
     res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+export const logOut = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    return res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    console.error("Error logging out:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
