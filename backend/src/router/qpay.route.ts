@@ -21,7 +21,7 @@ router.post("/create-invoice", async (req, res) => {
       code,
       invoice_id,
     });
-
+    console.log(result)
     res.status(200).json({ status: "success", data: result });
   } catch (error) {
     console.error("Error creating invoice:", error);

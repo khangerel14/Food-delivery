@@ -35,7 +35,7 @@ export const InvoiceDisplay = () => {
     return <p>No invoice data available</p>;
   }
 
-  const qrImg = inv.data.qr_image;
+  const qrImg = inv.data?.qr_image;
 
   const back = () => {
     router.push("order", { scroll: false });
