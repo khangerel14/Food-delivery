@@ -3,6 +3,7 @@ import db from "../model/index.js";
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
+import { Op } from "sequelize";
 import { CustomJwtPayload } from "../types/express.js";
 
 dotenv.config();
@@ -14,11 +15,11 @@ interface CustomRequest extends Request {
 }
 
 export const getProfile = async (
-  req: CustomRequest,
+  req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    if (req.user) {
+    if (req.user && typeof req.user !== "string") {
       const userId = req.user.id;
       const userProfile = await User.findOne({ where: { auth0Id: userId } });
 
@@ -32,7 +33,7 @@ export const getProfile = async (
     }
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error", error });
   }
 };
 
@@ -94,10 +95,10 @@ export const loginUser = async (req: Request, res: Response) => {
     }
 
     const token = jwt.sign(
-      { id: userData.id },
+      { id: userData.auth0Id },
       process.env.JWT_SECRET as string,
       {
-        expiresIn: "1h",
+        expiresIn: "3h",
       }
     );
 

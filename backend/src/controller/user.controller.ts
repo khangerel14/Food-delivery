@@ -7,6 +7,12 @@ dotenv.config();
 
 const { User } = db;
 
+export const idCheck = async (id: string) => {
+  const user = await db.User.findByPk(id);
+  if (!user) throw new Error("not found");
+  return user;
+};
+
 export const createUser = async (req: Request, res: Response) => {
   try {
     const { auth0Id, email, name, picture, password } = req.body;

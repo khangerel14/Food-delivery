@@ -7,6 +7,7 @@ const router = Router();
 export default (app: Express) => {
   router.post("/login", loginUser);
   router.post("/logOut", logOut);
-  // router.get("/profile", authenticateToken, getProfile);
+  router.get("/profile", authenticateToken, getProfile);
+
   app.use("/api", router);
 };
